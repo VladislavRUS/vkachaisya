@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Headers, Put, Param, ForbiddenException } from '@nestjs/common';
+import { Body, Controller, Post, Headers, Put, Param, ForbiddenException, Get } from '@nestjs/common';
 import { ReportsService } from './reports.service';
 import { CreateReportDto } from './dto/CreateReportDto';
 import { UpdateReportDto } from './dto/UpdateReportDto';
@@ -24,5 +24,13 @@ export class ReportsController {
   @Put('/:reportId')
   async updateReport(@Body() updateReportDto: UpdateReportDto, @Param('reportId') reportId: number) {
     return this.reportsService.update(reportId, updateReportDto);
+  }
+
+  @Get()
+  async getReportsByUserAndSubscription(
+    @Param('userId') userId: number,
+    @Param('subscriptionId') subscriptionId: number,
+  ) {
+    return this.reportsService.getBySubscriptionIdAndUserId(userId, subscriptionId);
   }
 }

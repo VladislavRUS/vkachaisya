@@ -8,7 +8,7 @@ export class UsersService {
   constructor(@InjectRepository(User) private userRepository: Repository<User>) {}
 
   async getById(id: number): Promise<User | null> {
-    return this.userRepository.findOne({ id }, { relations: ['subscriptions'] });
+    return this.userRepository.findOne({ id });
   }
 
   async create(userId: number) {

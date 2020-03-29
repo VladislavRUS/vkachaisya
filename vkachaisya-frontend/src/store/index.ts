@@ -8,19 +8,29 @@ import { History } from 'history';
 import { challengesSaga } from './challenges/sagas';
 import { IChallengesState } from './challenges/types';
 import { challengesReducer } from './challenges/reducer';
+import { ISubscriptionsState } from './subscriptions/types';
+import { subscriptionsReducer } from './subscriptions/reducer';
+import { subscriptionsSaga } from './subscriptions/sagas';
+import { IReportsState } from './reports/types';
+import { reportsReducer } from './reports/reducer';
+import { reportsSaga } from './reports/sagas';
 
 export interface IApplicationState {
-  users: IUserState;
+  user: IUserState;
   challenges: IChallengesState;
+  subscriptions: ISubscriptionsState;
+  reports: IReportsState;
 }
 
 export const createRootReducer = (history: History) =>
   combineReducers({
     user: userReducer,
     challenges: challengesReducer,
+    subscriptions: subscriptionsReducer,
+    reports: reportsReducer,
     router: connectRouter(history),
   });
 
 export function* rootSaga() {
-  yield all([fork(userSaga), fork(challengesSaga)]);
+  yield all([fork(userSaga), fork(challengesSaga), fork(subscriptionsSaga), fork(reportsSaga)]);
 }

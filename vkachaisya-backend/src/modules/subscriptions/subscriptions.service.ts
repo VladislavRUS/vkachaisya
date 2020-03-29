@@ -40,13 +40,17 @@ export class SubscriptionsService {
   }
 
   async getByUserId(userId: number) {
-    const user = new User();
-    user.id = userId;
-
-    return this.subscriptionRepository.find({ user });
+    return this.subscriptionRepository.find({
+      where: { user: { id: userId } },
+      relations: ['challenge'],
+    });
   }
 
   async getByUserIdAndChallengeId(userId: number, challengeId: number) {
     return this.subscriptionRepository.findOne({ where: { user: { id: userId }, challenge: { id: challengeId } } });
+  }
+
+  async getUserSubscription(userId: number, subscriptionId: number) {
+    return await this.getById(subscriptionId, ['challenge']);
   }
 }

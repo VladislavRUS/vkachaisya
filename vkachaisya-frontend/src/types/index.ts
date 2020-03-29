@@ -1,6 +1,7 @@
 export interface ISubscription {
   id: number;
   startDate: string;
+  challenge: IChallenge;
 }
 
 export interface IChallenge {
@@ -24,12 +25,6 @@ export interface IFile {
   name: string;
   type: 'image' | 'video';
   path: string;
-}
-
-export interface IUserChallengeInfo {
-  subscription: ISubscription;
-  challenge: IChallenge;
-  reports: IReport[];
 }
 
 export interface IUser {

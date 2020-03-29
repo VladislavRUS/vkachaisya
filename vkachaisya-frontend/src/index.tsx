@@ -18,14 +18,12 @@ const store = configureStore(history, initialState);
 bridge.send('VKWebAppInit');
 
 ReactDOM.render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <ThemeProvider>
-        <ConnectedRouter history={history}>
-          <App />
-        </ConnectedRouter>
-      </ThemeProvider>
-    </Provider>
-  </React.StrictMode>,
+  <Provider store={store}>
+    <ThemeProvider>
+      <ConnectedRouter history={history}>
+        <App />
+      </ConnectedRouter>
+    </ThemeProvider>
+  </Provider>,
   document.getElementById('root'),
 );

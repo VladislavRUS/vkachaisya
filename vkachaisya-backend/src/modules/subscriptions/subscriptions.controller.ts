@@ -1,4 +1,4 @@
-import { Controller, Headers, Get, Post, Body, ConflictException, Param } from '@nestjs/common';
+import { Controller, Headers, Get, Post, Body, ConflictException, Param, Query } from '@nestjs/common';
 import { SubscriptionsService } from './subscriptions.service';
 import { CreateSubscriptionDto } from './dto/CreateSubscriptionDto';
 import { ReportsService } from '../reports/reports.service';
@@ -24,6 +24,15 @@ export class SubscriptionsController {
   async getUserSubscriptions(@Headers() headers: any) {
     const userId = parseInt(headers['userId']);
     return this.subscriptionsService.getByUserId(userId);
+  }
+
+  @Get('/:subscriptionId')
+  async getUserSubscription(
+    @Headers() headers: any,
+    @Query('userId') userId: number,
+    @Param('subscriptionId') subscriptionId: number,
+  ) {
+    return this.subscriptionsService.getUserSubscription(userId, subscriptionId);
   }
 
   @Get('/:subscriptionId/reports')

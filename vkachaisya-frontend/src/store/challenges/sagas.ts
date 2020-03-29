@@ -2,6 +2,7 @@ import { put, all, takeLatest, fork, call } from 'redux-saga/effects';
 import { ChallengesActionTypes } from './types';
 import { createChallenge, createChallengeAsync, getAllChallengesAsync, getChallengesAsync } from './actions';
 import { ChallengesApi } from '../../api/challenges-api';
+import { goBack } from 'connected-react-router';
 
 // HANDLERS
 function* handleGetChallenges() {
@@ -34,6 +35,7 @@ function* handleCreateChallenge(action: ReturnType<typeof createChallenge>) {
   try {
     const { data } = yield call(ChallengesApi.createChallenge, challenge);
     yield put(createChallengeAsync.success(data));
+    yield put(goBack());
   } catch (e) {
     yield put(createChallengeAsync.failure());
   }

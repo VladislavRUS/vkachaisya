@@ -13,7 +13,7 @@ function* handleGetCurrentUser() {
   try {
     const { data } = yield call(UsersApi.getCurrentUser);
     yield put(getCurrentUserAsync.success(data));
-    yield put(replace(Routes.CHALLENGES));
+    yield put(replace(Routes.SUBSCRIPTIONS));
   } catch (e) {
     yield put(getCurrentUserAsync.failure());
     yield put(replace(Routes.WELCOME));
@@ -26,7 +26,7 @@ function* handleCreateCurrentUser() {
   try {
     const { data } = yield call(UsersApi.createCurrentUser);
     yield put(createCurrentUserAsync.success(data));
-    yield put(replace(Routes.CHALLENGES));
+    yield put(replace(Routes.SUBSCRIPTIONS));
   } catch (e) {
     yield put(createCurrentUserAsync.failure());
   }
