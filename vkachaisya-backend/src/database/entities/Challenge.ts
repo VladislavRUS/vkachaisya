@@ -10,7 +10,7 @@ export class Challenge {
     challenge.title = createChallengeDto.title;
     challenge.description = createChallengeDto.description;
     challenge.days = createChallengeDto.days;
-    challenge.reportType = createChallengeDto.reportType;
+    challenge.withReport = createChallengeDto.withReport;
 
     return challenge;
   }
@@ -28,7 +28,7 @@ export class Challenge {
   days: number;
 
   @Column()
-  reportType: ChallengeReportType;
+  withReport: boolean;
 
   @Column()
   authorId: number;
@@ -38,9 +38,4 @@ export class Challenge {
     subscription => subscription.challenge,
   )
   subscriptions: Subscription[];
-}
-
-export enum ChallengeReportType {
-  CHECK = 'check',
-  POST = 'post',
 }
