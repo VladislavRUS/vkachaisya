@@ -34,9 +34,9 @@ const tutorialSteps = [
 
 const Image = styled.img`
   display: block;
-  height: 255;
+  height: 255px;
   width: 100%;
-  maxwidth: 400;
+  max-width: 400px;
   overflow: hidden;
 `;
 

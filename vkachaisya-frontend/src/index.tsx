@@ -1,16 +1,31 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
 import { App } from './entry';
 import bridge from '@vkontakte/vk-bridge';
-import { API_CLIENT } from './api';
+import { createBrowserHistory } from 'history';
+import { Provider } from 'react-redux';
+import { ConnectedRouter } from 'connected-react-router';
+import configureStore from './configureStore';
+import { ThemeProvider } from './theme';
+
+const history = createBrowserHistory();
+
+// @ts-ignore
+const initialState = window.initialReduxState;
+
+const store = configureStore(history, initialState);
 
 bridge.send('VKWebAppInit');
-API_CLIENT.defaults.headers['url'] = window.location.href;
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Provider store={store}>
+      <ThemeProvider>
+        <ConnectedRouter history={history}>
+          <App />
+        </ConnectedRouter>
+      </ThemeProvider>
+    </Provider>
   </React.StrictMode>,
   document.getElementById('root'),
 );

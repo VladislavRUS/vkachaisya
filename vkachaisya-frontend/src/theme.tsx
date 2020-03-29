@@ -24,8 +24,6 @@ const theme = createMuiTheme({
       fontSize: '24px',
     },
   },
-  fontSizes: [],
-  fontWeights: [],
 });
 
 const GlobalStyle = createGlobalStyle`
