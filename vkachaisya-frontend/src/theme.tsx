@@ -27,6 +27,14 @@ const theme = createMuiTheme({
       main: '#E7EBFB',
       contrastText: '#4F70F5',
     },
+    text: {
+      primary: '#403e4b',
+      secondary: '#6a7b89',
+    },
+    background: {
+      default: '#f8f9fc',
+    },
+    divider: '#c4c4c4',
     ...COLORS,
   },
   shape: {

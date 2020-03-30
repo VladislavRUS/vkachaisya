@@ -16,6 +16,7 @@ export interface IChallenge {
   description: string;
   days: number;
   authorId: number;
+  hashtag: string;
   withReport: boolean;
 }
 
