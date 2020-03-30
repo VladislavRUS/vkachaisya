@@ -1,28 +1,31 @@
 import React from 'react';
 import { Wrapper, Header, Title, Description, Badges } from './Challenge.styles';
-import { IChallenge } from '../../../types/index';
+import { ISearchChallenge } from '../../../types/index';
 import { Badge } from '../../../components/Badge';
-import { Box } from '@material-ui/core';
+import { Box, Avatar } from '@material-ui/core';
 import { SquareButton } from '../../../components/SquareButton';
 import { Card } from '../../../components/Card';
 
 type Props = {
-  challenge: IChallenge;
+  searchChallenge: ISearchChallenge;
 };
 
-const Challenge: React.FC<Props> = ({ challenge }) => (
+const Challenge: React.FC<Props> = ({ searchChallenge }) => (
   <Wrapper>
     <Card>
       <Box pl={'20px'} pr={'20px'} pt={'22px'} pb={'25px'}>
         <Header>
-          <Title>{challenge.title}</Title>
+          <Title>{searchChallenge.challenge.title}</Title>
           <SquareButton iconName={'arrow'} />
         </Header>
-        <Description>{challenge.description}</Description>
+        <Description>{searchChallenge.challenge.description}</Description>
+        {searchChallenge.avatars.map((avatar) => (
+          <Avatar src={avatar} />
+        ))}
         <Badges>
-          <Badge text={`${challenge.days} дней`} bgColor={'#56cc95'} color={'#fff'} />
+          <Badge text={`${searchChallenge.challenge.days} дней`} bgColor={'#56cc95'} color={'#fff'} />
           <Box mr={1} />
-          <Badge text={`#ВКачайся${challenge.title}`} bgColor={'#f7f9fb'} color={'#9ea9b1'} />
+          <Badge text={`#ВКачайся${searchChallenge.challenge.title}`} bgColor={'#f7f9fb'} color={'#9ea9b1'} />
         </Badges>
       </Box>
     </Card>

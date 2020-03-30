@@ -53,4 +53,12 @@ export class SubscriptionsService {
   async getUserSubscription(userId: number, subscriptionId: number) {
     return await this.getById(subscriptionId, ['challenge']);
   }
+
+  async countUsersByChallengeId(challengeId: number) {
+    return this.subscriptionRepository.count({ where: { challenge: { id: challengeId } } });
+  }
+
+  async getSubscriptionsWithMaxUsers(challengeId: number, take: number) {
+    return this.subscriptionRepository.find({ where: { challenge: { id: challengeId } }, take, relations: ['user'] });
+  }
 }

@@ -4,6 +4,12 @@ export interface ISubscription {
   challenge: IChallenge;
 }
 
+export interface ISearchChallenge {
+  challenge: IChallenge;
+  totalParticipants: number;
+  avatars: string[];
+}
+
 export interface IChallenge {
   id: number;
   title: string;

@@ -11,6 +11,7 @@ export class Challenge {
     challenge.description = createChallengeDto.description;
     challenge.days = createChallengeDto.days;
     challenge.withReport = createChallengeDto.withReport;
+    challenge.hashtag = createChallengeDto.hashtag;
 
     return challenge;
   }
@@ -23,6 +24,9 @@ export class Challenge {
 
   @Column()
   description: string;
+
+  @Column()
+  hashtag: string;
 
   @Column()
   days: number;

@@ -7,6 +7,8 @@ import { SubscriptionsService } from '../subscriptions/subscriptions.service';
 import { CreateSubscriptionDto } from '../subscriptions/dto/CreateSubscriptionDto';
 import { ChallengeWithUserSubscriptionDto } from './dto/ChallengeWithUserSubscriptionDto';
 import { ReportsService } from '../reports/reports.service';
+import { SearchChallengeDto } from './dto/SearchChallengeDto';
+import { VK_API } from '../vk';
 
 @Injectable()
 export class ChallengesService {
@@ -34,8 +36,26 @@ export class ChallengesService {
     return this.challengeRepository.findOne({ id });
   }
 
-  async getAll() {
-    return this.challengeRepository.find();
+  async search() {
+    const challenges = await this.challengeRepository.find();
+
+    const result: SearchChallengeDto[] = [];
+
+    for (let i = 0; i < challenges.length; i++) {
+      const challenge = challenges[i];
+
+      const searchChallengeDto = new SearchChallengeDto();
+      searchChallengeDto.challenge = challenge;
+      searchChallengeDto.totalParticipants = await this.subscriptionsService.countUsersByChallengeId(challenge.id);
+      const subscriptions = await this.subscriptionsService.getSubscriptionsWithMaxUsers(challenge.id, 3);
+      const userIds = subscriptions.map(subscription => subscription.user.id);
+      const vkUsers = await VK_API.getUsers(userIds);
+      searchChallengeDto.avatars = vkUsers.map(user => user.photo_50);
+
+      result.push(searchChallengeDto);
+    }
+
+    return result;
   }
 
   async getChallengesByUserSubscriptions(userId: number) {

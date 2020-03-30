@@ -1,4 +1,4 @@
 import { IApplicationState } from '../index';
 
-export const selectAllChallenges = (state: IApplicationState) => state.challenges.allChallenges;
+export const selectSearchChallenges = (state: IApplicationState) => state.challenges.searchChallenges;
 export const selectIsChallengeCreating = (state: IApplicationState) => state.challenges.isCreating;

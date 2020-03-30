@@ -1,6 +1,6 @@
 import { put, all, takeLatest, fork, call } from 'redux-saga/effects';
 import { ChallengesActionTypes } from './types';
-import { createChallenge, createChallengeAsync, getAllChallengesAsync, getChallengesAsync } from './actions';
+import { createChallenge, createChallengeAsync, searchChallengesAsync, getChallengesAsync } from './actions';
 import { ChallengesApi } from '../../api/challenges-api';
 import { goBack } from 'connected-react-router';
 
@@ -16,14 +16,14 @@ function* handleGetChallenges() {
   }
 }
 
-function* handleGetAllChallenges() {
-  yield put(getAllChallengesAsync.request());
+function* handleSearchChallenges() {
+  yield put(searchChallengesAsync.request());
 
   try {
-    const { data } = yield call(ChallengesApi.getAllChallenges);
-    yield put(getAllChallengesAsync.success(data));
+    const { data } = yield call(ChallengesApi.searchChallenges);
+    yield put(searchChallengesAsync.success(data));
   } catch (e) {
-    yield put(getAllChallengesAsync.failure());
+    yield put(searchChallengesAsync.failure());
   }
 }
 
@@ -46,8 +46,8 @@ const watchers = [
   fork(function* watchGetChallenges() {
     yield takeLatest(ChallengesActionTypes.GET_CHALLENGES, handleGetChallenges);
   }),
-  fork(function* watchGetAllChallenges() {
-    yield takeLatest(ChallengesActionTypes.GET_ALL_CHALLENGES, handleGetAllChallenges);
+  fork(function* watchSearchChallenges() {
+    yield takeLatest(ChallengesActionTypes.SEARCH_CHALLENGES, handleSearchChallenges);
   }),
   fork(function* watchCreateChallenge() {
     yield takeLatest(ChallengesActionTypes.CREATE_CHALLENGE, handleCreateChallenge);

@@ -13,9 +13,9 @@ export class ChallengesController {
     return this.challengesService.getChallengesByUserSubscriptions(userId);
   }
 
-  @Get('/all')
-  async getAllChallenges() {
-    return this.challengesService.getAll();
+  @Get('/search')
+  async searchChallenges() {
+    return this.challengesService.search();
   }
 
   @Get('/:challengeId')

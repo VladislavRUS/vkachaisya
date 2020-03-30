@@ -6,9 +6,9 @@ type ChallengesActionType = ActionType<typeof challengesActions>;
 
 const initialState: IChallengesState = {
   challenges: [],
-  allChallenges: [],
+  searchChallenges: [],
   isFetching: false,
-  isFetchingAll: false,
+  isSearching: false,
   isCreating: false,
 };
 
@@ -33,20 +33,20 @@ export const challengesReducer = createReducer<IChallengesState, ChallengesActio
 
   // Get all challenges
   .handleType(
-    ChallengesActionTypes.GET_ALL_CHALLENGES_REQUEST,
-    (state): IChallengesState => ({ ...state, isFetchingAll: true }),
+    ChallengesActionTypes.SEARCH_CHALLENGES_REQUEST,
+    (state): IChallengesState => ({ ...state, isSearching: true }),
   )
   .handleType(
-    ChallengesActionTypes.GET_ALL_CHALLENGES_SUCCESS,
+    ChallengesActionTypes.SEARCH_CHALLENGES_SUCCESS,
     (state, action): IChallengesState => ({
       ...state,
-      isFetchingAll: false,
-      allChallenges: [...action.payload],
+      isSearching: false,
+      searchChallenges: [...action.payload],
     }),
   )
   .handleType(
-    ChallengesActionTypes.GET_ALL_CHALLENGES_FAILURE,
-    (state): IChallengesState => ({ ...state, isFetchingAll: false }),
+    ChallengesActionTypes.SEARCH_CHALLENGES_FAILURE,
+    (state): IChallengesState => ({ ...state, isSearching: false }),
   )
 
   // Create challenge
