@@ -16,11 +16,11 @@ const Challenge: React.FC<Props> = ({ searchChallenge }) => (
       <Box pl={'20px'} pr={'20px'} pt={'22px'} pb={'25px'}>
         <Header>
           <Title>{searchChallenge.challenge.title}</Title>
-          <SquareButton iconName={'arrow'} />
+          <SquareButton iconName={'arrow'} iconRotate="180deg" />
         </Header>
         <Description>{searchChallenge.challenge.description}</Description>
-        {searchChallenge.avatars.map((avatar) => (
-          <Avatar src={avatar} />
+        {searchChallenge.avatars.map((avatar, i) => (
+          <Avatar key={i} src={avatar} />
         ))}
         <Badges>
           <Badge text={`${searchChallenge.challenge.days} дней`} bgColor={'#56cc95'} color={'#fff'} />

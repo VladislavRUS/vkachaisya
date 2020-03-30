@@ -4,6 +4,7 @@ import styled, { css } from 'styled-components';
 
 import { ReactComponent as Arrow } from '../../assets/icons/arrow.svg';
 import { ReactComponent as Search } from '../../assets/icons/search.svg';
+import { ReactComponent as Plus } from '../../assets/icons/plus.svg';
 
 interface IconProps extends SpacingProps, PaletteProps, SizingProps {
   name: string;
@@ -16,6 +17,7 @@ interface IconProps extends SpacingProps, PaletteProps, SizingProps {
 const icons: { [key: string]: any } = {
   arrow: Arrow,
   search: Search,
+  plus: Plus,
 };
 
 const rotate = (props: IconProps) =>

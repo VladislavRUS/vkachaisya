@@ -16,16 +16,17 @@ const TopWave = styled.img`
   z-index: -1;
 `;
 
-const BottomLeftCircle = styled.div`
+const Circle = styled.div<{ position: 'top' | 'bottom' }>`
   position: absolute;
-  bottom: 0;
+  bottom: ${({ position }) => (position === 'top' ? 'auto' : 0)};
+  top: ${({ position }) => (position === 'bottom' ? 'auto' : 0)};
   left: 0;
   width: 140px;
   height: 140px;
   border-radius: 50%;
   background-color: rgba(100, 132, 255, 0.2);
-  transform: translate(-50%, 50%);
+  transform: ${({ position }) => (position === 'top' ? 'translate(-50%, -10%)' : 'translate(-50%, 50%);')};
   z-index: -1;
 `;
 
-export { StyledAppBar, TopWave, BottomLeftCircle };
+export { StyledAppBar, TopWave, Circle };

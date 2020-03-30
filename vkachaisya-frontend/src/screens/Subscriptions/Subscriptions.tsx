@@ -10,6 +10,7 @@ import { Routes } from '../../entry/Routes';
 import { selectSubscriptions } from '../../store/subscriptions/selectors';
 import { selectCurrentUser } from '../../store/user/selectors';
 import { Icon } from '../../components/Icon';
+import { SquareButton } from '../../components/SquareButton';
 
 const mapStateToProps = (state: IApplicationState) => ({
   user: selectCurrentUser(state),
@@ -44,7 +45,11 @@ const Header = () => (
         Мои челленджи
       </Typography>
     }
-    right={<Link to={Routes.CREATE_CHALLENGE}>Добавить</Link>}
+    right={
+      <Link to={Routes.CREATE_CHALLENGE}>
+        <SquareButton iconName="plus" />
+      </Link>
+    }
   />
 );
 
