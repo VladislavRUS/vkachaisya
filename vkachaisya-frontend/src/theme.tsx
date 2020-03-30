@@ -2,15 +2,30 @@ import React from 'react';
 import { createMuiTheme, MuiThemeProvider, StylesProvider } from '@material-ui/core/styles';
 import { ThemeProvider as StyledThemeProvider, createGlobalStyle } from 'styled-components';
 
-const COLORS = {};
+const COLORS = {
+  'blues:0': '#4F70F5',
+  'blues:1': '#4969F0',
+  'blues:2': '#E7EBFB',
+
+  'yellows:0': '#FFCD79',
+
+  'greens:0': '#56CC95',
+
+  'grays:0': '#f8f9fc',
+};
 
 const theme = createMuiTheme({
   palette: {
+    common: {
+      white: '#FFFFFF',
+    },
     primary: {
-      main: '#ff0000',
+      main: '#4F70F5',
+      contrastText: '#FFFFFF',
     },
     secondary: {
-      main: '#00ff00',
+      main: '#E7EBFB',
+      contrastText: '#4F70F5',
     },
     ...COLORS,
   },
@@ -18,10 +33,12 @@ const theme = createMuiTheme({
     borderRadius: 0,
   },
   typography: {
-    fontFamily: "'Roboto', Arial, 'sans-serif'",
+    fontFamily: "'Lato', sans-serif",
     h1: {
-      fontWeight: 700,
-      fontSize: '24px',
+      fontWeight: 'bold',
+      fontSize: '18px',
+      lineHeight: 1.3,
+      letterSpacing: '-0.02em',
     },
   },
 });

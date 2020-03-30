@@ -1,6 +1,7 @@
 import React from 'react';
-import { Button as MuiButton, ButtonProps as MuiButtonProps } from '@material-ui/core';
+import { ButtonProps } from '@material-ui/core';
+import { StyledButton } from './Button.styles';
 
-const Button: React.FC<MuiButtonProps> = (props) => <MuiButton {...props} />;
+const Button: React.FC<ButtonProps> = (props) => <StyledButton {...props}></StyledButton>;
 
 export { Button };
