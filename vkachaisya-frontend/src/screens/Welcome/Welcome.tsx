@@ -15,6 +15,7 @@ import Welcome1 from '../../assets/images/welcome1.svg';
 import Welcome2 from '../../assets/images/welcome2.svg';
 import Welcome3 from '../../assets/images/welcome3.svg';
 import Welcome4 from '../../assets/images/welcome4.svg';
+import { motion } from 'framer-motion';
 
 const steps = [
   {
@@ -100,6 +101,17 @@ const Welcome: React.FC<Props> = ({ isCreating, createCurrentUser }) => {
     }
   };
 
+  const variants = {
+    hidden: {
+      opacity: 0,
+      y: 10,
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+    },
+  };
+
   return (
     <Box
       display="flex"
@@ -113,11 +125,13 @@ const Welcome: React.FC<Props> = ({ isCreating, createCurrentUser }) => {
       <Box display="flex" flexDirection="column" flexGrow="1" justifyContent="center">
         <Carousel steps={steps} step={activeStep} setStep={setActiveStep} />
       </Box>
-      <Box mx={2} mb={7} visibility={showButton ? 'visible' : 'hidden'}>
-        <Button color="primary" variant="contained" fullWidth disabled={isCreating} onClick={onStart}>
-          Начать
-        </Button>
-      </Box>
+      <motion.div variants={variants} animate={showButton ? 'visible' : 'hidden'} initial={'hidden'}>
+        <Box mx={2} mb={7}>
+          <Button color="primary" variant="contained" fullWidth disabled={isCreating} onClick={onStart}>
+            Начать
+          </Button>
+        </Box>
+      </motion.div>
     </Box>
   );
 };
