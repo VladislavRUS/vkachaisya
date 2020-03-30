@@ -11,6 +11,7 @@ import { selectCurrentSubscriptions, selectFinishedSubscriptions } from '../../s
 import { selectCurrentUser } from '../../store/user/selectors';
 import { Icon } from '../../components/Icon';
 import { SquareButton } from '../../components/SquareButton';
+import { NoSubscriptions } from './NoSubscriptions';
 
 const mapStateToProps = (state: IApplicationState) => ({
   user: selectCurrentUser(state),
@@ -66,6 +67,8 @@ const Subscriptions: React.FC<Props> = ({ getSubscriptions, currentSubscriptions
   return (
     <Box display="flex" flexDirection="column" height="100%" width="100%" bgcolor="grays:0">
       <Header />
+
+      {!currentSubscriptions.length && !finishedSubscriptions.length && <NoSubscriptions />}
 
       {currentSubscriptions.map((subscription) => (
         <Link
