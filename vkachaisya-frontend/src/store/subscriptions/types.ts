@@ -1,10 +1,11 @@
 import { ISubscription } from '../../types';
+import { ISubscriptionResult } from '../../types/index';
 
 export interface ISubscriptionsState {
   subscriptions: ISubscription[];
-  userSubscription: ISubscription | null;
+  subscriptionResult: ISubscriptionResult | null;
   isFetchingSubscriptions: boolean;
-  isFetchingUserSubscription: boolean;
+  isFetchingSubscriptionResult: boolean;
 }
 
 export enum SubscriptionsActionTypes {
@@ -13,10 +14,10 @@ export enum SubscriptionsActionTypes {
   GET_SUBSCRIPTIONS_SUCCESS = '@@subscriptions/GET_SUBSCRIPTIONS_SUCCESS',
   GET_SUBSCRIPTIONS_FAILURE = '@@subscriptions/GET_SUBSCRIPTIONS_FAILURE',
 
-  GET_USER_SUBSCRIPTION = '@@subscriptions/GET_USER_SUBSCRIPTION',
-  GET_USER_SUBSCRIPTION_REQUEST = '@@subscriptions/GET_USER_SUBSCRIPTION_REQUEST',
-  GET_USER_SUBSCRIPTION_SUCCESS = '@@subscriptions/GET_USER_SUBSCRIPTION_SUCCESS',
-  GET_USER_SUBSCRIPTION_FAILURE = '@@subscriptions/GET_USER_SUBSCRIPTION_FAILURE',
+  GET_SUBSCRIPTION_RESULT = '@@subscriptions/GET_SUBSCRIPTION_RESULT',
+  GET_SUBSCRIPTION_RESULT_REQUEST = '@@subscriptions/GET_SUBSCRIPTION_RESULT_REQUEST',
+  GET_SUBSCRIPTION_RESULT_SUCCESS = '@@subscriptions/GET_SUBSCRIPTION_RESULT_SUCCESS',
+  GET_SUBSCRIPTION_RESULT_FAILURE = '@@subscriptions/GET_SUBSCRIPTION_RESULT_FAILURE',
 
   CLEAR_USER_SUBSCRIPTION = '@@subscriptions/CLEAR_USER_SUBSCRIPTION',
 }

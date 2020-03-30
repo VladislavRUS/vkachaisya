@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Box } from '@material-ui/core';
 import { Carousel } from '../../components/Carousel';
 import { Button } from '../../components/Button';
@@ -7,6 +7,14 @@ import { createCurrentUser } from '../../store/user/actions';
 import { connect } from 'react-redux';
 import { IApplicationState } from '../../store';
 import { isCurrentUserCreating } from '../../store/user/selectors';
+import bridge from '@vkontakte/vk-bridge';
+import {
+  AnyReceiveMethodName,
+  VKBridgeEvent,
+  VKBridgeSubscribeHandler,
+} from '@vkontakte/vk-bridge/dist/types/src/types/bridge';
+import { IUser } from '../../types/index';
+import { mockUser } from '../../mock';
 
 const steps = [
   {
@@ -48,6 +56,35 @@ type Props = StateProps & DispatchProps;
 const Welcome: React.FC<Props> = ({ isCreating, createCurrentUser }) => {
   const [activeStep, setActiveStep] = React.useState(0);
 
+  useEffect(() => {
+    const listener = (event: VKBridgeEvent<AnyReceiveMethodName>) => {
+      if (event.detail.type === 'VKWebAppGetUserInfoResult') {
+        const { data } = event.detail;
+
+        const user: IUser = {
+          id: data.id,
+          firstName: data.first_name,
+          lastName: data.last_name,
+          avatar: data.photo_100,
+        };
+
+        createCurrentUser(user);
+      }
+    };
+
+    bridge.subscribe(listener);
+
+    return () => bridge.unsubscribe(listener);
+  }, [createCurrentUser]);
+
+  const onStart = () => {
+    if (process.env.NODE_ENV === 'development') {
+      createCurrentUser(mockUser);
+    } else {
+      bridge.send('VKWebAppGetUserInfo', {});
+    }
+  };
+
   return (
     <Box
       display="flex"
@@ -62,7 +99,7 @@ const Welcome: React.FC<Props> = ({ isCreating, createCurrentUser }) => {
         <Carousel steps={steps} step={activeStep} setStep={setActiveStep} />
       </Box>
       <Box mx={2} mb={7} visibility={activeStep === steps.length - 1 ? 'visible' : 'visible'}>
-        <Button color="primary" variant="contained" fullWidth disabled={isCreating} onClick={createCurrentUser}>
+        <Button color="primary" variant="contained" fullWidth disabled={isCreating} onClick={onStart}>
           Начать
         </Button>
       </Box>

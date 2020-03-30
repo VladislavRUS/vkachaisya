@@ -6,9 +6,9 @@ type SubscriptionsActionType = ActionType<typeof actions>;
 
 const initialState: ISubscriptionsState = {
   subscriptions: [],
-  userSubscription: null,
+  subscriptionResult: null,
   isFetchingSubscriptions: false,
-  isFetchingUserSubscription: false,
+  isFetchingSubscriptionResult: false,
 };
 
 export const subscriptionsReducer = createReducer<ISubscriptionsState, SubscriptionsActionType>(initialState)
@@ -30,20 +30,20 @@ export const subscriptionsReducer = createReducer<ISubscriptionsState, Subscript
     (state): ISubscriptionsState => ({ ...state, isFetchingSubscriptions: false }),
   )
 
-  // Get user subscription
+  // Get subscription result
   .handleType(
-    SubscriptionsActionTypes.GET_USER_SUBSCRIPTION_REQUEST,
-    (state): ISubscriptionsState => ({ ...state, isFetchingUserSubscription: true }),
+    SubscriptionsActionTypes.GET_SUBSCRIPTION_RESULT_REQUEST,
+    (state): ISubscriptionsState => ({ ...state, isFetchingSubscriptionResult: true }),
   )
   .handleType(
-    SubscriptionsActionTypes.GET_USER_SUBSCRIPTION_SUCCESS,
+    SubscriptionsActionTypes.GET_SUBSCRIPTION_RESULT_SUCCESS,
     (state, action): ISubscriptionsState => ({
       ...state,
-      isFetchingUserSubscription: false,
-      userSubscription: action.payload,
+      isFetchingSubscriptionResult: false,
+      subscriptionResult: action.payload,
     }),
   )
   .handleType(
-    SubscriptionsActionTypes.GET_USER_SUBSCRIPTION_FAILURE,
-    (state): ISubscriptionsState => ({ ...state, isFetchingUserSubscription: false }),
+    SubscriptionsActionTypes.GET_SUBSCRIPTION_RESULT_FAILURE,
+    (state): ISubscriptionsState => ({ ...state, isFetchingSubscriptionResult: false }),
   );

@@ -1,6 +1,6 @@
 import { all, fork, takeEvery, put, call } from 'redux-saga/effects';
 import { UserActionTypes } from './types';
-import { createCurrentUserAsync, getCurrentUserAsync } from './actions';
+import { createCurrentUser, createCurrentUserAsync, getCurrentUserAsync } from './actions';
 import { UsersApi } from '../../api/users-api';
 import { replace } from 'connected-react-router';
 import { Routes } from '../../entry/Routes';
@@ -20,11 +20,11 @@ function* handleGetCurrentUser() {
   }
 }
 
-function* handleCreateCurrentUser() {
+function* handleCreateCurrentUser(action: ReturnType<typeof createCurrentUser>) {
   yield put(createCurrentUserAsync.request());
 
   try {
-    const { data } = yield call(UsersApi.createCurrentUser);
+    const { data } = yield call(UsersApi.createCurrentUser, action.payload.user);
     yield put(createCurrentUserAsync.success(data));
     yield put(replace(Routes.SUBSCRIPTIONS));
   } catch (e) {

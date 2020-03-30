@@ -7,14 +7,19 @@ import { IApplicationState } from '../../store';
 import { AppBar } from '../../components/AppBar';
 import { Link, generatePath } from 'react-router-dom';
 import { Routes } from '../../entry/Routes';
-import { selectSubscriptions } from '../../store/subscriptions/selectors';
+import {
+  selectCurrentSubscriptions,
+  selectFinishedSubscriptions,
+  selectSubscriptions,
+} from '../../store/subscriptions/selectors';
 import { selectCurrentUser } from '../../store/user/selectors';
 import { Icon } from '../../components/Icon';
 import { SquareButton } from '../../components/SquareButton';
 
 const mapStateToProps = (state: IApplicationState) => ({
   user: selectCurrentUser(state),
-  subscriptions: selectSubscriptions(state),
+  currentSubscriptions: selectCurrentSubscriptions(state),
+  finishedSubscriptions: selectFinishedSubscriptions(state),
 });
 
 type StateProps = ReturnType<typeof mapStateToProps>;
@@ -53,7 +58,7 @@ const Header = () => (
   />
 );
 
-const Subscriptions: React.FC<Props> = ({ getSubscriptions, subscriptions, user }) => {
+const Subscriptions: React.FC<Props> = ({ getSubscriptions, currentSubscriptions, finishedSubscriptions, user }) => {
   useEffect(() => {
     getSubscriptions();
   }, [getSubscriptions]);
@@ -66,7 +71,7 @@ const Subscriptions: React.FC<Props> = ({ getSubscriptions, subscriptions, user 
     <Box display="flex" flexDirection="column" height="100%" width="100%" bgcolor="grays:0">
       <Header />
 
-      {subscriptions.map((subscription) => (
+      {currentSubscriptions.map((subscription) => (
         <Link
           key={subscription.id}
           to={{
@@ -74,7 +79,7 @@ const Subscriptions: React.FC<Props> = ({ getSubscriptions, subscriptions, user 
             search: `?userId=${user.id}`,
           }}
         >
-          <Box>{subscription.challenge.title}</Box>
+          <Box>{subscription.title}</Box>
         </Link>
       ))}
     </Box>

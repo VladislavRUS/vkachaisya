@@ -8,7 +8,6 @@ import { CreateSubscriptionDto } from '../subscriptions/dto/CreateSubscriptionDt
 import { ChallengeWithUserSubscriptionDto } from './dto/ChallengeWithUserSubscriptionDto';
 import { ReportsService } from '../reports/reports.service';
 import { SearchChallengeDto } from './dto/SearchChallengeDto';
-import { VK_API } from '../vk';
 
 @Injectable()
 export class ChallengesService {
@@ -48,9 +47,7 @@ export class ChallengesService {
       searchChallengeDto.challenge = challenge;
       searchChallengeDto.totalParticipants = await this.subscriptionsService.countUsersByChallengeId(challenge.id);
       const subscriptions = await this.subscriptionsService.getSubscriptionsWithMaxUsers(challenge.id, 3);
-      const userIds = subscriptions.map(subscription => subscription.user.id);
-      const vkUsers = await VK_API.getUsers(userIds);
-      searchChallengeDto.avatars = vkUsers.map(user => user.photo_50);
+      searchChallengeDto.avatars = subscriptions.map(subscription => subscription.user.avatar);
 
       result.push(searchChallengeDto);
     }

@@ -1,9 +1,3 @@
-export interface ISubscription {
-  id: number;
-  startDate: string;
-  challenge: IChallenge;
-}
-
 export interface ISearchChallenge {
   challenge: IChallenge;
   totalParticipants: number;
@@ -36,4 +30,26 @@ export interface IFile {
 
 export interface IUser {
   id: number;
+  firstName: string;
+  lastName: string;
+  avatar: string;
+}
+
+export interface ISubscription {
+  id: number;
+  title: string;
+  hashtag: string;
+  startDate: string;
+  days: number;
+  avatars: string[];
+  totalParticipants: number;
+}
+
+export interface ISubscriptionResult {
+  id: number;
+  title: string;
+  hashtag: string;
+  startDate: string;
+  days: number;
+  users: IUser[];
 }

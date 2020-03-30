@@ -6,14 +6,14 @@ import { connect } from 'react-redux';
 import { IApplicationState } from '../../store';
 import { selectCurrentUser } from '../../store/user/selectors';
 import { withRouter, RouteComponentProps, Link, generatePath } from 'react-router-dom';
-import { getUserSubscription } from '../../store/subscriptions/actions';
-import { selectUserSubscription } from '../../store/subscriptions/selectors';
+import { selectSubscriptionResult } from '../../store/subscriptions/selectors';
 import { selectReports } from '../../store/reports/selectors';
 import { Routes } from '../../entry/Routes';
+import { getSubscriptionResult } from '../../store/subscriptions/actions';
 
 const mapStateToProps = (state: IApplicationState) => ({
   currentUser: selectCurrentUser(state),
-  userSubscription: selectUserSubscription(state),
+  subscriptionResult: selectSubscriptionResult(state),
   reports: selectReports(state),
 });
 
@@ -24,7 +24,7 @@ const mapDispatchToProps = (dispatch: Dispatch) =>
     {
       getReports,
       clearReports,
-      getUserSubscription,
+      getSubscriptionResult,
     },
     dispatch,
   );
@@ -37,8 +37,8 @@ const Subscription: React.FC<Props> = ({
   getReports,
   currentUser,
   match,
-  userSubscription,
-  getUserSubscription,
+  subscriptionResult,
+  getSubscriptionResult,
   reports,
 }) => {
   const { subscriptionId } = match.params as any;
@@ -55,22 +55,22 @@ const Subscription: React.FC<Props> = ({
     }
 
     if (userId) {
-      getUserSubscription(userId, subscriptionId);
+      getSubscriptionResult(userId, subscriptionId);
       getReports(userId, subscriptionId);
     }
 
     return () => {
       clearReports();
     };
-  }, [currentUser, getReports, getUserSubscription, subscriptionId]);
+  }, [currentUser, getReports, getSubscriptionResult, subscriptionId]);
 
-  if (!userSubscription) {
+  if (!subscriptionResult) {
     return null;
   }
 
   const days = [];
 
-  for (let i = 0; i < userSubscription.challenge.days; i++) {
+  for (let i = 0; i < subscriptionResult.days; i++) {
     const day = i + 1;
 
     const hasReport = reports.find((report) => report.day === day);
@@ -82,7 +82,7 @@ const Subscription: React.FC<Props> = ({
     <Box height="100%" width="100%">
       <Box p={3}>
         <Box>
-          <Typography variant="h1">Challenge {userSubscription.challenge.title}</Typography>
+          <Typography variant="h1">Challenge {subscriptionResult.title}</Typography>
         </Box>
         <Box my={2}>
           <Typography>Прогресс</Typography>

@@ -9,7 +9,7 @@ export const getCurrentUserAsync = createAsyncAction(
   UserActionTypes.GET_CURRENT_USER_FAILURE,
 )<undefined, IUser, undefined>();
 
-export const createCurrentUser = () => action(UserActionTypes.CREATE_CURRENT_USER);
+export const createCurrentUser = (user: IUser) => action(UserActionTypes.CREATE_CURRENT_USER, { user });
 export const createCurrentUserAsync = createAsyncAction(
   UserActionTypes.CREATE_CURRENT_USER_REQUEST,
   UserActionTypes.CREATE_CURRENT_USER_SUCCESS,

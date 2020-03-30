@@ -1,4 +1,38 @@
 import { IApplicationState } from '../index';
+import { createSelector } from 'reselect';
+import { selectCurrentUser } from '../user/selectors';
+import { differenceInCalendarDays } from 'date-fns';
 
 export const selectSubscriptions = (state: IApplicationState) => state.subscriptions.subscriptions;
-export const selectUserSubscription = (state: IApplicationState) => state.subscriptions.userSubscription;
+
+export const selectCurrentSubscriptions = createSelector(
+  [selectSubscriptions, selectCurrentUser],
+  (subscriptions, user) => {
+    if (!user) {
+      return [];
+    }
+
+    const now = new Date();
+
+    return subscriptions.filter((subscription) => {
+      return differenceInCalendarDays(new Date(subscription.startDate), now) <= subscription.days;
+    });
+  },
+);
+
+export const selectFinishedSubscriptions = createSelector(
+  [selectSubscriptions, selectCurrentUser],
+  (subscriptions, user) => {
+    if (!user) {
+      return [];
+    }
+
+    const now = new Date();
+
+    return subscriptions.filter((subscription) => {
+      return differenceInCalendarDays(new Date(subscription.startDate), now) > subscription.days;
+    });
+  },
+);
+
+export const selectSubscriptionResult = (state: IApplicationState) => state.subscriptions.subscriptionResult;

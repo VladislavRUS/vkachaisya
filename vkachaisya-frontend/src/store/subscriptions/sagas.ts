@@ -1,6 +1,6 @@
 import { fork, put, takeLatest, all, call } from 'redux-saga/effects';
 import { SubscriptionsActionTypes } from './types';
-import { getSubscriptionsAsync, getUserSubscription, getUserSubscriptionAsync } from './actions';
+import { getSubscriptionsAsync, getSubscriptionResult, getSubscriptionResultAsync } from './actions';
 import { SubscriptionsApi } from '../../api/subscriptions-api';
 
 // HANDLERS
@@ -15,16 +15,16 @@ function* handleGetSubscriptions() {
   }
 }
 
-function* handleGetUserSubscription(action: ReturnType<typeof getUserSubscription>) {
-  yield put(getUserSubscriptionAsync.request());
+function* handleGetSubscriptionResult(action: ReturnType<typeof getSubscriptionResult>) {
+  yield put(getSubscriptionResultAsync.request());
 
   const { userId, subscriptionId } = action.payload;
 
   try {
-    const { data } = yield call(SubscriptionsApi.getExtendedSubscriptionInformation, userId, subscriptionId);
-    yield put(getUserSubscriptionAsync.success(data));
+    const { data } = yield call(SubscriptionsApi.getSubscriptionResult, userId, subscriptionId);
+    yield put(getSubscriptionResultAsync.success(data));
   } catch (e) {
-    yield put(getUserSubscriptionAsync.failure());
+    yield put(getSubscriptionResultAsync.failure());
   }
 }
 
@@ -33,8 +33,8 @@ const watchers = [
   fork(function* watchGetSubscriptions() {
     yield takeLatest(SubscriptionsActionTypes.GET_SUBSCRIPTIONS, handleGetSubscriptions);
   }),
-  fork(function* watchGetUserSubscription() {
-    yield takeLatest(SubscriptionsActionTypes.GET_USER_SUBSCRIPTION, handleGetUserSubscription);
+  fork(function* watchGetSubscriptionResult() {
+    yield takeLatest(SubscriptionsActionTypes.GET_SUBSCRIPTION_RESULT, handleGetSubscriptionResult);
   }),
 ];
 

@@ -1,5 +1,6 @@
-import { Controller, Get, NotFoundException, Param, Post, Headers } from '@nestjs/common';
+import { Controller, Get, NotFoundException, Param, Post, Headers, Body } from '@nestjs/common';
 import { UsersService } from './users.service';
+import { CreateUserDto } from './dto/CreateUserDto';
 
 @Controller('users')
 export class UsersController {
@@ -30,10 +31,10 @@ export class UsersController {
   }
 
   @Post()
-  async createUser(@Headers() headers: any) {
+  async createUser(@Headers() headers: any, @Body() createUserDto: CreateUserDto) {
     const userId = parseInt(headers['userId']);
 
-    await this.usersService.create(userId);
+    await this.usersService.create(createUserDto);
     return this.usersService.getById(userId);
   }
 }
