@@ -8,11 +8,7 @@ import { connect } from 'react-redux';
 import { IApplicationState } from '../../store';
 import { isCurrentUserCreating } from '../../store/user/selectors';
 import bridge from '@vkontakte/vk-bridge';
-import {
-  AnyReceiveMethodName,
-  VKBridgeEvent,
-  VKBridgeSubscribeHandler,
-} from '@vkontakte/vk-bridge/dist/types/src/types/bridge';
+import { AnyReceiveMethodName, VKBridgeEvent } from '@vkontakte/vk-bridge/dist/types/src/types/bridge';
 import { IUser } from '../../types/index';
 import { mockUser } from '../../mock';
 import Welcome1 from '../../assets/images/welcome1.svg';

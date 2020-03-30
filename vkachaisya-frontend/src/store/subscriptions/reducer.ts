@@ -9,6 +9,7 @@ const initialState: ISubscriptionsState = {
   subscriptionResult: null,
   isFetchingSubscriptions: false,
   isFetchingSubscriptionResult: false,
+  isCreating: false,
 };
 
 export const subscriptionsReducer = createReducer<ISubscriptionsState, SubscriptionsActionType>(initialState)
@@ -46,4 +47,17 @@ export const subscriptionsReducer = createReducer<ISubscriptionsState, Subscript
   .handleType(
     SubscriptionsActionTypes.GET_SUBSCRIPTION_RESULT_FAILURE,
     (state): ISubscriptionsState => ({ ...state, isFetchingSubscriptionResult: false }),
+  )
+
+  // Create subscription
+  .handleType(
+    SubscriptionsActionTypes.CREATE_SUBSCRIPTION_REQUEST,
+    (state): ISubscriptionsState => ({ ...state, isCreating: true }),
+  )
+  .handleType(
+    [SubscriptionsActionTypes.CREATE_SUBSCRIPTION_SUCCESS, SubscriptionsActionTypes.CREATE_SUBSCRIPTION_FAILURE],
+    (state): ISubscriptionsState => ({
+      ...state,
+      isCreating: false,
+    }),
   );

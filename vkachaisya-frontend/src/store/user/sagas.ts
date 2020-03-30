@@ -12,6 +12,7 @@ function* handleGetCurrentUser() {
 
   try {
     const { data } = yield call(UsersApi.getCurrentUser);
+
     yield put(getCurrentUserAsync.success(data));
     yield put(replace(Routes.SUBSCRIPTIONS));
   } catch (e) {
@@ -28,6 +29,7 @@ function* handleCreateCurrentUser(action: ReturnType<typeof createCurrentUser>) 
     yield put(createCurrentUserAsync.success(data));
     yield put(replace(Routes.SUBSCRIPTIONS));
   } catch (e) {
+    alert(JSON.stringify(e));
     yield put(createCurrentUserAsync.failure());
   }
 }

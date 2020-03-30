@@ -1,7 +1,7 @@
 import React from 'react';
 import { SwitchProps, SwitchClassKey, Switch as MuiSwitch } from '@material-ui/core';
-import { withStyles, Theme, createStyles } from '@material-ui/core/styles';
-import { StyledSwitch, StyledControl, StyledLabel } from './Switch.styles';
+import { withStyles, createStyles } from '@material-ui/core/styles';
+import { StyledControl, StyledLabel } from './Switch.styles';
 
 interface Styles extends Partial<Record<SwitchClassKey, string>> {
   focusVisible?: string;

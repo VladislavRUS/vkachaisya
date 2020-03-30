@@ -7,11 +7,7 @@ import { IApplicationState } from '../../store';
 import { AppBar } from '../../components/AppBar';
 import { Link, generatePath } from 'react-router-dom';
 import { Routes } from '../../entry/Routes';
-import {
-  selectCurrentSubscriptions,
-  selectFinishedSubscriptions,
-  selectSubscriptions,
-} from '../../store/subscriptions/selectors';
+import { selectCurrentSubscriptions, selectFinishedSubscriptions } from '../../store/subscriptions/selectors';
 import { selectCurrentUser } from '../../store/user/selectors';
 import { Icon } from '../../components/Icon';
 import { SquareButton } from '../../components/SquareButton';

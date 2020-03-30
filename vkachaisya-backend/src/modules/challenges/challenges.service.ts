@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Not, Repository } from 'typeorm';
 import { Challenge } from '../../database/entities/Challenge';
 import { CreateChallengeDto } from './dto/CreateChallengeDto';
 import { SubscriptionsService } from '../subscriptions/subscriptions.service';
@@ -35,8 +35,8 @@ export class ChallengesService {
     return this.challengeRepository.findOne({ id });
   }
 
-  async search() {
-    const challenges = await this.challengeRepository.find();
+  async search(userId: number) {
+    const challenges = await this.challengeRepository.find({ where: { authorId: Not(userId) } });
 
     const result: SearchChallengeDto[] = [];
 

@@ -6,6 +6,7 @@ export interface ISubscriptionsState {
   subscriptionResult: ISubscriptionResult | null;
   isFetchingSubscriptions: boolean;
   isFetchingSubscriptionResult: boolean;
+  isCreating: boolean;
 }
 
 export enum SubscriptionsActionTypes {
@@ -18,6 +19,11 @@ export enum SubscriptionsActionTypes {
   GET_SUBSCRIPTION_RESULT_REQUEST = '@@subscriptions/GET_SUBSCRIPTION_RESULT_REQUEST',
   GET_SUBSCRIPTION_RESULT_SUCCESS = '@@subscriptions/GET_SUBSCRIPTION_RESULT_SUCCESS',
   GET_SUBSCRIPTION_RESULT_FAILURE = '@@subscriptions/GET_SUBSCRIPTION_RESULT_FAILURE',
+
+  CREATE_SUBSCRIPTION = '@@subscriptions/CREATE_SUBSCRIPTION',
+  CREATE_SUBSCRIPTION_REQUEST = '@@subscriptions/CREATE_SUBSCRIPTION_REQUEST',
+  CREATE_SUBSCRIPTION_SUCCESS = '@@subscriptions/CREATE_SUBSCRIPTION_SUCCESS',
+  CREATE_SUBSCRIPTION_FAILURE = '@@subscriptions/CREATE_SUBSCRIPTION_FAILURE',
 
   CLEAR_USER_SUBSCRIPTION = '@@subscriptions/CLEAR_USER_SUBSCRIPTION',
 }

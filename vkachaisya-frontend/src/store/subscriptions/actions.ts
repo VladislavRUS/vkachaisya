@@ -17,3 +17,10 @@ export const getSubscriptionResultAsync = createAsyncAction(
   SubscriptionsActionTypes.GET_SUBSCRIPTION_RESULT_SUCCESS,
   SubscriptionsActionTypes.GET_SUBSCRIPTION_RESULT_FAILURE,
 )<undefined, ISubscriptionResult, undefined>();
+
+export const createSubscription = (challengedId: number) => action(SubscriptionsActionTypes.CREATE_SUBSCRIPTION, { challengedId });
+export const createSubscriptionAsync = createAsyncAction(
+  SubscriptionsActionTypes.CREATE_SUBSCRIPTION_REQUEST,
+  SubscriptionsActionTypes.CREATE_SUBSCRIPTION_SUCCESS,
+  SubscriptionsActionTypes.CREATE_SUBSCRIPTION_FAILURE,
+)<undefined, undefined, undefined>();

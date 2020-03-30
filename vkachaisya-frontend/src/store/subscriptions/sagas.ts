@@ -1,7 +1,14 @@
 import { fork, put, takeLatest, all, call } from 'redux-saga/effects';
 import { SubscriptionsActionTypes } from './types';
-import { getSubscriptionsAsync, getSubscriptionResult, getSubscriptionResultAsync } from './actions';
+import {
+  getSubscriptionsAsync,
+  getSubscriptionResult,
+  getSubscriptionResultAsync,
+  createSubscription,
+  createSubscriptionAsync,
+} from './actions';
 import { SubscriptionsApi } from '../../api/subscriptions-api';
+import { searchChallenges } from '../challenges/actions';
 
 // HANDLERS
 function* handleGetSubscriptions() {
@@ -28,6 +35,21 @@ function* handleGetSubscriptionResult(action: ReturnType<typeof getSubscriptionR
   }
 }
 
+function* handleCreateSubscription(action: ReturnType<typeof createSubscription>) {
+  yield put(createSubscriptionAsync.request());
+
+  const { challengedId } = action.payload;
+
+  try {
+    yield call(SubscriptionsApi.createSubscription, challengedId);
+    yield put(createSubscriptionAsync.success());
+
+    yield put(searchChallenges());
+  } catch (e) {
+    yield put(createSubscriptionAsync.failure());
+  }
+}
+
 // WATCHERS
 const watchers = [
   fork(function* watchGetSubscriptions() {
@@ -35,6 +57,9 @@ const watchers = [
   }),
   fork(function* watchGetSubscriptionResult() {
     yield takeLatest(SubscriptionsActionTypes.GET_SUBSCRIPTION_RESULT, handleGetSubscriptionResult);
+  }),
+  fork(function* watchCreateSubscription() {
+    yield takeLatest(SubscriptionsActionTypes.CREATE_SUBSCRIPTION, handleCreateSubscription);
   }),
 ];
 
