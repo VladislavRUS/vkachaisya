@@ -1,14 +1,15 @@
 import React, { useEffect } from 'react';
-import { Box } from '@material-ui/core';
+import { Box, Typography, IconButton } from '@material-ui/core';
 import { bindActionCreators, Dispatch } from 'redux';
 import { getSubscriptions } from '../../store/subscriptions/actions';
 import { connect } from 'react-redux';
 import { IApplicationState } from '../../store';
-import { NavigationBar } from '../../components/NavigationBar';
+import { AppBar } from '../../components/AppBar';
 import { Link, generatePath } from 'react-router-dom';
 import { Routes } from '../../entry/Routes';
 import { selectSubscriptions } from '../../store/subscriptions/selectors';
 import { selectCurrentUser } from '../../store/user/selectors';
+import { Icon } from '../../components/Icon';
 
 const mapStateToProps = (state: IApplicationState) => ({
   user: selectCurrentUser(state),
@@ -29,6 +30,24 @@ type DispatchProps = ReturnType<typeof mapDispatchToProps>;
 
 type Props = StateProps & DispatchProps;
 
+const Header = () => (
+  <AppBar.Small
+    left={
+      <Link to={Routes.SEARCH_CHALLENGES}>
+        <IconButton>
+          <Icon name="search" size={18} />
+        </IconButton>
+      </Link>
+    }
+    center={
+      <Typography variant="h1" noWrap={true}>
+        Мои челленджи
+      </Typography>
+    }
+    right={<Link to={Routes.CREATE_CHALLENGE}>Добавить</Link>}
+  />
+);
+
 const Subscriptions: React.FC<Props> = ({ getSubscriptions, subscriptions, user }) => {
   useEffect(() => {
     getSubscriptions();
@@ -39,12 +58,8 @@ const Subscriptions: React.FC<Props> = ({ getSubscriptions, subscriptions, user 
   }
 
   return (
-    <Box height="100%" width="100%">
-      <NavigationBar
-        left={<Link to={Routes.SEARCH_CHALLENGES}>Искать</Link>}
-        center={'Челленджи'}
-        right={<Link to={Routes.CREATE_CHALLENGE}>Добавить</Link>}
-      />
+    <Box display="flex" flexDirection="column" height="100%" width="100%" bgcolor="grays:0">
+      <Header />
 
       {subscriptions.map((subscription) => (
         <Link
