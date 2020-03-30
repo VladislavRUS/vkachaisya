@@ -23,6 +23,7 @@
     "connected-react-router": "^6.8.0",
     "date-fns": "^2.11.1",
     "final-form": "^4.18.7",
+    "framer-motion": "^1.10.3",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-final-form": "^6.3.5",
