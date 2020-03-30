@@ -13,7 +13,7 @@ import PrivateRoute from './PrivateRoute/PrivateRoute';
 const App = () => (
   <Switch>
     <Route path={Routes.INITIAL} component={Initial} exact />
-    <Route path={Routes.WELCOME} component={Welcome} />
+    <PrivateRoute path={Routes.WELCOME} component={Welcome} />
 
     <PrivateRoute path={Routes.SUBSCRIPTIONS} component={Subscriptions} exact />
     <Route path={Routes.SUBSCRIPTION} component={Subscription} exact />
