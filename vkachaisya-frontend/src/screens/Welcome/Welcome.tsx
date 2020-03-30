@@ -15,23 +15,35 @@ import {
 } from '@vkontakte/vk-bridge/dist/types/src/types/bridge';
 import { IUser } from '../../types/index';
 import { mockUser } from '../../mock';
+import Welcome1 from '../../assets/images/welcome1.svg';
+import Welcome2 from '../../assets/images/welcome2.svg';
+import Welcome3 from '../../assets/images/welcome3.svg';
+import Welcome4 from '../../assets/images/welcome4.svg';
 
 const steps = [
   {
-    img: 'https://fakeimg.pl/158x158',
-    text: 'Добро пожаловать в ВКачайся!',
+    img: Welcome1,
+    imgWidth: 201,
+    imgHeight: 217,
+    text: ['Добро пожаловать', 'в ВКачайся!'],
   },
   {
-    img: 'https://fakeimg.pl/158x158',
-    text: 'Ставьте перед собой цели! ',
+    img: Welcome2,
+    imgWidth: 212,
+    imgHeight: 213,
+    text: ['Ставь перед', 'собой новые цели!'],
   },
   {
-    img: 'https://fakeimg.pl/158x158',
-    text: 'Проходите челленджи вместе с друзьями! ',
+    img: Welcome3,
+    imgWidth: 192,
+    imgHeight: 204,
+    text: ['Проходи челленджи', 'вместе с друзьями!'],
   },
   {
-    img: 'https://fakeimg.pl/158x158',
-    text: 'Делитесь результатами!',
+    img: Welcome4,
+    imgWidth: 283,
+    imgHeight: 297,
+    text: ['Делись своими', 'результатами!'],
   },
 ];
 
@@ -55,6 +67,7 @@ type Props = StateProps & DispatchProps;
 
 const Welcome: React.FC<Props> = ({ isCreating, createCurrentUser }) => {
   const [activeStep, setActiveStep] = React.useState(0);
+  const [showButton, setShowButton] = React.useState(false);
 
   useEffect(() => {
     const listener = (event: VKBridgeEvent<AnyReceiveMethodName>) => {
@@ -77,6 +90,12 @@ const Welcome: React.FC<Props> = ({ isCreating, createCurrentUser }) => {
     return () => bridge.unsubscribe(listener);
   }, [createCurrentUser]);
 
+  useEffect(() => {
+    if (activeStep === steps.length - 1) {
+      setShowButton(true);
+    }
+  }, [activeStep]);
+
   const onStart = () => {
     if (process.env.NODE_ENV === 'development') {
       createCurrentUser(mockUser);
@@ -98,7 +117,7 @@ const Welcome: React.FC<Props> = ({ isCreating, createCurrentUser }) => {
       <Box display="flex" flexDirection="column" flexGrow="1" justifyContent="center">
         <Carousel steps={steps} step={activeStep} setStep={setActiveStep} />
       </Box>
-      <Box mx={2} mb={7} visibility={activeStep === steps.length - 1 ? 'visible' : 'visible'}>
+      <Box mx={2} mb={7} visibility={showButton ? 'visible' : 'hidden'}>
         <Button color="primary" variant="contained" fullWidth disabled={isCreating} onClick={onStart}>
           Начать
         </Button>

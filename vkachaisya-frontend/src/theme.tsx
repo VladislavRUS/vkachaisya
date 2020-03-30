@@ -48,6 +48,12 @@ const theme = createMuiTheme({
       lineHeight: 1.3,
       letterSpacing: '-0.02em',
     },
+    h2: {
+      color: '#4969f0',
+      fontSize: '24px',
+      fontWeight: 700,
+      lineHeight: '29.71px',
+    },
   },
 });
 

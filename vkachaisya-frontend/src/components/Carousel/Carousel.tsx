@@ -3,17 +3,25 @@ import styled from 'styled-components';
 import { useTheme } from '@material-ui/core/styles';
 import MobileStepper from '@material-ui/core/MobileStepper';
 import SwipeableViews from 'react-swipeable-views';
-import { Box } from '@material-ui/core';
+import { Box, Typography } from '@material-ui/core';
 
 const Dots = styled(MobileStepper)`
   display: flex;
   justify-content: center;
   background-color: transparent;
+
+  .MuiMobileStepper-dot {
+    width: 7px;
+    height: 7px;
+    margin: 0 5px;
+  }
 `;
 
 interface Step {
   img: string;
-  text: string;
+  imgWidth?: number;
+  imgHeight?: number;
+  text: string[];
 }
 
 interface CarouselProps {
@@ -37,9 +45,24 @@ const Carousel: React.FC<CarouselProps> = ({ steps, step, setStep }) => {
         onChangeIndex={handleStepChange}
         enableMouseEvents
       >
-        {steps.map(({ text, img }, index) => (
-          <Box display="flex" width="100%" py={8} justifyContent="center" key={index}>
-            {Math.abs(step - index) <= 2 ? <img src={img} alt={text} /> : null}
+        {steps.map(({ text, img, imgWidth, imgHeight }, index) => (
+          <Box
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+            width="100%"
+            py={5}
+            justifyContent="center"
+            key={index}
+          >
+            <Box display="flex" alignItems="center" justifyContent="center" width="250px" height="300px">
+              <img src={img} width={imgWidth} height={imgHeight} />
+            </Box>
+            <Box display="flex" flexDirection="column" alignItems="center">
+              {text.map((str) => (
+                <Typography variant="h2">{str}</Typography>
+              ))}
+            </Box>
           </Box>
         ))}
       </SwipeableViews>
