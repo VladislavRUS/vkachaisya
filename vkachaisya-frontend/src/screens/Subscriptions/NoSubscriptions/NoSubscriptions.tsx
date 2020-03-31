@@ -7,10 +7,20 @@ import { Routes } from '../../../entry/Routes';
 
 const NoSubscriptions = () => {
   return (
-    <Box display="flex" flexDirection="column" flexGrow={1} width="100%" bgcolor="grays:0">
+    <Box display="flex" flexDirection="column" flexGrow={1} width="100%" bgcolor="grays:0" overflow="hidden">
       <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" flexGrow={1}>
-        <img src={Image} width="162" height="236" />
-        <Box mt={4}>
+        <Box
+          mt={5}
+          display="flex"
+          flexDirection="column"
+          justifyContent="center"
+          alignItems="center"
+          width="100%"
+          flexGrow={1}
+        >
+          <img src={Image} alt="No challenges" height="100%" width="auto" />
+        </Box>
+        <Box m={4}>
           <Typography align="center" variant="h4">
             У вас пока нет челленджей
           </Typography>
@@ -23,7 +33,7 @@ const NoSubscriptions = () => {
           </Button>
         </Link>
       </Box>
-      <Box mx={2} mb={8}>
+      <Box mx={2} mb="8vh">
         <Link component={RouterLink} underline="none" to={Routes.CREATE_CHALLENGE}>
           <Button color="secondary" variant="contained" fullWidth>
             Создать свой челлендж

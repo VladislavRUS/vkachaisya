@@ -10,6 +10,9 @@ import { selectSubscriptionResult } from '../../store/subscriptions/selectors';
 import { selectReports } from '../../store/reports/selectors';
 import { Routes } from '../../entry/Routes';
 import { getSubscriptionResult } from '../../store/subscriptions/actions';
+import { AppBar } from '../../components/AppBar';
+import { BackLink } from '../../components/BackLink';
+import { Card } from '../../components/Card';
 
 const mapStateToProps = (state: IApplicationState) => ({
   currentUser: selectCurrentUser(state),
@@ -33,6 +36,17 @@ type DispatchProps = ReturnType<typeof mapDispatchToProps>;
 
 type Props = StateProps & DispatchProps & RouteComponentProps;
 
+const Header = ({ title }: any) => (
+  <AppBar.Small
+    left={<BackLink to={Routes.SUBSCRIPTIONS} />}
+    center={
+      <Typography variant="h1" noWrap={true}>
+        {title}
+      </Typography>
+    }
+  />
+);
+
 const Subscription: React.FC<Props> = ({
   getReports,
   currentUser,
@@ -42,11 +56,10 @@ const Subscription: React.FC<Props> = ({
   reports,
 }) => {
   const { subscriptionId } = match.params as any;
+  const urlParams = new URLSearchParams(window.location.search);
+  const urlUserId = urlParams.get('userId');
 
   useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const urlUserId = urlParams.get('userId');
-
     let userId;
     if (urlUserId) {
       userId = parseInt(urlUserId);
@@ -62,7 +75,7 @@ const Subscription: React.FC<Props> = ({
     return () => {
       clearReports();
     };
-  }, [currentUser, getReports, getSubscriptionResult, subscriptionId]);
+  }, [currentUser, getReports, getSubscriptionResult, subscriptionId, urlUserId]);
 
   if (!subscriptionResult) {
     return null;
@@ -79,28 +92,42 @@ const Subscription: React.FC<Props> = ({
   }
 
   return (
-    <Box height="100%" width="100%">
+    <Box height="100%" width="100%" bgcolor="grays:0">
+      <Header title={subscriptionResult.title} />
       <Box p={3}>
-        <Box>
-          <Typography variant="h1">Challenge {subscriptionResult.title}</Typography>
-        </Box>
-        <Box my={2}>
-          <Typography>Прогресс</Typography>
-          <Typography variant="h1">12%</Typography>
-        </Box>
-        <Box my={2}>
-          <Grid spacing={2} alignContent="space-between" container>
-            {days.map((day, idx) => (
-              <Link
-                to={generatePath(Routes.SUBSCRIPTION_REPORT_DAY, { subscriptionId, reportDay: day.number })}
-                key={idx}
-              >
-                <Grid>
-                  <Avatar>{day.number}</Avatar>
+        <Card>
+          <Box p={2}>
+            <Typography>Прогресс</Typography>
+            <Typography variant="h1">12%</Typography>
+          </Box>
+          <Box m={2}>
+            <Grid spacing={1} alignContent="space-between" container>
+              {days.map((day, idx) => (
+                <Grid item xs={2} key={idx}>
+                  <Link
+                    to={{
+                      pathname: generatePath(Routes.SUBSCRIPTION_REPORT_DAY, { subscriptionId, reportDay: day.number }),
+                      search: `?userId=${urlUserId}`,
+                    }}
+                  >
+                    <Box p={1}>{day.number}</Box>
+                  </Link>
                 </Grid>
-              </Link>
-            ))}
-          </Grid>
+              ))}
+            </Grid>
+          </Box>
+        </Card>
+        <Box>
+          <Typography>Участники</Typography>
+          <Typography>{subscriptionResult.users.length}</Typography>
+          {subscriptionResult.users.map((user) => (
+            <Box key={user.id}>
+              <Avatar src={user.avatar} />
+              <Typography>
+                {user.firstName} {user.lastName}
+              </Typography>
+            </Box>
+          ))}
         </Box>
       </Box>
     </Box>

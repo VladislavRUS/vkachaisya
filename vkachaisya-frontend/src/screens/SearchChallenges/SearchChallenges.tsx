@@ -10,8 +10,8 @@ import { AppBar } from '../../components/AppBar';
 import { SquareButton } from '../../components/SquareButton';
 import { BackLink } from '../../components/BackLink';
 import { Routes } from '../../entry/Routes';
-import { Challenge } from './Challenge';
 import { ChallengesList, Title, StyledLink } from './SearchChallenges.styles';
+import { ChallengeCard } from '../../components/ChallengeCard';
 
 const mapStateToProps = (state: IApplicationState) => ({
   challenges: selectSearchChallenges(state),
@@ -60,7 +60,12 @@ const SearchChallenges: React.FC<Props> = ({ challenges, searchChallenges }) => 
       <Header />
       <ChallengesList>
         {challenges.map((searchChallenge) => (
-          <Challenge key={searchChallenge.challenge.id} searchChallenge={searchChallenge} />
+          <ChallengeCard
+            key={searchChallenge.challenge.id}
+            {...searchChallenge.challenge}
+            avatars={searchChallenge.avatars}
+            iconName="plus"
+          />
         ))}
       </ChallengesList>
     </Box>

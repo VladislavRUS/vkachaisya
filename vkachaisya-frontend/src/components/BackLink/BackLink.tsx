@@ -6,7 +6,7 @@ import { Icon } from '../Icon';
 const BackLink = ({ to }: { to: string }) => (
   <Link to={to} component={RouterLink}>
     <IconButton>
-      <Icon name="arrow" size={16} />
+      <Icon name="arrow" color="white" size={16} />
     </IconButton>
   </Link>
 );

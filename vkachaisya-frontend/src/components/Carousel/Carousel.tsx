@@ -51,16 +51,18 @@ const Carousel: React.FC<CarouselProps> = ({ steps, step, setStep }) => {
             flexDirection="column"
             alignItems="center"
             width="100%"
-            py={5}
+            py="4vh"
             justifyContent="center"
             key={index}
           >
             <Box display="flex" alignItems="center" justifyContent="center" width="250px" height="300px">
-              <img src={img} width={imgWidth} height={imgHeight} />
+              <img src={img} alt={text.join(' ')} width={imgWidth} height={imgHeight} />
             </Box>
             <Box display="flex" flexDirection="column" alignItems="center">
-              {text.map((str) => (
-                <Typography variant="h2">{str}</Typography>
+              {text.map((str, i) => (
+                <Typography key={i} variant="h2">
+                  {str}
+                </Typography>
               ))}
             </Box>
           </Box>
