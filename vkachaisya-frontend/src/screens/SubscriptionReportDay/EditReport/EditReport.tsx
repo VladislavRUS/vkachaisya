@@ -38,11 +38,32 @@ const EditReport: React.FC<Props> = ({ editReport, setEditReport }) => {
     setEditReport(newReport);
   };
 
+  const ref = React.createRef<HTMLInputElement>();
+
+  const onImageSelect = () => {
+    if (ref.current) {
+      ref.current.click();
+    }
+  };
+
+  const onImageChange = (event: React.FormEvent<HTMLInputElement>) => {
+    if (event.currentTarget.files && event.currentTarget.files.length) {
+      alert(event.currentTarget.files[0].name);
+    }
+  };
+
   return (
     <Wrapper>
       <TextArea placeholder={'Поделитесь впечатлениями'} value={editReport.text} onChange={onTextChange} />
       <Bottom>
-        <IconButton>
+        <input
+          type={'file'}
+          ref={ref}
+          accept={'image'}
+          style={{ opacity: 0, width: 0, height: 0 }}
+          onChange={onImageChange}
+        />
+        <IconButton onClick={onImageSelect}>
           <Icon name={'image'} size={20} />
         </IconButton>
 
