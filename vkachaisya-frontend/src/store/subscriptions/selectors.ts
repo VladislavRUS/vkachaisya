@@ -15,7 +15,7 @@ export const selectCurrentSubscriptions = createSelector(
     const now = new Date();
 
     return subscriptions.filter((subscription) => {
-      return differenceInCalendarDays(new Date(subscription.startDate), now) <= subscription.days;
+      return differenceInCalendarDays(now, new Date(subscription.startDate)) <= subscription.days;
     });
   },
 );
@@ -30,7 +30,7 @@ export const selectFinishedSubscriptions = createSelector(
     const now = new Date();
 
     return subscriptions.filter((subscription) => {
-      return differenceInCalendarDays(new Date(subscription.startDate), now) > subscription.days;
+      return differenceInCalendarDays(now, new Date(subscription.startDate)) > subscription.days;
     });
   },
 );

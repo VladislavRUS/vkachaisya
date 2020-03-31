@@ -84,7 +84,7 @@ const SubscriptionReportDay: React.FC<Props> = ({
     if (report) {
       setEditReport(report);
     }
-  }, []);
+  }, [getReports, report, reports.length, setEditReport, subscriptionId, userId]);
 
   const [editMode, setEditMode] = useState(!Boolean(report));
 
