@@ -34,6 +34,7 @@ const StyledExpansionPanelSummary = styled(ExpansionPanelSummary)`
 
 const StyledExpansionPanelDetails = styled(ExpansionPanelDetails)`
   flex-direction: column;
+  padding: 5px 16px 0;
 `;
 
 export { StyledExpansionPanel, StyledExpansionPanelSummary, StyledExpansionPanelDetails };

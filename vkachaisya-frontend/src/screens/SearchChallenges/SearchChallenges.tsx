@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
 import { IApplicationState } from '../../store';
 import { bindActionCreators, Dispatch } from 'redux';
 import { searchChallenges } from '../../store/challenges/actions';
@@ -7,11 +6,12 @@ import { selectSearchChallenges } from '../../store/challenges/selectors';
 import { Box } from '@material-ui/core';
 import { connect } from 'react-redux';
 import { AppBar } from '../../components/AppBar';
-import { SquareButton } from '../../components/SquareButton';
 import { BackLink } from '../../components/BackLink';
 import { Routes } from '../../entry/Routes';
-import { ChallengesList, Title, StyledLink } from './SearchChallenges.styles';
+import { ChallengesList } from './SearchChallenges.styles';
 import { ChallengeCard } from '../../components/ChallengeCard';
+import { Typography } from '../../components/Typography';
+import { Layout } from '../../components/Layout';
 
 const mapStateToProps = (state: IApplicationState) => ({
   challenges: selectSearchChallenges(state),
@@ -32,21 +32,14 @@ type DispatchProps = ReturnType<typeof mapDispatchToProps>;
 type Props = StateProps & DispatchProps;
 
 const Header = () => (
-  <AppBar.Large
+  <AppBar.Small
     left={<BackLink to={Routes.SUBSCRIPTIONS} />}
-    center={
-      <Title>
-        Выберите челлендж или{' '}
-        <StyledLink component={RouterLink} to={Routes.CREATE_CHALLENGE}>
-          создайте свой
-        </StyledLink>
-      </Title>
-    }
-    right={
-      <RouterLink to={Routes.CREATE_CHALLENGE}>
-        <SquareButton iconName="plus" size="large" />
-      </RouterLink>
-    }
+    center={<Typography variant="h1">Выберите челлендж</Typography>}
+    // right={
+    //   <RouterLink to={Routes.CREATE_CHALLENGE}>
+    //     <SquareButton iconName="plus" />
+    //   </RouterLink>
+    // }
   />
 );
 
@@ -56,19 +49,18 @@ const SearchChallenges: React.FC<Props> = ({ challenges, searchChallenges }) => 
   }, [searchChallenges]);
 
   return (
-    <Box bgcolor="grays:0" height="100%" width="100%">
-      <Header />
-      <ChallengesList>
-        {challenges.map((searchChallenge) => (
-          <ChallengeCard
-            key={searchChallenge.challenge.id}
-            {...searchChallenge.challenge}
-            avatars={searchChallenge.avatars}
-            iconName="plus"
-          />
-        ))}
-      </ChallengesList>
-    </Box>
+    <Layout
+      header={<Header />}
+      body={
+        <ChallengesList>
+          {challenges.map((searchChallenge) => (
+            <Box key={searchChallenge.challenge.id} mb="10px">
+              <ChallengeCard {...searchChallenge.challenge} avatars={searchChallenge.avatars} iconName="plus" />
+            </Box>
+          ))}
+        </ChallengesList>
+      }
+    />
   );
 };
 

@@ -16,6 +16,7 @@ import Welcome2 from '../../assets/images/welcome2.svg';
 import Welcome3 from '../../assets/images/welcome3.svg';
 import Welcome4 from '../../assets/images/welcome4.svg';
 import { motion } from 'framer-motion';
+import { Layout } from '../../components/Layout';
 
 const steps = [
   {
@@ -113,26 +114,29 @@ const Welcome: React.FC<Props> = ({ isCreating, createCurrentUser }) => {
   };
 
   return (
-    <Box
-      display="flex"
-      flexDirection="column"
-      justifyContent="space-between"
-      alignItems="stretch"
-      height="100%"
-      width="100%"
-      bgcolor="grays:0"
-    >
-      <Box display="flex" flexDirection="column" flexGrow="1" justifyContent="center">
-        <Carousel steps={steps} step={activeStep} setStep={setActiveStep} />
-      </Box>
-      <motion.div variants={variants} animate={showButton ? 'visible' : 'hidden'} initial={'hidden'}>
-        <Box mx={2} mb={7}>
-          <Button color="primary" variant="contained" fullWidth disabled={isCreating} onClick={onStart}>
-            Начать
-          </Button>
+    <Layout
+      body={
+        <Box
+          display="flex"
+          flexDirection="column"
+          justifyContent="space-between"
+          alignItems="stretch"
+          height="100%"
+          width="100%"
+        >
+          <Box display="flex" flexDirection="column" flexGrow="1" justifyContent="center">
+            <Carousel steps={steps} step={activeStep} setStep={setActiveStep} />
+          </Box>
+          <motion.div variants={variants} animate={showButton ? 'visible' : 'hidden'} initial={'hidden'}>
+            <Box mx={2}>
+              <Button color="primary" variant="contained" fullWidth disabled={isCreating} onClick={onStart}>
+                Начать
+              </Button>
+            </Box>
+          </motion.div>
         </Box>
-      </motion.div>
-    </Box>
+      }
+    />
   );
 };
 

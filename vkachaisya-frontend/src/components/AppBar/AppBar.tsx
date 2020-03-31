@@ -30,7 +30,7 @@ const AppBar: AppBar = ({ circlePosition, ...props }) => (
 
 AppBar.Small = (props) => (
   <AppBar {...props} circlePosition="bottom">
-    <Box display="flex" alignItems="flex-end" p={1} pr="19px" width="100%" height="14vh">
+    <Box display="flex" alignItems="flex-end" p={1} pr="19px" width="100%" height="100%">
       <Grid container alignItems="center">
         <Grid container item xs={2}>
           {props.left}

@@ -12,6 +12,8 @@ const COLORS = {
   'greens:0': '#56CC95',
 
   'grays:0': '#f8f9fc',
+  'grays:1': '#403e4b',
+  'grays:2': '#6a7b89',
 };
 
 const theme = createMuiTheme({
@@ -68,6 +70,7 @@ const GlobalStyle = createGlobalStyle`
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     margin: 0;
+    overflow: hidden;
   }
   html,
   body {

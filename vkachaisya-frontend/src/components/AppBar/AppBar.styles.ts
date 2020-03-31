@@ -6,7 +6,7 @@ const StyledAppBar = styled(AppBar)`
   top: 0;
   background-image: linear-gradient(30.21deg, #3e5ee7 3.36%, #4f70f5 105%);
   box-shadow: none;
-  min-height: 14vh;
+  height: 108px;
   overflow: hidden;
 `;
 

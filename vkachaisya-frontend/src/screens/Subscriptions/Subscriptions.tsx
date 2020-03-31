@@ -13,7 +13,8 @@ import { Icon } from '../../components/Icon';
 import { SquareButton } from '../../components/SquareButton';
 import { NoSubscriptions } from './NoSubscriptions';
 import { ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails } from '../../components/ExpansionPanel';
-import { ChallengeCard } from '../../components/ChallengeCard/ChallengeCard';
+import { ChallengeCard } from '../../components/ChallengeCard';
+import { Layout } from '../../components/Layout';
 
 const mapStateToProps = (state: IApplicationState) => ({
   user: selectCurrentUser(state),
@@ -67,55 +68,65 @@ const Subscriptions: React.FC<Props> = ({ getSubscriptions, currentSubscriptions
   }
 
   return (
-    <Box display="flex" flexDirection="column" alignItems="stretch" height="100%" width="100%" bgcolor="grays:0">
-      <Header />
+    <Layout
+      header={<Header />}
+      body={
+        <Box width="100%">
+          {!currentSubscriptions.length && !finishedSubscriptions.length && <NoSubscriptions />}
 
-      {!currentSubscriptions.length && !finishedSubscriptions.length && <NoSubscriptions />}
+          {!!currentSubscriptions.length && (
+            <Box mt="10px">
+              <ExpansionPanel defaultExpanded={true}>
+                <ExpansionPanelSummary>Текущие</ExpansionPanelSummary>
+                <ExpansionPanelDetails>
+                  {currentSubscriptions.map((subscription) => (
+                    <Box mb="10px" key={subscription.id}>
+                      <Link
+                        component={RouterLink}
+                        to={{
+                          pathname: generatePath(Routes.SUBSCRIPTION, { subscriptionId: subscription.id }),
+                          search: `?userId=${user.id}`,
+                        }}
+                      >
+                        <ChallengeCard
+                          {...subscription}
+                          iconName="arrow"
+                          daysPassed={Math.round(Math.random() * subscription.days)}
+                        />
+                      </Link>
+                    </Box>
+                  ))}
+                </ExpansionPanelDetails>
+              </ExpansionPanel>
+            </Box>
+          )}
 
-      {!!currentSubscriptions.length && (
-        <Box mt="10px">
-          <ExpansionPanel defaultExpanded={true}>
-            <ExpansionPanelSummary>Текущие</ExpansionPanelSummary>
-            <ExpansionPanelDetails>
-              {currentSubscriptions.map((subscription) => (
-                <Box mb={2} key={subscription.id}>
-                  <Link
-                    component={RouterLink}
-                    to={{
-                      pathname: generatePath(Routes.SUBSCRIPTION, { subscriptionId: subscription.id }),
-                      search: `?userId=${user.id}`,
-                    }}
-                  >
-                    <ChallengeCard {...subscription} iconName="arrow" />
-                  </Link>
-                </Box>
-              ))}
-            </ExpansionPanelDetails>
-          </ExpansionPanel>
+          {!!finishedSubscriptions.length && (
+            <Box mt="10px">
+              <ExpansionPanel defaultExpanded={true}>
+                <ExpansionPanelSummary>Завершенные</ExpansionPanelSummary>
+                <ExpansionPanelDetails>
+                  {finishedSubscriptions.map((subscription) => (
+                    <Box mb="10px" key={subscription.id}>
+                      <Link
+                        underline="none"
+                        component={RouterLink}
+                        to={{
+                          pathname: generatePath(Routes.SUBSCRIPTION, { subscriptionId: subscription.id }),
+                          search: `?userId=${user.id}`,
+                        }}
+                      >
+                        <ChallengeCard {...subscription} iconName="arrow" />
+                      </Link>
+                    </Box>
+                  ))}
+                </ExpansionPanelDetails>
+              </ExpansionPanel>
+            </Box>
+          )}
         </Box>
-      )}
-
-      {!!finishedSubscriptions.length && (
-        <ExpansionPanel defaultExpanded={true}>
-          <ExpansionPanelSummary>Завершенные</ExpansionPanelSummary>
-          <ExpansionPanelDetails>
-            {finishedSubscriptions.map((subscription) => (
-              <Box mb={2} key={subscription.id}>
-                <Link
-                  component={RouterLink}
-                  to={{
-                    pathname: generatePath(Routes.SUBSCRIPTION, { subscriptionId: subscription.id }),
-                    search: `?userId=${user.id}`,
-                  }}
-                >
-                  <ChallengeCard {...subscription} iconName="arrow" />
-                </Link>
-              </Box>
-            ))}
-          </ExpansionPanelDetails>
-        </ExpansionPanel>
-      )}
-    </Box>
+      }
+    />
   );
 };
 
