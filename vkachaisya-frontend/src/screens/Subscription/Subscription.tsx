@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Box, Typography, Grid, Avatar } from '@material-ui/core';
+import { Box, Grid, Avatar } from '@material-ui/core';
 import { bindActionCreators, Dispatch } from 'redux';
 import { getReports, clearReports } from '../../store/reports/actions';
 import { connect } from 'react-redux';
@@ -14,7 +14,7 @@ import { AppBar } from '../../components/AppBar';
 import { BackLink } from '../../components/BackLink';
 import { Card } from '../../components/Card';
 import { Layout } from '../../components/Layout';
-import { useRouteMatch } from 'react-router-dom';
+import { Typography } from '../../components/Typography';
 
 const mapStateToProps = (state: IApplicationState) => ({
   currentUser: selectCurrentUser(state),
@@ -88,45 +88,56 @@ const Subscription: React.FC<Props> = ({
     <Layout
       header={<Header title={subscriptionResult.title} />}
       body={
-        <Box p={3}>
-          <Card>
-            <Box p={2}>
-              <Typography>Прогресс</Typography>
-              <Typography variant="h1">12%</Typography>
+        <>
+          <Box m={2} mt={4} mb={1}>
+            <Card>
+              <Box p={2}>
+                <Typography>Прогресс</Typography>
+                <Typography variant="h1">12%</Typography>
+              </Box>
+
+              <Box m={2}>
+                <Grid spacing={1} alignContent="space-between" container>
+                  {days.map((day, idx) => (
+                    <Grid item xs={2} key={idx}>
+                      <Link
+                        to={{
+                          pathname: generatePath(Routes.SUBSCRIPTION_REPORT_DAY, {
+                            subscriptionId,
+                            userId,
+                            reportDay: day.number,
+                          }),
+                        }}
+                      >
+                        <Box p={1}>{day.number}</Box>
+                      </Link>
+                    </Grid>
+                  ))}
+                </Grid>
+              </Box>
+            </Card>
+          </Box>
+          <Box m="25px" mb="0">
+            <Box display="flex" alignItems="center" mb="7px">
+              <Typography color="grays:1" fontSize="16px" fontWeight={700}>
+                Участники
+              </Typography>
+              <Box ml={1} />
+              <Typography color="grays:2" fontSize="14px" fontWeight={400}>
+                {subscriptionResult.users.length}
+              </Typography>
             </Box>
-            <Box m={2}>
-              <Grid spacing={1} alignContent="space-between" container>
-                {days.map((day, idx) => (
-                  <Grid item xs={2} key={idx}>
-                    <Link
-                      to={{
-                        pathname: generatePath(Routes.SUBSCRIPTION_REPORT_DAY, {
-                          subscriptionId,
-                          userId,
-                          reportDay: day.number,
-                        }),
-                      }}
-                    >
-                      <Box p={1}>{day.number}</Box>
-                    </Link>
-                  </Grid>
-                ))}
-              </Grid>
-            </Box>
-          </Card>
-          <Box>
-            <Typography>Участники</Typography>
-            <Typography>{subscriptionResult.users.length}</Typography>
             {subscriptionResult.users.map((user) => (
-              <Box key={user.id}>
+              <Box key={user.id} display="flex" alignItems="center" mt="15px">
                 <Avatar src={user.avatar} />
-                <Typography>
+                <Box ml={2} />
+                <Typography color="grays:1" fontSize="16px" fontWeight={400}>
                   {user.firstName} {user.lastName}
                 </Typography>
               </Box>
             ))}
           </Box>
-        </Box>
+        </>
       }
     />
   );
