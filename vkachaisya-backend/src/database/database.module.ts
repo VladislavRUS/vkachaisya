@@ -8,12 +8,12 @@ import { File } from './entities/File';
 
 export const DatabaseModule = TypeOrmModule.forRoot({
   type: 'postgres',
-  host: 'database',
+  host: process.env.APP_ENV === 'development' ? 'localhost' : 'database',
   port: config.databasePort,
   username: config.databaseUsername,
   password: config.databasePassword,
   database: config.databaseName,
   entities: [User, Challenge, Subscription, File, Report],
   synchronize: true,
-  dropSchema: true,
+  dropSchema: process.env.APP_ENV === 'development',
 });
