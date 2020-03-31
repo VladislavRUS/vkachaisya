@@ -8,7 +8,7 @@ import { File } from './entities/File';
 
 export const DatabaseModule = TypeOrmModule.forRoot({
   type: 'postgres',
-  host: 'localhost',
+  host: 'database',
   port: config.databasePort,
   username: config.databaseUsername,
   password: config.databasePassword,
