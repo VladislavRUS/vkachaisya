@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  frontend:
+    container_name: vkachaisya-frontend
+    build: ./vkachaisya-frontend
+    ports:
+      - 3001:80
+      
+  backend:
+    container_name: vkachaisya-backend
+    build: ./vkachaisya-backend
+    ports:
+      - 3000:3000
+
+  database:
+    container_name: vkachaisya-database
+    image: postgres:12.1
+    restart: always
+    ports:
+      - 5432:5432
+    volumes:
+      - ./docker-volumes/postgresql:/var/lib/postgresql
+    env_file:
+      - database.env
+     
