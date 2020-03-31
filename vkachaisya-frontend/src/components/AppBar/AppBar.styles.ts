@@ -2,9 +2,11 @@ import styled from 'styled-components';
 import { AppBar } from '@material-ui/core';
 
 const StyledAppBar = styled(AppBar)`
+  position: sticky;
+  top: 0;
   background-image: linear-gradient(30.21deg, #3e5ee7 3.36%, #4f70f5 105%);
   box-shadow: none;
-  min-height: 100px;
+  min-height: 14vh;
   overflow: hidden;
 `;
 

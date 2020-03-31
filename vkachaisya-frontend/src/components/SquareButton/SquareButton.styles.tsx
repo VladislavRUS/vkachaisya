@@ -15,6 +15,9 @@ const StyledButton = styled(({ iconName, iconRotate, size, ...props }) => <Butto
     min-width: 0;
     background-color: ${({ theme }) => theme.palette['yellows:0']};
   }
+  svg {
+    color: white;
+  }
 `;
 
 export { StyledButton };

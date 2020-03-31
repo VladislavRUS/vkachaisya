@@ -65,7 +65,7 @@ const CreateChallenge: React.FC<Props> = ({ createChallenge, isCreating }) => {
     });
   };
   return (
-    <Box display="flex" flexDirection="column" height="100%" width="100%" bgcolor="grays:0">
+    <Box display="flex" flexDirection="column" minHeight="100%" width="100%" bgcolor="grays:0">
       <Header />
       <Box display="flex" flexDirection="column" flexGrow="1">
         <Form
