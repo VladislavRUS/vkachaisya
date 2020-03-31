@@ -2,13 +2,13 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { App } from './entry';
 import bridge from '@vkontakte/vk-bridge';
-import { createBrowserHistory } from 'history';
+import { createHashHistory } from 'history';
 import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'connected-react-router';
 import configureStore from './configureStore';
 import { ThemeProvider } from './theme';
 
-const history = createBrowserHistory();
+const history = createHashHistory();
 
 // @ts-ignore
 const initialState = window.initialReduxState;
