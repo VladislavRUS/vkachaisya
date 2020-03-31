@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { IApplicationState } from '../../store';
 import { bindActionCreators, Dispatch } from 'redux';
 import { searchChallenges } from '../../store/challenges/actions';
@@ -12,6 +12,8 @@ import { ChallengesList } from './SearchChallenges.styles';
 import { ChallengeCard } from '../../components/ChallengeCard';
 import { Typography } from '../../components/Typography';
 import { Layout } from '../../components/Layout';
+import { Modal } from '../../components/Modal';
+import JoinImage from '../../assets/images/join.svg';
 
 const mapStateToProps = (state: IApplicationState) => ({
   challenges: selectSearchChallenges(state),
@@ -44,23 +46,46 @@ const Header = () => (
 );
 
 const SearchChallenges: React.FC<Props> = ({ challenges, searchChallenges }) => {
+  const [showModal, setShowModal] = useState(false);
+
   useEffect(() => {
     searchChallenges();
   }, [searchChallenges]);
 
+  const join = () => {
+    setShowModal(true);
+  };
+
   return (
-    <Layout
-      header={<Header />}
-      body={
-        <ChallengesList>
-          {challenges.map((searchChallenge) => (
-            <Box key={searchChallenge.challenge.id} mb="10px">
-              <ChallengeCard {...searchChallenge.challenge} avatars={searchChallenge.avatars} iconName="plus" />
-            </Box>
-          ))}
-        </ChallengesList>
-      }
-    />
+    <>
+      <Layout
+        header={<Header />}
+        body={
+          <ChallengesList>
+            {challenges.map((searchChallenge) => (
+              <Box key={searchChallenge.challenge.id} mb="10px">
+                <ChallengeCard
+                  {...searchChallenge}
+                  {...searchChallenge.challenge}
+                  onButtonClick={join}
+                  iconName="plus"
+                />
+              </Box>
+            ))}
+          </ChallengesList>
+        }
+      />
+      <Modal image={JoinImage} onBackButtonClick={() => setShowModal(false)} open={showModal}>
+        <Typography color="grays:1" fontSize="21px" fontWeight={500} align="center">
+          <Typography display="block">Поздравляем!</Typography>
+          <Typography display="block">Вы присоединились</Typography>
+          <Typography display="block">к новому челленджу</Typography>
+          <Typography display="block" color="blues:0">
+            #ВКачайсяБассейн
+          </Typography>
+        </Typography>
+      </Modal>
+    </>
   );
 };
 

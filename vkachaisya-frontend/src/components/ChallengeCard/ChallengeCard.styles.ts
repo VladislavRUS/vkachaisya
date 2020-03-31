@@ -27,10 +27,20 @@ export const Description = styled.div`
   font-size: 14px;
   font-weight: 400;
   line-height: 19.6px;
-  margin-bottom: 22px;
 `;
 
 export const Badges = styled.div`
   display: flex;
   align-items: center;
+`;
+
+export const Circle = styled.div`
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 126px;
+  height: 100px;
+  border-radius: 50%;
+  background-color: #56cc95;
+  transform: translate(50%, 50%);
 `;

@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react';
 import { Box, Typography, IconButton, Link } from '@material-ui/core';
+import { differenceInCalendarDays } from 'date-fns';
 import { bindActionCreators, Dispatch } from 'redux';
 import { getSubscriptions } from '../../store/subscriptions/actions';
 import { connect } from 'react-redux';
 import { IApplicationState } from '../../store';
 import { AppBar } from '../../components/AppBar';
-import { Link as RouterLink, generatePath } from 'react-router-dom';
+import { Link as RouterLink, generatePath, useHistory } from 'react-router-dom';
 import { Routes } from '../../entry/Routes';
 import { selectCurrentSubscriptions, selectFinishedSubscriptions } from '../../store/subscriptions/selectors';
 import { selectCurrentUser } from '../../store/user/selectors';
@@ -59,6 +60,8 @@ const Header = () => (
 );
 
 const Subscriptions: React.FC<Props> = ({ getSubscriptions, currentSubscriptions, finishedSubscriptions, user }) => {
+  const history = useHistory();
+
   useEffect(() => {
     getSubscriptions();
   }, [getSubscriptions]);
@@ -67,11 +70,16 @@ const Subscriptions: React.FC<Props> = ({ getSubscriptions, currentSubscriptions
     return null;
   }
 
+  const onChooseChallenge = (subscriptionId: number) => {
+    history.push(generatePath(Routes.SUBSCRIPTION, { subscriptionId, userId: user.id }));
+  };
+
   return (
     <Layout
       header={<Header />}
+      withScroll={!!currentSubscriptions.length || !!finishedSubscriptions.length}
       body={
-        <Box width="100%">
+        <>
           {!currentSubscriptions.length && !finishedSubscriptions.length && <NoSubscriptions />}
 
           {!!currentSubscriptions.length && (
@@ -81,16 +89,12 @@ const Subscriptions: React.FC<Props> = ({ getSubscriptions, currentSubscriptions
                 <ExpansionPanelDetails>
                   {currentSubscriptions.map((subscription) => (
                     <Box mb="10px" key={subscription.id}>
-                      <Link
-                        component={RouterLink}
-                        to={generatePath(Routes.SUBSCRIPTION, { subscriptionId: subscription.id, userId: user.id })}
-                      >
-                        <ChallengeCard
-                          {...subscription}
-                          iconName="arrow"
-                          daysPassed={Math.round(Math.random() * subscription.days)}
-                        />
-                      </Link>
+                      <ChallengeCard
+                        {...subscription}
+                        iconName="arrow"
+                        onButtonClick={() => onChooseChallenge(subscription.id)}
+                        daysPassed={differenceInCalendarDays(new Date(), new Date(subscription.startDate))}
+                      />
                     </Box>
                   ))}
                 </ExpansionPanelDetails>
@@ -101,27 +105,23 @@ const Subscriptions: React.FC<Props> = ({ getSubscriptions, currentSubscriptions
           {!!finishedSubscriptions.length && (
             <Box mt="10px">
               <ExpansionPanel defaultExpanded={true}>
-                <ExpansionPanelSummary>Завершенные</ExpansionPanelSummary>
+                <ExpansionPanelSummary>Прошедшие</ExpansionPanelSummary>
                 <ExpansionPanelDetails>
                   {finishedSubscriptions.map((subscription) => (
                     <Box mb="10px" key={subscription.id}>
-                      <Link
-                        underline="none"
-                        component={RouterLink}
-                        to={{
-                          pathname: generatePath(Routes.SUBSCRIPTION, { subscriptionId: subscription.id }),
-                          search: `?userId=${user.id}`,
-                        }}
-                      >
-                        <ChallengeCard {...subscription} iconName="arrow" />
-                      </Link>
+                      <ChallengeCard
+                        {...subscription}
+                        iconName="arrow"
+                        done={true}
+                        onButtonClick={() => onChooseChallenge(subscription.id)}
+                      />
                     </Box>
                   ))}
                 </ExpansionPanelDetails>
               </ExpansionPanel>
             </Box>
           )}
-        </Box>
+        </>
       }
     />
   );
