@@ -83,10 +83,7 @@ const Subscriptions: React.FC<Props> = ({ getSubscriptions, currentSubscriptions
                     <Box mb="10px" key={subscription.id}>
                       <Link
                         component={RouterLink}
-                        to={{
-                          pathname: generatePath(Routes.SUBSCRIPTION, { subscriptionId: subscription.id }),
-                          search: `?userId=${user.id}`,
-                        }}
+                        to={generatePath(Routes.SUBSCRIPTION, { subscriptionId: subscription.id, userId: user.id })}
                       >
                         <ChallengeCard
                           {...subscription}

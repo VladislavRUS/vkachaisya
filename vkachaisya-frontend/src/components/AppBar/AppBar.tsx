@@ -7,6 +7,7 @@ interface SmallAppBarProps extends MuiAppBarProps {
   left?: React.ReactNode;
   center?: React.ReactNode;
   right?: React.ReactNode;
+  isTransparent?: boolean;
 }
 
 interface LargeAppBarProps extends MuiAppBarProps {
@@ -15,15 +16,20 @@ interface LargeAppBarProps extends MuiAppBarProps {
   right?: React.ReactNode;
 }
 
-interface AppBar extends React.FC<MuiAppBarProps & { circlePosition: 'top' | 'bottom' }> {
+interface AppBar extends React.FC<MuiAppBarProps & { circlePosition: 'top' | 'bottom'; isTransparent?: boolean }> {
   Small: React.FC<SmallAppBarProps>;
   Large: React.FC<LargeAppBarProps>;
 }
 
 const AppBar: AppBar = ({ circlePosition, ...props }) => (
   <StyledAppBar {...props} position="sticky">
-    <TopWave src={WaveImage} />
-    <Circle position={circlePosition} />
+    {!props.isTransparent && (
+      <>
+        <TopWave src={WaveImage} />
+        <Circle position={circlePosition} />
+      </>
+    )}
+
     {props.children}
   </StyledAppBar>
 );

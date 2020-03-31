@@ -4,9 +4,17 @@ import * as actions from './actions';
 
 type ReportsActionType = ActionType<typeof actions>;
 
+const emptyEditReport = {
+  text: '',
+  day: 1,
+  files: [],
+};
+
 const initialState: IReportsState = {
   reports: [],
+  editReport: emptyEditReport,
   isFetching: false,
+  isCreating: false,
 };
 
 export const reportsReducer = createReducer<IReportsState, ReportsActionType>(initialState)
@@ -20,4 +28,19 @@ export const reportsReducer = createReducer<IReportsState, ReportsActionType>(in
   .handleType(ReportsActionTypes.GET_REPORTS_FAILURE, (state) => ({ ...state, isFetching: false }))
 
   // Clear reports
-  .handleType(ReportsActionTypes.CLEAR_REPORTS, (state) => ({ ...state, reports: [] }));
+  .handleType(ReportsActionTypes.CLEAR_REPORTS, (state) => ({ ...state, reports: [], editReport: emptyEditReport }))
+
+  // Set edit report
+  .handleType(ReportsActionTypes.SET_EDIT_REPORT, (state, action) => ({
+    ...state,
+    editReport: { ...action.payload.editReport },
+  }))
+
+  // Create report
+  .handleType(ReportsActionTypes.CREATE_REPORT_REQUEST, (state) => ({ ...state, isCreating: true }))
+  .handleType(ReportsActionTypes.CREATE_REPORT_SUCCESS, (state, action) => ({
+    ...state,
+    isCreating: false,
+    reports: [...state.reports, action.payload],
+  }))
+  .handleType(ReportsActionTypes.CREATE_REPORT_FAILURE, (state) => ({ ...state, isCreating: false }));

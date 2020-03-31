@@ -14,6 +14,7 @@ import { AppBar } from '../../components/AppBar';
 import { BackLink } from '../../components/BackLink';
 import { Card } from '../../components/Card';
 import { Layout } from '../../components/Layout';
+import { useRouteMatch } from 'react-router-dom';
 
 const mapStateToProps = (state: IApplicationState) => ({
   currentUser: selectCurrentUser(state),
@@ -56,18 +57,9 @@ const Subscription: React.FC<Props> = ({
   getSubscriptionResult,
   reports,
 }) => {
-  const { subscriptionId } = match.params as any;
-  const urlParams = new URLSearchParams(window.location.search);
-  const urlUserId = urlParams.get('userId');
+  const { subscriptionId, userId } = match.params as any;
 
   useEffect(() => {
-    let userId;
-    if (urlUserId) {
-      userId = parseInt(urlUserId);
-    } else if (currentUser) {
-      userId = currentUser.id;
-    }
-
     if (userId) {
       getSubscriptionResult(userId, subscriptionId);
       getReports(userId, subscriptionId);
@@ -76,7 +68,7 @@ const Subscription: React.FC<Props> = ({
     return () => {
       clearReports();
     };
-  }, [currentUser, getReports, getSubscriptionResult, subscriptionId, urlUserId]);
+  }, [currentUser, getReports, getSubscriptionResult, subscriptionId, userId]);
 
   if (!subscriptionResult) {
     return null;
@@ -110,9 +102,9 @@ const Subscription: React.FC<Props> = ({
                       to={{
                         pathname: generatePath(Routes.SUBSCRIPTION_REPORT_DAY, {
                           subscriptionId,
+                          userId,
                           reportDay: day.number,
                         }),
-                        search: `?userId=${urlUserId}`,
                       }}
                     >
                       <Box p={1}>{day.number}</Box>

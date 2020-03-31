@@ -14,6 +14,8 @@ export interface IChallenge {
   withReport: boolean;
 }
 
+export type EditReport = Omit<IReport, 'id'>;
+
 export interface IReport {
   id: number;
   text: string;
