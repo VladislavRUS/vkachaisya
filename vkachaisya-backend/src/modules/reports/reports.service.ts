@@ -5,11 +5,14 @@ import { Report } from '../../database/entities/Report';
 import { CreateReportDto } from './dto/CreateReportDto';
 import { UpdateReportDto } from './dto/UpdateReportDto';
 import { FilesService } from '../files/files.service';
+import { Subscription } from '../../database/entities/Subscription';
+import { SubscriptionsService } from '../subscriptions/subscriptions.service';
 
 @Injectable()
 export class ReportsService {
   constructor(
     @InjectRepository(Report) private reportRepository: Repository<Report>,
+    private subscriptionsService: SubscriptionsService,
     private filesService: FilesService,
   ) {}
 
@@ -35,11 +38,8 @@ export class ReportsService {
     return this.reportRepository.find({ where: { subscription: { id: subscriptionId } }, relations: ['files'] });
   }
 
-  async getBySubscriptionIdAndUserId(userId, subscriptionId: number) {
-    return this.reportRepository.find({
-      where: { user: { id: userId }, subscription: { id: subscriptionId } },
-      relations: ['files'],
-    });
+  async getBySubscriptionIdAndUserId(userId: number, subscriptionId: number) {
+    return this.reportRepository.find({ where: { subscription: { id: subscriptionId } } });
   }
 
   async update(reportId: number, updateReportDto: UpdateReportDto) {

@@ -62,7 +62,7 @@ const Subscription: React.FC<Props> = ({
   useEffect(() => {
     if (userId) {
       getSubscriptionResult(userId, subscriptionId);
-      getReports(userId, subscriptionId);
+      getReports(userId);
     }
 
     return () => {

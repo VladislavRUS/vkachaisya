@@ -6,6 +6,7 @@ export interface IReportsState {
   editReport: EditReport;
   isFetching: boolean;
   isCreating: boolean;
+  isUpdating: boolean;
 }
 
 export enum ReportsActionTypes {
@@ -18,6 +19,11 @@ export enum ReportsActionTypes {
   CREATE_REPORT_REQUEST = '@@reports/CREATE_REPORT_REQUEST',
   CREATE_REPORT_SUCCESS = '@@reports/CREATE_REPORT_SUCCESS',
   CREATE_REPORT_FAILURE = '@@reports/CREATE_REPORT_FAILURE',
+
+  UPDATE_REPORT = '@@reports/UPDATE_REPORT',
+  UPDATE_REPORT_REQUEST = '@@reports/UPDATE_REPORT_REQUEST',
+  UPDATE_REPORT_SUCCESS = '@@reports/UPDATE_REPORT_SUCCESS',
+  UPDATE_REPORT_FAILURE = '@@reports/UPDATE_REPORT_FAILURE',
 
   CLEAR_REPORTS = '@@reports/CLEAR_REPORTS',
 

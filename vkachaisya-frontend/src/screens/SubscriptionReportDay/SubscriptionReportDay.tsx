@@ -7,15 +7,17 @@ import { AppBar } from '../../components/AppBar';
 import { Box, Typography } from '@material-ui/core';
 import { BackLink } from '../../components/BackLink';
 import { Routes } from '../../entry/Routes';
-import { selectReportByDay, selectReports } from '../../store/reports/selectors';
+import { selectIsFetchingReports, selectReportByDay, selectReports } from '../../store/reports/selectors';
 import { EditReport } from './EditReport';
 import { RoundButton } from '../../components/RoundButton';
 import { Icon } from '../../components/Icon';
-import { createReport, getReports, setEditReport } from '../../store/reports/actions';
+import { clearReports, createReport, getReports, setEditReport, updateReport } from '../../store/reports/actions';
+import { ViewReport } from './ViewReport';
 
 const mapStateToProps = (state: IApplicationState, routeProps: RouteComponentProps) => ({
   reports: selectReports(state),
-  report: selectReportByDay(state, (routeProps.match.params as any).day),
+  report: selectReportByDay(state, +(routeProps.match.params as any).reportDay),
+  isFetchingReports: selectIsFetchingReports(state),
 });
 
 type StateProps = ReturnType<typeof mapStateToProps>;
@@ -26,6 +28,8 @@ const mapDispatchToProps = (dispatch: Dispatch) =>
       getReports,
       setEditReport,
       createReport,
+      clearReports,
+      updateReport,
     },
     dispatch,
   );
@@ -33,13 +37,18 @@ type DispatchProps = ReturnType<typeof mapDispatchToProps>;
 
 type Props = StateProps & DispatchProps & RouteComponentProps;
 
-const ViewHeader = ({ to, title }: any) => (
+const ViewHeader = ({ to, title, onEdit }: any) => (
   <AppBar.Small
     left={<BackLink to={to} />}
     center={
       <Typography variant="h1" noWrap={true}>
         {title}
       </Typography>
+    }
+    right={
+      <RoundButton onClick={onEdit} buttonColor={'transparent'}>
+        <Icon name={'pencil'} size={50} color={'#818c99'} />
+      </RoundButton>
     }
   />
 );
@@ -73,20 +82,32 @@ const SubscriptionReportDay: React.FC<Props> = ({
   getReports,
   setEditReport,
   createReport,
+  isFetchingReports,
+  clearReports,
+  updateReport,
 }) => {
   const { subscriptionId, reportDay, userId } = match.params as any;
 
+  const [editMode, setEditMode] = useState(false);
+
   useEffect(() => {
     if (reports.length === 0) {
-      getReports(userId, subscriptionId);
+      getReports(subscriptionId);
     }
 
-    if (report) {
-      setEditReport(report);
-    }
+    return () => {
+      clearReports();
+    };
   }, []);
 
-  const [editMode, setEditMode] = useState(!Boolean(report));
+  useEffect(() => {
+    if (report) {
+      setEditReport(report);
+      setEditMode(false);
+    } else {
+      setEditMode(true);
+    }
+  }, [report]);
 
   const getTitle = () => {
     if (editMode && report) {
@@ -108,22 +129,35 @@ const SubscriptionReportDay: React.FC<Props> = ({
     }
   };
 
-  const onSave = () => {
-    if (!report) {
-      createReport(subscriptionId);
-    } else {
+  const onEdit = () => {
+    if (report) {
+      setEditReport(report);
+      setEditMode(true);
     }
   };
+
+  const onSave = () => {
+    if (!report) {
+      createReport(+reportDay, subscriptionId);
+    } else {
+      updateReport(report.id);
+    }
+  };
+
+  if (isFetchingReports) {
+    return null;
+  }
 
   return (
     <Box display={'flex'} flexDirection={'column'} width={'100%'} height={'100%'} overflow={'hidden'}>
       {editMode ? (
         <EditHeader onCancel={onCancel} title={getTitle()} onSave={onSave} />
       ) : (
-        <ViewHeader to={subscriptionsLink} title={getTitle()} />
+        <ViewHeader to={subscriptionsLink} title={getTitle()} onEdit={onEdit} />
       )}
 
-      {editMode ? <EditReport day={reportDay} /> : null}
+      {editMode && <EditReport day={reportDay} />}
+      {!editMode && report && <ViewReport report={report} />}
     </Box>
   );
 };

@@ -15,32 +15,57 @@ const initialState: IReportsState = {
   editReport: emptyEditReport,
   isFetching: false,
   isCreating: false,
+  isUpdating: false,
 };
 
 export const reportsReducer = createReducer<IReportsState, ReportsActionType>(initialState)
   // Get reports
-  .handleType(ReportsActionTypes.GET_REPORTS_REQUEST, (state) => ({ ...state, isFetching: true }))
-  .handleType(ReportsActionTypes.GET_REPORTS_SUCCESS, (state, action) => ({
-    ...state,
-    isFetching: false,
-    reports: [...action.payload],
-  }))
-  .handleType(ReportsActionTypes.GET_REPORTS_FAILURE, (state) => ({ ...state, isFetching: false }))
+  .handleType(ReportsActionTypes.GET_REPORTS_REQUEST, (state): IReportsState => ({ ...state, isFetching: true }))
+  .handleType(
+    ReportsActionTypes.GET_REPORTS_SUCCESS,
+    (state, action): IReportsState => ({
+      ...state,
+      isFetching: false,
+      reports: [...action.payload],
+    }),
+  )
+  .handleType(ReportsActionTypes.GET_REPORTS_FAILURE, (state): IReportsState => ({ ...state, isFetching: false }))
 
   // Clear reports
-  .handleType(ReportsActionTypes.CLEAR_REPORTS, (state) => ({ ...state, reports: [], editReport: emptyEditReport }))
+  .handleType(
+    ReportsActionTypes.CLEAR_REPORTS,
+    (state): IReportsState => ({ ...state, reports: [], editReport: emptyEditReport }),
+  )
 
   // Set edit report
-  .handleType(ReportsActionTypes.SET_EDIT_REPORT, (state, action) => ({
-    ...state,
-    editReport: { ...action.payload.editReport },
-  }))
+  .handleType(
+    ReportsActionTypes.SET_EDIT_REPORT,
+    (state, action): IReportsState => ({
+      ...state,
+      editReport: { ...action.payload.editReport },
+    }),
+  )
 
   // Create report
-  .handleType(ReportsActionTypes.CREATE_REPORT_REQUEST, (state) => ({ ...state, isCreating: true }))
-  .handleType(ReportsActionTypes.CREATE_REPORT_SUCCESS, (state, action) => ({
-    ...state,
-    isCreating: false,
-    reports: [...state.reports, action.payload],
-  }))
-  .handleType(ReportsActionTypes.CREATE_REPORT_FAILURE, (state) => ({ ...state, isCreating: false }));
+  .handleType(ReportsActionTypes.CREATE_REPORT_REQUEST, (state): IReportsState => ({ ...state, isCreating: true }))
+  .handleType(
+    ReportsActionTypes.CREATE_REPORT_SUCCESS,
+    (state, action): IReportsState => ({
+      ...state,
+      isCreating: false,
+      reports: [...state.reports, action.payload],
+    }),
+  )
+  .handleType(ReportsActionTypes.CREATE_REPORT_FAILURE, (state): IReportsState => ({ ...state, isCreating: false }))
+
+  // Update report
+  .handleType(ReportsActionTypes.UPDATE_REPORT_REQUEST, (state): IReportsState => ({ ...state, isUpdating: true }))
+  .handleType(
+    ReportsActionTypes.UPDATE_REPORT_SUCCESS,
+    (state, action): IReportsState => ({
+      ...state,
+      isUpdating: false,
+      reports: state.reports.map((report) => (report.id === action.payload.id ? action.payload : report)),
+    }),
+  )
+  .handleType(ReportsActionTypes.UPDATE_REPORT_FAILURE, (state): IReportsState => ({ ...state, isUpdating: false }));

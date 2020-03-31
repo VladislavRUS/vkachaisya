@@ -9,6 +9,7 @@ import { ReactComponent as Close } from '../../assets/icons/close.svg';
 import { ReactComponent as ArrowUp } from '../../assets/icons/arrow_up.svg';
 import { ReactComponent as Image } from '../../assets/icons/image.svg';
 import { ReactComponent as Video } from '../../assets/icons/video.svg';
+import { ReactComponent as Pencil } from '../../assets/icons/pencil.svg';
 
 interface IconProps extends SpacingProps, PaletteProps, SizingProps {
   name: string;
@@ -26,6 +27,7 @@ const icons: { [key: string]: any } = {
   arrowUp: ArrowUp,
   image: Image,
   video: Video,
+  pencil: Pencil,
 };
 
 const rotate = (props: IconProps) =>
