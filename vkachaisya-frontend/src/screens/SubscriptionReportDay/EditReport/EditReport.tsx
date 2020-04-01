@@ -8,6 +8,7 @@ import { selectEditReport } from '../../../store/reports/selectors';
 import { bindActionCreators, Dispatch } from 'redux';
 import { attachFile, setEditReport } from '../../../store/reports/actions';
 import { connect } from 'react-redux';
+import { RoundButton } from '../../../components/RoundButton';
 
 const mapStateToProps = (state: IApplicationState) => ({
   editReport: selectEditReport(state),
@@ -29,11 +30,12 @@ type DispatchProps = ReturnType<typeof mapDispatchToProps>;
 type OwnProps = {
   day: string;
   report?: IReport;
+  onSubmit: () => void;
 };
 
 type Props = OwnProps & StateProps & DispatchProps;
 
-const EditReport: React.FC<Props> = ({ editReport, setEditReport, attachFile }) => {
+const EditReport: React.FC<Props> = ({ editReport, setEditReport, attachFile, onSubmit }) => {
   const onTextChange = (event: React.FormEvent<HTMLTextAreaElement>) => {
     const newReport = { ...editReport, text: event.currentTarget.value };
     setEditReport(newReport);
@@ -91,14 +93,24 @@ const EditReport: React.FC<Props> = ({ editReport, setEditReport, attachFile }) 
       <Bottom>
         <FileInput ref={imageInputRef} accept={'image'} onChange={onImageChange} />
         <IconButton onClick={onImageSelect}>
-          <Icon name={'image'} size={20} />
+          <Icon name={'image'} size={20} color="#7a8e9c" />
         </IconButton>
 
         <FileInput ref={videoInputRef} accept={'image'} onChange={onVideoChange} />
 
         <IconButton onClick={onVideoSelect}>
-          <Icon name={'video'} size={22} />
+          <Icon name={'video'} size={22} color="#7a8e9c" />
         </IconButton>
+        <Box flexGrow={1} />
+        <RoundButton
+          size={34}
+          disabled={!editReport.text}
+          disableTouchRipple={!editReport.text}
+          buttonColor={editReport.text ? '#3f8ae0' : '#f0f1f3'}
+          onClick={() => onSubmit()}
+        >
+          <Icon name={'arrowUp'} size={18} color={'#e3e3e3'} />
+        </RoundButton>
       </Bottom>
     </Wrapper>
   );

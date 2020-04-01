@@ -104,7 +104,7 @@ const SubscriptionReportDay: React.FC<Props> = ({
   const getTitle = () => {
     if (editMode && report) {
       return 'Редактирование отчета';
-    } else if (!editMode && !report) {
+    } else if (editMode && !report) {
       return 'Добавление отчета';
     } else if (report) {
       return `День ${report.day}`;
@@ -148,8 +148,8 @@ const SubscriptionReportDay: React.FC<Props> = ({
         <ViewHeader to={subscriptionsLink} title={getTitle()} onEdit={onEdit} />
       )}
 
-      {editMode && <EditReport day={reportDay} />}
-      {!editMode && report && <ViewReport report={report} />}
+      {editMode && <EditReport day={reportDay} onSubmit={onSave} />}
+      {!editMode && report && <ViewReport report={report} onEdit={onEdit} />}
     </Box>
   );
 };

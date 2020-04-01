@@ -12,7 +12,7 @@ interface AppBarProps extends MuiAppBarProps {
 }
 
 const AppBar: React.FC<AppBarProps> = ({ ...props }) => (
-  <StyledPanelHeader>
+  <StyledPanelHeader {...props}>
     {!props.isTransparent && (
       <>
         <TopWave src={WaveImage} />
@@ -24,7 +24,7 @@ const AppBar: React.FC<AppBarProps> = ({ ...props }) => (
         {props.left}
       </Box>
       <Box display="flex" justifyContent="center" flexGrow="1" overflow="hidden">
-        <Typography variant="h1" noWrap={true}>
+        <Typography variant="h1" noWrap={true} color={props.isTransparent ? '#403E4B' : 'white'}>
           {props.center}
         </Typography>
       </Box>

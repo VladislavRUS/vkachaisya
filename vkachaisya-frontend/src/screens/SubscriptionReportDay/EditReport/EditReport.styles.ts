@@ -17,6 +17,8 @@ export const TextArea = styled.textarea`
 `;
 
 export const Bottom = styled.div`
+  margin: 0 15px;
+  border-top: 1px solid #f5f5f5;
   height: 55px;
   flex-shrink: 0;
   display: flex;
