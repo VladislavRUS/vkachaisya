@@ -11,6 +11,8 @@ const COLORS = {
 
   'greens:0': '#56CC95',
 
+  'reds:0': '#fb6a6a',
+
   'grays:0': '#f8f9fc',
   'grays:1': '#403e4b',
   'grays:2': '#6a7b89',

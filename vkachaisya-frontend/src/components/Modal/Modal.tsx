@@ -2,6 +2,9 @@ import React from 'react';
 import { Dialog, Box, DialogProps } from '@material-ui/core';
 import styled from 'styled-components';
 import { Button } from '../Button';
+import { Typography } from '../Typography';
+
+import JoinImage from '../../assets/images/join.svg';
 
 const ImageBox = styled(({ src, ...props }) => <Box {...props} />)`
   background-image: url(${({ src }) => src});
@@ -17,7 +20,15 @@ interface ModalProps extends DialogProps {
   onBackButtonClick?: () => void;
 }
 
-const Modal: React.FC<ModalProps> = ({ image, onShareButtonClick, onBackButtonClick, children, ...props }) => (
+interface JoinModalProps extends Omit<ModalProps, 'children'> {
+  hashtag: string;
+}
+
+interface Modal extends React.FC<ModalProps> {
+  Join: React.FC<JoinModalProps>;
+}
+
+const Modal: Modal = ({ image, onShareButtonClick, onBackButtonClick, children, ...props }) => (
   <Dialog fullScreen {...props}>
     <Box display="flex" flexDirection="column" width="100%" height="100%" p={2} pb="8vh">
       <Box flexGrow="1" display="flex" flexDirection="column" justifyContent="center" alignItems="center" m={3}>
@@ -36,6 +47,19 @@ const Modal: React.FC<ModalProps> = ({ image, onShareButtonClick, onBackButtonCl
       </Box>
     </Box>
   </Dialog>
+);
+
+Modal.Join = ({ hashtag, ...props }) => (
+  <Modal image={JoinImage} {...props}>
+    <Typography color="grays:1" fontSize="21px" fontWeight={500} align="center">
+      <Typography display="block">Поздравляем!</Typography>
+      <Typography display="block">Вы присоединились</Typography>
+      <Typography display="block">к новому челленджу</Typography>
+      <Typography display="block" color="blues:0">
+        {hashtag}
+      </Typography>
+    </Typography>
+  </Modal>
 );
 
 export { Modal };
