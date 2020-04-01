@@ -55,6 +55,7 @@ export class SubscriptionsService {
       userSubscriptionDto.days = subscription.challenge.days;
       userSubscriptionDto.hashtag = subscription.challenge.hashtag;
       userSubscriptionDto.startDate = subscription.startDate;
+      userSubscriptionDto.challengeId = subscription.challenge.id;
       userSubscriptionDto.totalParticipants = await this.countUsersByChallengeId(subscription.challenge.id);
       const subscriptionsSlice = await this.getSubscriptionsWithMaxUsers(subscription.challenge.id, 3);
       userSubscriptionDto.avatars = subscriptionsSlice.map(subscription => subscription.user.avatar);

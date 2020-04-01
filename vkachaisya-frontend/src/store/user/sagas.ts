@@ -29,7 +29,6 @@ function* handleCreateCurrentUser(action: ReturnType<typeof createCurrentUser>) 
     yield put(createCurrentUserAsync.success(data));
     yield put(replace(Routes.SUBSCRIPTIONS));
   } catch (e) {
-    alert(JSON.stringify(e));
     yield put(createCurrentUserAsync.failure());
   }
 }

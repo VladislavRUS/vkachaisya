@@ -2,6 +2,7 @@ import { ChallengesActionTypes, IChallengesState } from './types';
 import * as challengesActions from './actions';
 import { ActionType, createReducer } from 'typesafe-actions';
 import { TAKE_CHALLENGES } from './sagas';
+import { searchChallenges } from './actions';
 
 type ChallengesActionType = ActionType<typeof challengesActions>;
 
@@ -74,4 +75,14 @@ export const challengesReducer = createReducer<IChallengesState, ChallengesActio
   .handleType(
     ChallengesActionTypes.CLEAR_SEARCH_CHALLENGES,
     (state): IChallengesState => ({ ...state, searchChallenges: [], hasMore: true }),
+  )
+  // Clear search challenges
+  .handleType(
+    ChallengesActionTypes.REMOVE_FROM_SEARCH_CHALLENGES,
+    (state, action): IChallengesState => ({
+      ...state,
+      searchChallenges: state.searchChallenges.filter(
+        (searchChallenge) => searchChallenge.challenge.id !== action.payload.challengeId,
+      ),
+    }),
   );

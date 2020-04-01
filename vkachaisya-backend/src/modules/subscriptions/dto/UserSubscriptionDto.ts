@@ -6,4 +6,5 @@ export class UserSubscriptionDto {
   days: number;
   avatars: string[];
   totalParticipants: number;
+  challengeId: number;
 }

@@ -45,6 +45,7 @@ export interface ISubscription {
   days: number;
   avatars: string[];
   totalParticipants: number;
+  challengeId: number;
 }
 
 export interface ISubscriptionResult {

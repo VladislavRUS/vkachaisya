@@ -1,5 +1,5 @@
 import { ISubscription } from '../../types';
-import { ISubscriptionResult } from '../../types/index';
+import { IChallenge, ISubscriptionResult } from '../../types/index';
 
 export interface ISubscriptionsState {
   subscriptions: ISubscription[];
@@ -7,6 +7,7 @@ export interface ISubscriptionsState {
   isFetchingSubscriptions: boolean;
   isFetchingSubscriptionResult: boolean;
   isCreating: boolean;
+  joinedChallenge: IChallenge | null;
 }
 
 export enum SubscriptionsActionTypes {
@@ -26,4 +27,6 @@ export enum SubscriptionsActionTypes {
   CREATE_SUBSCRIPTION_FAILURE = '@@subscriptions/CREATE_SUBSCRIPTION_FAILURE',
 
   CLEAR_USER_SUBSCRIPTION = '@@subscriptions/CLEAR_USER_SUBSCRIPTION',
+
+  SET_JOINED_CHALLENGE = '@@subscriptions/SET_JOINED_CHALLENGE',
 }
