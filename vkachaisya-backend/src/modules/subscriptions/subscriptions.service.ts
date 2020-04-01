@@ -92,6 +92,7 @@ export class SubscriptionsService {
     subscriptionResultDto.startDate = subscription.startDate;
     const subscriptions = await this.getByChallengeId(subscription.challenge.id, ['user']);
     subscriptionResultDto.users = subscriptions.map(subscription => subscription.user);
+    subscriptionResultDto.challenge = subscription.challenge;
 
     return subscriptionResultDto;
   }

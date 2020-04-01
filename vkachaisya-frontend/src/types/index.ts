@@ -55,4 +55,5 @@ export interface ISubscriptionResult {
   startDate: string;
   days: number;
   users: IUser[];
+  challenge: IChallenge;
 }

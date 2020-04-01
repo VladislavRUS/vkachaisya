@@ -8,12 +8,22 @@ import { selectCurrentUser } from '../../store/user/selectors';
 import { withRouter, RouteComponentProps, generatePath, useHistory } from 'react-router-dom';
 import {
   selectIsFetchingSubscriptionResult,
+  selectIsFetchingSubscriptions,
+  selectIsSubscriptionCreating,
+  selectJoinedChallenge,
+  selectJoinedSubscription,
   selectSubscriptionResult,
   selectSubscriptions,
 } from '../../store/subscriptions/selectors';
 import { selectReports } from '../../store/reports/selectors';
 import { Routes } from '../../entry/Routes';
-import { clearSubscriptionResult, getSubscriptionResult, getSubscriptions } from '../../store/subscriptions/actions';
+import {
+  clearSubscriptionResult,
+  createSubscription,
+  getSubscriptionResult,
+  getSubscriptions,
+  setJoinedChallenge,
+} from '../../store/subscriptions/actions';
 import { AppBar } from '../../components/AppBar';
 import { BackLink } from '../../components/BackLink';
 import { Card } from '../../components/Card';
@@ -36,6 +46,10 @@ const mapStateToProps = (state: IApplicationState) => ({
   reports: selectReports(state),
   isFetchingSubscriptionResult: selectIsFetchingSubscriptionResult(state),
   subscriptions: selectSubscriptions(state),
+  isFetchingSubscriptions: selectIsFetchingSubscriptions(state),
+  isSubscriptionCreating: selectIsSubscriptionCreating(state),
+  joinedChallenge: selectJoinedChallenge(state),
+  joinedSubscription: selectJoinedSubscription(state),
 });
 
 type StateProps = ReturnType<typeof mapStateToProps>;
@@ -49,6 +63,8 @@ const mapDispatchToProps = (dispatch: Dispatch) =>
       clearSubscriptionResult,
       getSubscriptions,
       getCurrentUser,
+      createSubscription,
+      setJoinedChallenge,
     },
     dispatch,
   );
@@ -70,14 +86,20 @@ const Subscription: React.FC<Props> = ({
   clearSubscriptionResult,
   getCurrentUser,
   subscriptions,
+  getSubscriptions,
+  isFetchingSubscriptions,
+  createSubscription,
+  joinedChallenge,
+  setJoinedChallenge,
+  joinedSubscription,
+  isSubscriptionCreating,
 }) => {
   const history = useHistory();
 
   const { subscriptionId, userId } = match.params as any;
-  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
-    if (userId) {
+    if (userId && subscriptionId) {
       getSubscriptionResult(userId, subscriptionId);
       getReports(subscriptionId);
     }
@@ -101,7 +123,9 @@ const Subscription: React.FC<Props> = ({
     return <PageLoader />;
   }
 
-  const canJoin = !subscriptions.find((subscription) => subscription.id === subscriptionResult.id);
+  const canJoin = isFetchingSubscriptions
+    ? false
+    : !subscriptions.find((subscription) => subscription.challengeId === subscriptionResult.challenge.id);
 
   const canShare = currentUser && currentUser.id === parseInt(userId);
 
@@ -139,7 +163,7 @@ const Subscription: React.FC<Props> = ({
   };
 
   const join = () => {
-    setShowModal(true);
+    createSubscription(subscriptionResult.challenge);
   };
 
   const onShare = () => {
@@ -150,13 +174,30 @@ const Subscription: React.FC<Props> = ({
     }
   };
 
+  const onShareButtonClick = () => {
+    if (joinedChallenge && joinedSubscription && currentUser) {
+      bridge.send('VKWebAppShowWallPostBox', {
+        attachments: `https://vk.com/app7380006#/subscriptions/${joinedSubscription.id}/users/${currentUser.id}`,
+        message: `Я присоединился к челленджу "${joinedChallenge.title}"! \nОтслеживай мои результаты в приложении \n\n${joinedChallenge.hashtag}`,
+      });
+    }
+  };
+
+  const onBackButtonClick = () => {
+    if (userId) {
+      getSubscriptionResult(userId, subscriptionId);
+    }
+
+    setJoinedChallenge(null);
+  };
+
   return (
     <>
       <Layout
         header={<Header title={subscriptionResult.title} />}
         body={
           <>
-            {isFetchingSubscriptionResult && <PageLoader />}
+            {(isFetchingSubscriptionResult || isSubscriptionCreating) && <PageLoader />}
 
             <Box m={2} mt={4} mb={1}>
               <Card>
@@ -231,7 +272,14 @@ const Subscription: React.FC<Props> = ({
         }
       />
       {canJoin && <FloatButton iconName="plus" onClick={join} />}
-      <Modal.Join hashtag={subscriptionResult.hashtag} onBackButtonClick={() => setShowModal(false)} open={showModal} />
+      {joinedChallenge && (
+        <Modal.Join
+          hashtag={joinedChallenge.hashtag}
+          onBackButtonClick={onBackButtonClick}
+          open={Boolean(joinedChallenge)}
+          onShareButtonClick={onShareButtonClick}
+        />
+      )}
       {/* <Modal.Complete
         hashtag={subscriptionResult.hashtag}
         onBackButtonClick={() => setShowModal(false)}
