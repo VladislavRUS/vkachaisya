@@ -6,10 +6,10 @@ import { connect } from 'react-redux';
 import { IApplicationState } from '../../store';
 import { selectCurrentUser } from '../../store/user/selectors';
 import { withRouter, RouteComponentProps, generatePath, useHistory } from 'react-router-dom';
-import { selectSubscriptionResult } from '../../store/subscriptions/selectors';
+import { selectIsFetchingSubscriptionResult, selectSubscriptionResult } from '../../store/subscriptions/selectors';
 import { selectReports } from '../../store/reports/selectors';
 import { Routes } from '../../entry/Routes';
-import { getSubscriptionResult } from '../../store/subscriptions/actions';
+import { clearSubscriptionResult, getSubscriptionResult } from '../../store/subscriptions/actions';
 import { AppBar } from '../../components/AppBar';
 import { BackLink } from '../../components/BackLink';
 import { Card } from '../../components/Card';
@@ -22,11 +22,13 @@ import { SquareButton } from '../../components/SquareButton';
 import { Modal } from '../../components/Modal';
 import { differenceInCalendarDays } from 'date-fns';
 import { FloatButton } from '../../components/FloatButton';
+import { PageLoader } from '../../components/PageLoader';
 
 const mapStateToProps = (state: IApplicationState) => ({
   currentUser: selectCurrentUser(state),
   subscriptionResult: selectSubscriptionResult(state),
   reports: selectReports(state),
+  isFetchingSubscriptionResult: selectIsFetchingSubscriptionResult(state),
 });
 
 type StateProps = ReturnType<typeof mapStateToProps>;
@@ -37,6 +39,7 @@ const mapDispatchToProps = (dispatch: Dispatch) =>
       getReports,
       clearReports,
       getSubscriptionResult,
+      clearSubscriptionResult,
     },
     dispatch,
   );
@@ -54,6 +57,8 @@ const Subscription: React.FC<Props> = ({
   subscriptionResult,
   getSubscriptionResult,
   reports,
+  isFetchingSubscriptionResult,
+  clearSubscriptionResult,
 }) => {
   const history = useHistory();
 
@@ -68,11 +73,12 @@ const Subscription: React.FC<Props> = ({
 
     return () => {
       clearReports();
+      clearSubscriptionResult();
     };
-  }, [currentUser, getReports, getSubscriptionResult, subscriptionId, userId]);
+  }, [clearSubscriptionResult, currentUser, getReports, getSubscriptionResult, subscriptionId, userId]);
 
   if (!subscriptionResult) {
-    return null;
+    return <PageLoader />;
   }
 
   const days = [];
@@ -118,6 +124,8 @@ const Subscription: React.FC<Props> = ({
         header={<Header title={subscriptionResult.title} />}
         body={
           <>
+            {isFetchingSubscriptionResult && <PageLoader />}
+
             <Box m={2} mt={4} mb={1}>
               <Card>
                 <Box display="flex" justifyContent="space-between" p="15px">

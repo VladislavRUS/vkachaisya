@@ -56,15 +56,26 @@ export const subscriptionsReducer = createReducer<ISubscriptionsState, Subscript
     (state): ISubscriptionsState => ({ ...state, isCreating: true }),
   )
   .handleType(
-    [SubscriptionsActionTypes.CREATE_SUBSCRIPTION_SUCCESS, SubscriptionsActionTypes.CREATE_SUBSCRIPTION_FAILURE],
-    (state): ISubscriptionsState => ({
+    SubscriptionsActionTypes.CREATE_SUBSCRIPTION_SUCCESS,
+    (state, action): ISubscriptionsState => ({
       ...state,
       isCreating: false,
+      subscriptions: [...state.subscriptions, action.payload],
     }),
+  )
+  .handleType(
+    SubscriptionsActionTypes.CREATE_SUBSCRIPTION_FAILURE,
+    (state): ISubscriptionsState => ({ ...state, isCreating: true }),
   )
 
   // Joined challenge
   .handleType(
     SubscriptionsActionTypes.SET_JOINED_CHALLENGE,
     (state, action): ISubscriptionsState => ({ ...state, joinedChallenge: action.payload.joinedChallenge }),
+  )
+
+  // Clear subscription result
+  .handleType(
+    SubscriptionsActionTypes.CLEAR_SUBSCRIPTION_RESULT,
+    (state): ISubscriptionsState => ({ ...state, subscriptionResult: null }),
   );

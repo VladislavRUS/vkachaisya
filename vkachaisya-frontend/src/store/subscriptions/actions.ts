@@ -24,7 +24,9 @@ export const createSubscriptionAsync = createAsyncAction(
   SubscriptionsActionTypes.CREATE_SUBSCRIPTION_REQUEST,
   SubscriptionsActionTypes.CREATE_SUBSCRIPTION_SUCCESS,
   SubscriptionsActionTypes.CREATE_SUBSCRIPTION_FAILURE,
-)<undefined, undefined, undefined>();
+)<undefined, ISubscription, undefined>();
 
 export const setJoinedChallenge = (joinedChallenge: IChallenge | null) =>
   action(SubscriptionsActionTypes.SET_JOINED_CHALLENGE, { joinedChallenge });
+
+export const clearSubscriptionResult = () => action(SubscriptionsActionTypes.CLEAR_SUBSCRIPTION_RESULT);

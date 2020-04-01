@@ -20,6 +20,7 @@ import { ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails } from '..
 import { ChallengeCard } from '../../components/ChallengeCard';
 import { Layout } from '../../components/Layout';
 import { FloatButton } from '../../components/FloatButton';
+import { PageLoader } from '../../components/PageLoader';
 
 const mapStateToProps = (state: IApplicationState) => ({
   user: selectCurrentUser(state),
@@ -87,18 +88,7 @@ const Subscriptions: React.FC<Props> = ({
           <>
             {!hasChallenges && !isFetchingSubscriptions && <NoSubscriptions />}
 
-            {!hasChallenges && isFetchingSubscriptions && (
-              <Box
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  height: '100%',
-                }}
-              >
-                <CircularProgress disableShrink={true} />
-              </Box>
-            )}
+            {!hasChallenges && isFetchingSubscriptions && <PageLoader />}
 
             {!!currentSubscriptions.length && (
               <Box mt="10px">
