@@ -90,7 +90,8 @@ const SubscriptionReportDay: React.FC<Props> = ({
     return () => {
       clearReports();
     };
-  }, [clearReports, getReports, reports.length, subscriptionId]);
+    // eslint-disable-next-line
+  }, []);
 
   useEffect(() => {
     if (report) {

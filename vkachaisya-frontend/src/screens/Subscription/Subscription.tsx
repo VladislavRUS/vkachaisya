@@ -68,7 +68,7 @@ const Subscription: React.FC<Props> = ({
   useEffect(() => {
     if (userId) {
       getSubscriptionResult(userId, subscriptionId);
-      getReports(userId);
+      getReports(subscriptionId);
     }
 
     return () => {
@@ -93,7 +93,7 @@ const Subscription: React.FC<Props> = ({
   }
 
   const reportDays = days.filter(({ hasReport }) => hasReport).length;
-  const progress = reportDays < subscriptionResult.days ? Math.ceil(reportDays / subscriptionResult.days) * 100 : 100;
+  const progress = reportDays < subscriptionResult.days ? Math.ceil((reportDays / subscriptionResult.days) * 100) : 100;
 
   const progressText = () => {
     if (progress > 50) {
@@ -116,6 +116,10 @@ const Subscription: React.FC<Props> = ({
 
   const join = () => {
     setShowModal(true);
+  };
+
+  const onShare = () => {
+
   };
 
   return (
@@ -164,7 +168,7 @@ const Subscription: React.FC<Props> = ({
                   </Box>
                   <Box display="flex" justifyContent="space-between" alignItems="center" pl="15px" pr="3px" pb="3px">
                     <Badge text={subscriptionResult.hashtag} bgColor={'#f7f9fb'} color={'#9ea9b1'} />
-                    <IconButton>
+                    <IconButton onClick={onShare}>
                       <Icon name="share" size={24} />
                     </IconButton>
                   </Box>
