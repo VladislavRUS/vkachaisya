@@ -44,7 +44,7 @@ type DispatchProps = ReturnType<typeof mapDispatchToProps>;
 type Props = StateProps & DispatchProps;
 
 const Header = () => (
-  <AppBar.Small
+  <AppBar
     left={
       <Link component={RouterLink} to={Routes.SEARCH_CHALLENGES}>
         <IconButton>

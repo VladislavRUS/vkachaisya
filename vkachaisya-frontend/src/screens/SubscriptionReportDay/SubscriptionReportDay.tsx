@@ -38,13 +38,9 @@ type DispatchProps = ReturnType<typeof mapDispatchToProps>;
 type Props = StateProps & DispatchProps & RouteComponentProps;
 
 const ViewHeader = ({ to, title, onEdit }: any) => (
-  <AppBar.Small
+  <AppBar
     left={<BackLink to={to} />}
-    center={
-      <Typography variant="h1" noWrap={true}>
-        {title}
-      </Typography>
-    }
+    center={title}
     right={
       <RoundButton onClick={onEdit} buttonColor={'transparent'}>
         <Icon name={'pencil'} size={50} color={'#818c99'} />
@@ -54,18 +50,14 @@ const ViewHeader = ({ to, title, onEdit }: any) => (
 );
 
 const EditHeader = ({ onCancel, onSave, title }: any) => (
-  <AppBar.Small
+  <AppBar
     isTransparent={true}
     left={
       <RoundButton onClick={onCancel}>
         <Icon name={'close'} size={10} color={'#818c99'} />
       </RoundButton>
     }
-    center={
-      <Typography variant="h1" noWrap={true}>
-        {title}
-      </Typography>
-    }
+    center={title}
     right={
       <RoundButton onClick={onSave}>
         <Icon name={'arrowUp'} size={34} color={'#e3e3e3'} />
@@ -98,7 +90,7 @@ const SubscriptionReportDay: React.FC<Props> = ({
     return () => {
       clearReports();
     };
-  }, []);
+  }, [clearReports, getReports, reports.length, subscriptionId]);
 
   useEffect(() => {
     if (report) {
@@ -107,7 +99,7 @@ const SubscriptionReportDay: React.FC<Props> = ({
     } else {
       setEditMode(true);
     }
-  }, [report]);
+  }, [report, setEditReport]);
 
   const getTitle = () => {
     if (editMode && report) {

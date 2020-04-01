@@ -40,7 +40,7 @@ type DispatchProps = ReturnType<typeof mapDispatchToProps>;
 
 type Props = StateProps & DispatchProps;
 
-const Header = () => <AppBar.Small left={<BackLink to={Routes.SUBSCRIPTIONS} />} center="Выберите челлендж" />;
+const Header = () => <AppBar left={<BackLink to={Routes.SUBSCRIPTIONS} />} center="Выберите челлендж" />;
 
 const SearchChallenges: React.FC<Props> = ({
   challenges,
@@ -55,7 +55,7 @@ const SearchChallenges: React.FC<Props> = ({
   useEffect(() => {
     clearSearchChallenges();
     searchChallenges();
-  }, []);
+  }, [clearSearchChallenges, searchChallenges]);
 
   const join = (challenge: IChallenge) => {
     setCurrentChallenge(challenge);

@@ -45,7 +45,7 @@ type DispatchProps = ReturnType<typeof mapDispatchToProps>;
 
 type Props = StateProps & DispatchProps & RouteComponentProps;
 
-const Header = ({ title }: any) => <AppBar.Small left={<BackLink to={Routes.SUBSCRIPTIONS} />} center={title} />;
+const Header = ({ title }: any) => <AppBar left={<BackLink to={Routes.SUBSCRIPTIONS} />} center={title} />;
 
 const Subscription: React.FC<Props> = ({
   getReports,
