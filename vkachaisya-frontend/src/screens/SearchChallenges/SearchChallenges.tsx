@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { IApplicationState } from '../../store';
 import { bindActionCreators, Dispatch } from 'redux';
 import { clearSearchChallenges, searchChallenges } from '../../store/challenges/actions';
 import {
   selectHasMoreChallenges,
+  selectIsChallengeCreating,
   selectIsChallengesSearching,
-  selectSearchChallenges,
+  selectUserSearchChallenges,
 } from '../../store/challenges/selectors';
 import { Box, CircularProgress } from '@material-ui/core';
 import { connect } from 'react-redux';
@@ -14,15 +15,18 @@ import { BackLink } from '../../components/BackLink';
 import { Routes } from '../../entry/Routes';
 import { ChallengesList } from './SearchChallenges.styles';
 import { ChallengeCard } from '../../components/ChallengeCard';
-import { Typography } from '../../components/Typography';
 import { Layout } from '../../components/Layout';
 import { Modal } from '../../components/Modal';
 import { IChallenge } from '../../types';
+import { createSubscription, setJoinedChallenge } from '../../store/subscriptions/actions';
+import { selectJoinedChallenge } from '../../store/subscriptions/selectors';
 
 const mapStateToProps = (state: IApplicationState) => ({
-  challenges: selectSearchChallenges(state),
+  challenges: selectUserSearchChallenges(state),
   isSearching: selectIsChallengesSearching(state),
+  isCreating: selectIsChallengeCreating(state),
   hasMore: selectHasMoreChallenges(state),
+  joinedChallenge: selectJoinedChallenge(state),
 });
 
 type StateProps = ReturnType<typeof mapStateToProps>;
@@ -32,6 +36,8 @@ const mapDispatchToProps = (dispatch: Dispatch) =>
     {
       searchChallenges,
       clearSearchChallenges,
+      createSubscription,
+      setJoinedChallenge,
     },
     dispatch,
   );
@@ -48,23 +54,22 @@ const SearchChallenges: React.FC<Props> = ({
   clearSearchChallenges,
   isSearching,
   hasMore,
+  createSubscription,
+  isCreating,
+  joinedChallenge,
+  setJoinedChallenge,
 }) => {
-  const [showModal, setShowModal] = useState(false);
-  const [currentChallenge, setCurrentChallenge] = useState<IChallenge | null>(null);
-
   useEffect(() => {
     clearSearchChallenges();
     searchChallenges();
   }, []);
 
   const join = (challenge: IChallenge) => {
-    setCurrentChallenge(challenge);
-    setShowModal(true);
+    createSubscription(challenge);
   };
 
   const onCloseModal = () => {
-    setShowModal(false);
-    setCurrentChallenge(null);
+    setJoinedChallenge(null);
   };
 
   const handleScroll = (e: any) => {
@@ -82,7 +87,7 @@ const SearchChallenges: React.FC<Props> = ({
         onScroll={handleScroll}
         body={
           <>
-            {isSearching && (
+            {(isSearching || isCreating) && (
               <Box
                 style={{
                   display: 'flex',
@@ -124,7 +129,11 @@ const SearchChallenges: React.FC<Props> = ({
           </>
         }
       />
-      <Modal.Join hashtag={currentChallenge?.hashtag || ''} onBackButtonClick={onCloseModal} open={showModal} />
+      <Modal.Join
+        hashtag={joinedChallenge?.hashtag || ''}
+        onBackButtonClick={onCloseModal}
+        open={Boolean(joinedChallenge)}
+      />
     </>
   );
 };

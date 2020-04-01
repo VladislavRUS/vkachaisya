@@ -11,7 +11,7 @@ import { Routes } from '../../entry/Routes';
 import {
   selectCurrentSubscriptions,
   selectFinishedSubscriptions,
-  selectisFetchingSubscriptions,
+  selectIsFetchingSubscriptions,
 } from '../../store/subscriptions/selectors';
 import { selectCurrentUser } from '../../store/user/selectors';
 import { Icon } from '../../components/Icon';
@@ -25,7 +25,7 @@ const mapStateToProps = (state: IApplicationState) => ({
   user: selectCurrentUser(state),
   currentSubscriptions: selectCurrentSubscriptions(state),
   finishedSubscriptions: selectFinishedSubscriptions(state),
-  isFetchingSubscriptions: selectisFetchingSubscriptions(state),
+  isFetchingSubscriptions: selectIsFetchingSubscriptions(state),
 });
 
 type StateProps = ReturnType<typeof mapStateToProps>;

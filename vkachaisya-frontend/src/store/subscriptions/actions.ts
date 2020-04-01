@@ -1,7 +1,7 @@
 import { action, createAsyncAction } from 'typesafe-actions';
 import { SubscriptionsActionTypes } from './types';
 import { ISubscription } from '../../types';
-import { ISubscriptionResult } from '../../types/index';
+import { IChallenge, ISubscriptionResult } from '../../types/index';
 
 export const getSubscriptions = () => action(SubscriptionsActionTypes.GET_SUBSCRIPTIONS);
 export const getSubscriptionsAsync = createAsyncAction(
@@ -18,9 +18,13 @@ export const getSubscriptionResultAsync = createAsyncAction(
   SubscriptionsActionTypes.GET_SUBSCRIPTION_RESULT_FAILURE,
 )<undefined, ISubscriptionResult, undefined>();
 
-export const createSubscription = (challengedId: number) => action(SubscriptionsActionTypes.CREATE_SUBSCRIPTION, { challengedId });
+export const createSubscription = (challenge: IChallenge) =>
+  action(SubscriptionsActionTypes.CREATE_SUBSCRIPTION, { challenge });
 export const createSubscriptionAsync = createAsyncAction(
   SubscriptionsActionTypes.CREATE_SUBSCRIPTION_REQUEST,
   SubscriptionsActionTypes.CREATE_SUBSCRIPTION_SUCCESS,
   SubscriptionsActionTypes.CREATE_SUBSCRIPTION_FAILURE,
 )<undefined, undefined, undefined>();
+
+export const setJoinedChallenge = (joinedChallenge: IChallenge | null) =>
+  action(SubscriptionsActionTypes.SET_JOINED_CHALLENGE, { joinedChallenge });

@@ -26,3 +26,5 @@ export const createChallengeAsync = createAsyncAction(
 )<undefined, IChallenge, undefined>();
 
 export const clearSearchChallenges = () => action(ChallengesActionTypes.CLEAR_SEARCH_CHALLENGES);
+export const removeFromSearchChallenges = (challengeId: number) =>
+  action(ChallengesActionTypes.REMOVE_FROM_SEARCH_CHALLENGES, { challengeId });

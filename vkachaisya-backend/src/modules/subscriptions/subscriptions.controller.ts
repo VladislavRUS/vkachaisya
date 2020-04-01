@@ -11,7 +11,10 @@ export class SubscriptionsController {
   async createSubscription(@Headers() headers: any, @Body() createSubscriptionDto: CreateSubscriptionDto) {
     const userId = parseInt(headers['userId']);
 
-    const subscription = await this.subscriptionsService.getByChallengeId(createSubscriptionDto.challengeId);
+    const subscription = await this.subscriptionsService.getByUserIdAndChallengeId(
+      userId,
+      createSubscriptionDto.challengeId,
+    );
 
     if (subscription) {
       throw new ConflictException();

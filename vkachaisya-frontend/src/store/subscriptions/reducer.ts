@@ -10,6 +10,7 @@ const initialState: ISubscriptionsState = {
   isFetchingSubscriptions: false,
   isFetchingSubscriptionResult: false,
   isCreating: false,
+  joinedChallenge: null,
 };
 
 export const subscriptionsReducer = createReducer<ISubscriptionsState, SubscriptionsActionType>(initialState)
@@ -60,4 +61,10 @@ export const subscriptionsReducer = createReducer<ISubscriptionsState, Subscript
       ...state,
       isCreating: false,
     }),
+  )
+
+  // Joined challenge
+  .handleType(
+    SubscriptionsActionTypes.SET_JOINED_CHALLENGE,
+    (state, action): ISubscriptionsState => ({ ...state, joinedChallenge: action.payload.joinedChallenge }),
   );

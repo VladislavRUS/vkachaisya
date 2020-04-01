@@ -6,9 +6,10 @@ import {
   getSubscriptionResultAsync,
   createSubscription,
   createSubscriptionAsync,
+  setJoinedChallenge,
 } from './actions';
 import { SubscriptionsApi } from '../../api/subscriptions-api';
-import { searchChallenges } from '../challenges/actions';
+import { removeFromSearchChallenges, searchChallenges } from '../challenges/actions';
 
 // HANDLERS
 function* handleGetSubscriptions() {
@@ -38,13 +39,14 @@ function* handleGetSubscriptionResult(action: ReturnType<typeof getSubscriptionR
 function* handleCreateSubscription(action: ReturnType<typeof createSubscription>) {
   yield put(createSubscriptionAsync.request());
 
-  const { challengedId } = action.payload;
+  const { challenge } = action.payload;
 
   try {
-    yield call(SubscriptionsApi.createSubscription, challengedId);
+    yield call(SubscriptionsApi.createSubscription, challenge.id);
     yield put(createSubscriptionAsync.success());
 
-    yield put(searchChallenges());
+    yield put(setJoinedChallenge({ ...challenge }));
+    yield put(removeFromSearchChallenges(challenge.id));
   } catch (e) {
     yield put(createSubscriptionAsync.failure());
   }

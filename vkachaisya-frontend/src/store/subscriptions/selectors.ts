@@ -36,4 +36,5 @@ export const selectFinishedSubscriptions = createSelector(
 );
 
 export const selectSubscriptionResult = (state: IApplicationState) => state.subscriptions.subscriptionResult;
-export const selectisFetchingSubscriptions = (state: IApplicationState) => state.subscriptions.isFetchingSubscriptions;
+export const selectIsFetchingSubscriptions = (state: IApplicationState) => state.subscriptions.isFetchingSubscriptions;
+export const selectJoinedChallenge = (state: IApplicationState) => state.subscriptions.joinedChallenge;
