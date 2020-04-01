@@ -42,8 +42,8 @@ function* handleCreateSubscription(action: ReturnType<typeof createSubscription>
   const { challenge } = action.payload;
 
   try {
-    yield call(SubscriptionsApi.createSubscription, challenge.id);
-    yield put(createSubscriptionAsync.success());
+    const { data } = yield call(SubscriptionsApi.createSubscription, challenge.id);
+    yield put(createSubscriptionAsync.success(data));
 
     yield put(setJoinedChallenge({ ...challenge }));
     yield put(removeFromSearchChallenges(challenge.id));

@@ -19,14 +19,23 @@ import { Layout } from '../../components/Layout';
 import { Modal } from '../../components/Modal';
 import { IChallenge } from '../../types';
 import { createSubscription, setJoinedChallenge } from '../../store/subscriptions/actions';
-import { selectJoinedChallenge } from '../../store/subscriptions/selectors';
+import {
+  selectIsSubscriptionCreating,
+  selectJoinedChallenge,
+  selectJoinedSubscription,
+} from '../../store/subscriptions/selectors';
+import bridge from '@vkontakte/vk-bridge';
+import { selectCurrentUser } from '../../store/user/selectors';
+import { PageLoader } from '../../components/PageLoader';
 
 const mapStateToProps = (state: IApplicationState) => ({
   challenges: selectUserSearchChallenges(state),
   isSearching: selectIsChallengesSearching(state),
-  isCreating: selectIsChallengeCreating(state),
+  isCreating: selectIsSubscriptionCreating(state),
   hasMore: selectHasMoreChallenges(state),
   joinedChallenge: selectJoinedChallenge(state),
+  joinedSubscription: selectJoinedSubscription(state),
+  user: selectCurrentUser(state),
 });
 
 type StateProps = ReturnType<typeof mapStateToProps>;
@@ -58,6 +67,8 @@ const SearchChallenges: React.FC<Props> = ({
   isCreating,
   joinedChallenge,
   setJoinedChallenge,
+  joinedSubscription,
+  user,
 }) => {
   useEffect(() => {
     clearSearchChallenges();
@@ -80,6 +91,15 @@ const SearchChallenges: React.FC<Props> = ({
     }
   };
 
+  const onShareButtonClick = () => {
+    if (joinedChallenge && joinedSubscription && user) {
+      bridge.send('VKWebAppShowWallPostBox', {
+        attachments: `https://vk.com/app7380006#/subscriptions/${joinedSubscription.id}/users/${user.id}`,
+        message: `Я присоединился к челленджу "${joinedChallenge.title}"! \nОтслеживай мои результаты в приложении \n\n${joinedChallenge.hashtag}`,
+      });
+    }
+  };
+
   return (
     <>
       <Layout
@@ -87,18 +107,7 @@ const SearchChallenges: React.FC<Props> = ({
         onScroll={handleScroll}
         body={
           <>
-            {(isSearching || isCreating) && (
-              <Box
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  height: '100%',
-                }}
-              >
-                <CircularProgress disableShrink={true} />
-              </Box>
-            )}
+            {(isSearching || isCreating) && <PageLoader />}
 
             {challenges.length > 0 && (
               <ChallengesList>
@@ -132,6 +141,7 @@ const SearchChallenges: React.FC<Props> = ({
       <Modal.Join
         hashtag={joinedChallenge?.hashtag || ''}
         onBackButtonClick={onCloseModal}
+        onShareButtonClick={onShareButtonClick}
         open={Boolean(joinedChallenge)}
       />
     </>
