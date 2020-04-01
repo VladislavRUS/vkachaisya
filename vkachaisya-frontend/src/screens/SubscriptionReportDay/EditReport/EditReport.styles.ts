@@ -14,6 +14,9 @@ export const TextArea = styled.textarea`
   font-weight: 300;
   flex-grow: 1;
   outline: none;
+  resize: none;
+  border: none;
+  outline: none;
 `;
 
 export const Bottom = styled.div`

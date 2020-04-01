@@ -9,6 +9,7 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { attachFile, setEditReport } from '../../../store/reports/actions';
 import { connect } from 'react-redux';
 import { RoundButton } from '../../../components/RoundButton';
+import { ImageGrid } from '../../../components/ImageGrid';
 
 const mapStateToProps = (state: IApplicationState) => ({
   editReport: selectEditReport(state),
@@ -78,16 +79,8 @@ const EditReport: React.FC<Props> = ({ editReport, setEditReport, attachFile, on
     <Wrapper>
       <TextArea placeholder={'Поделитесь впечатлениями'} value={editReport.text} onChange={onTextChange} />
 
-      <Box>
-        {editReport.files.map((file) => (
-          <Box>
-            {file.type === 'image' ? (
-              <img src={file.path} onClick={() => onFileDelete(file)} />
-            ) : (
-              <Box onClick={() => onFileDelete(file)}>{file.type}</Box>
-            )}
-          </Box>
-        ))}
+      <Box my="24px" mx="16px">
+        <ImageGrid files={editReport.files} size={60} editMode={true} onDelete={(file: any) => onFileDelete(file)} />
       </Box>
 
       <Bottom>

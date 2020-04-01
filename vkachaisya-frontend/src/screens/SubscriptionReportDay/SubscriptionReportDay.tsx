@@ -12,12 +12,15 @@ import { EditReport } from './EditReport';
 import { RoundButton } from '../../components/RoundButton';
 import { Icon } from '../../components/Icon';
 import { clearReports, createReport, getReports, setEditReport, updateReport } from '../../store/reports/actions';
+import { getSubscriptions } from '../../store/subscriptions/actions';
 import { ViewReport } from './ViewReport';
+import { selectSubscriptions } from '../../store/subscriptions/selectors';
 
 const mapStateToProps = (state: IApplicationState, routeProps: RouteComponentProps) => ({
   reports: selectReports(state),
   report: selectReportByDay(state, +(routeProps.match.params as any).reportDay),
   isFetchingReports: selectIsFetchingReports(state),
+  subscriptions: selectSubscriptions(state),
 });
 
 type StateProps = ReturnType<typeof mapStateToProps>;
@@ -30,6 +33,7 @@ const mapDispatchToProps = (dispatch: Dispatch) =>
       createReport,
       clearReports,
       updateReport,
+      getSubscriptions,
     },
     dispatch,
   );
@@ -77,6 +81,8 @@ const SubscriptionReportDay: React.FC<Props> = ({
   isFetchingReports,
   clearReports,
   updateReport,
+  subscriptions,
+  getSubscriptions,
 }) => {
   const { subscriptionId, reportDay, userId } = match.params as any;
 
@@ -85,6 +91,10 @@ const SubscriptionReportDay: React.FC<Props> = ({
   useEffect(() => {
     if (reports.length === 0) {
       getReports(subscriptionId);
+    }
+
+    if (subscriptions.length === 0) {
+      getSubscriptions();
     }
 
     return () => {
@@ -111,6 +121,8 @@ const SubscriptionReportDay: React.FC<Props> = ({
       return `День ${report.day}`;
     }
   };
+
+  const subscription = subscriptions.find(({ id }) => id === +subscriptionId);
 
   const subscriptionsLink = generatePath(Routes.SUBSCRIPTION, { subscriptionId, userId });
 
@@ -150,7 +162,13 @@ const SubscriptionReportDay: React.FC<Props> = ({
       )}
 
       {editMode && <EditReport day={reportDay} onSubmit={onSave} />}
-      {!editMode && report && <ViewReport report={report} onEdit={onEdit} />}
+      {!editMode && report && (
+        <ViewReport
+          start={subscription ? new Date(subscription.startDate).toString() : null}
+          report={report}
+          onEdit={onEdit}
+        />
+      )}
     </Box>
   );
 };
