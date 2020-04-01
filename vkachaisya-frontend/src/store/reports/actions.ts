@@ -1,7 +1,7 @@
 import { action, createAsyncAction } from 'typesafe-actions';
 import { ReportsActionTypes } from './types';
 import { IReport } from '../../types';
-import { EditReport } from '../../types/index';
+import { EditReport, IFile } from '../../types/index';
 
 export const getReports = (subscriptionId: number) => action(ReportsActionTypes.GET_REPORTS, { subscriptionId });
 export const getReportsAsync = createAsyncAction(
@@ -28,3 +28,10 @@ export const updateReportAsync = createAsyncAction(
   ReportsActionTypes.UPDATE_REPORT_SUCCESS,
   ReportsActionTypes.UPDATE_REPORT_FAILURE,
 )<undefined, IReport, undefined>();
+
+export const attachFile = (file: File, type: string) => action(ReportsActionTypes.ATTACH_FILE, { file, type });
+export const attachFileAsync = createAsyncAction(
+  ReportsActionTypes.ATTACH_FILE_REQUEST,
+  ReportsActionTypes.ATTACH_FILE_SUCCESS,
+  ReportsActionTypes.ATTACH_FILE_FAILURE,
+)<undefined, IFile, undefined>();

@@ -1,6 +1,8 @@
 import { all, takeLatest, fork, call, put, select } from 'redux-saga/effects';
 import { ReportsActionTypes } from './types';
 import {
+  attachFile,
+  attachFileAsync,
   createReport,
   createReportAsync,
   getReports,
@@ -10,6 +12,7 @@ import {
 } from './actions';
 import { ReportsApi } from '../../api/reports-api';
 import { selectEditReport } from './selectors';
+import { FilesApi } from '../../api/files-api';
 
 // HANDLERS
 function* handleGetReports(action: ReturnType<typeof getReports>) {
@@ -65,6 +68,19 @@ function* handleUpdateReport(action: ReturnType<typeof updateReport>) {
   }
 }
 
+function* handleAttachFile(action: ReturnType<typeof attachFile>) {
+  yield put(attachFileAsync.request());
+
+  const { file, type } = action.payload;
+
+  try {
+    const { data } = yield call(FilesApi.uploadFile, file, type);
+    yield put(attachFileAsync.success(data));
+  } catch (e) {
+    yield put(attachFileAsync.failure());
+  }
+}
+
 // WATCHERS
 
 const watchers = [
@@ -76,6 +92,9 @@ const watchers = [
   }),
   fork(function* watchUpdateReport() {
     yield takeLatest(ReportsActionTypes.UPDATE_REPORT, handleUpdateReport);
+  }),
+  fork(function* watchAttachFile() {
+    yield takeLatest(ReportsActionTypes.ATTACH_FILE, handleAttachFile);
   }),
 ];
 

@@ -1,12 +1,12 @@
 import React from 'react';
-import { IReport } from '../../../types/index';
-import { Wrapper, TextArea, Bottom } from './EditReport.styles';
-import { IconButton } from '@material-ui/core';
+import { IFile, IReport } from '../../../types/index';
+import { Wrapper, TextArea, Bottom, FileInput } from './EditReport.styles';
+import { Box, IconButton } from '@material-ui/core';
 import { Icon } from '../../../components/Icon';
 import { IApplicationState } from '../../../store';
 import { selectEditReport } from '../../../store/reports/selectors';
 import { bindActionCreators, Dispatch } from 'redux';
-import { setEditReport } from '../../../store/reports/actions';
+import { attachFile, setEditReport } from '../../../store/reports/actions';
 import { connect } from 'react-redux';
 
 const mapStateToProps = (state: IApplicationState) => ({
@@ -19,6 +19,7 @@ const mapDispatchToProps = (dispatch: Dispatch) =>
   bindActionCreators(
     {
       setEditReport,
+      attachFile,
     },
     dispatch,
   );
@@ -32,42 +33,70 @@ type OwnProps = {
 
 type Props = OwnProps & StateProps & DispatchProps;
 
-const EditReport: React.FC<Props> = ({ editReport, setEditReport }) => {
+const EditReport: React.FC<Props> = ({ editReport, setEditReport, attachFile }) => {
   const onTextChange = (event: React.FormEvent<HTMLTextAreaElement>) => {
     const newReport = { ...editReport, text: event.currentTarget.value };
     setEditReport(newReport);
   };
 
-  const ref = React.createRef<HTMLInputElement>();
+  const imageInputRef = React.createRef<HTMLInputElement>();
 
   const onImageSelect = () => {
-    if (ref.current) {
-      ref.current.click();
+    if (imageInputRef.current) {
+      imageInputRef.current.click();
     }
   };
 
   const onImageChange = (event: React.FormEvent<HTMLInputElement>) => {
     if (event.currentTarget.files && event.currentTarget.files.length) {
-      alert(event.currentTarget.files[0].name);
+      attachFile(event.currentTarget.files[0], 'image');
     }
+  };
+
+  const videoInputRef = React.createRef<HTMLInputElement>();
+
+  const onVideoSelect = () => {
+    if (videoInputRef.current) {
+      videoInputRef.current.click();
+    }
+  };
+
+  const onVideoChange = (event: React.FormEvent<HTMLInputElement>) => {
+    if (event.currentTarget.files && event.currentTarget.files.length) {
+      attachFile(event.currentTarget.files[0], 'video');
+    }
+  };
+
+  const onFileDelete = (fileToDelete: IFile) => {
+    const updatedEditReport = { ...editReport, files: editReport.files.filter((file) => file.id !== fileToDelete.id) };
+    setEditReport(updatedEditReport);
   };
 
   return (
     <Wrapper>
       <TextArea placeholder={'Поделитесь впечатлениями'} value={editReport.text} onChange={onTextChange} />
+
+      <Box>
+        {editReport.files.map((file) => (
+          <Box>
+            {file.type === 'image' ? (
+              <img src={file.path} onClick={() => onFileDelete(file)} />
+            ) : (
+              <Box onClick={() => onFileDelete(file)}>{file.type}</Box>
+            )}
+          </Box>
+        ))}
+      </Box>
+
       <Bottom>
-        <input
-          type={'file'}
-          ref={ref}
-          accept={'image'}
-          style={{ opacity: 0, width: 0, height: 0 }}
-          onChange={onImageChange}
-        />
+        <FileInput ref={imageInputRef} accept={'image'} onChange={onImageChange} />
         <IconButton onClick={onImageSelect}>
           <Icon name={'image'} size={20} />
         </IconButton>
 
-        <IconButton>
+        <FileInput ref={videoInputRef} accept={'image'} onChange={onVideoChange} />
+
+        <IconButton onClick={onVideoSelect}>
           <Icon name={'video'} size={22} />
         </IconButton>
       </Bottom>

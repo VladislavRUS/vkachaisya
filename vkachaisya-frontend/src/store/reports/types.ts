@@ -7,6 +7,7 @@ export interface IReportsState {
   isFetching: boolean;
   isCreating: boolean;
   isUpdating: boolean;
+  isAttachingFile: boolean;
 }
 
 export enum ReportsActionTypes {
@@ -24,6 +25,11 @@ export enum ReportsActionTypes {
   UPDATE_REPORT_REQUEST = '@@reports/UPDATE_REPORT_REQUEST',
   UPDATE_REPORT_SUCCESS = '@@reports/UPDATE_REPORT_SUCCESS',
   UPDATE_REPORT_FAILURE = '@@reports/UPDATE_REPORT_FAILURE',
+
+  ATTACH_FILE = '@@reports/ATTACH_FILE',
+  ATTACH_FILE_REQUEST = '@@reports/ATTACH_FILE_REQUEST',
+  ATTACH_FILE_SUCCESS = '@@reports/ATTACH_FILE_SUCCESS',
+  ATTACH_FILE_FAILURE = '@@reports/ATTACH_FILE_FAILURE',
 
   CLEAR_REPORTS = '@@reports/CLEAR_REPORTS',
 

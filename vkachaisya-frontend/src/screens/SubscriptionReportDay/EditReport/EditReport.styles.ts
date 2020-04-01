@@ -22,3 +22,11 @@ export const Bottom = styled.div`
   display: flex;
   align-items: center;
 `;
+
+export const FileInput = styled.input.attrs({ type: 'file' })`
+  position: absolute;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  opacity: 0;
+`;
