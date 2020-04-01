@@ -16,6 +16,7 @@ import { NoSubscriptions } from './NoSubscriptions';
 import { ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails } from '../../components/ExpansionPanel';
 import { ChallengeCard } from '../../components/ChallengeCard';
 import { Layout } from '../../components/Layout';
+import { FloatButton } from '../../components/FloatButton';
 
 const mapStateToProps = (state: IApplicationState) => ({
   user: selectCurrentUser(state),
@@ -46,16 +47,7 @@ const Header = () => (
         </IconButton>
       </Link>
     }
-    center={
-      <Typography variant="h1" noWrap={true}>
-        Мои челленджи
-      </Typography>
-    }
-    right={
-      <Link component={RouterLink} to={Routes.CREATE_CHALLENGE}>
-        <SquareButton iconName="plus" />
-      </Link>
-    }
+    center="Мои челленджи"
   />
 );
 
@@ -74,56 +66,61 @@ const Subscriptions: React.FC<Props> = ({ getSubscriptions, currentSubscriptions
     history.push(generatePath(Routes.SUBSCRIPTION, { subscriptionId, userId: user.id }));
   };
 
+  const hasChallenges = !!currentSubscriptions.length || !!finishedSubscriptions.length;
+
   return (
-    <Layout
-      header={<Header />}
-      withScroll={!!currentSubscriptions.length || !!finishedSubscriptions.length}
-      body={
-        <>
-          {!currentSubscriptions.length && !finishedSubscriptions.length && <NoSubscriptions />}
+    <>
+      <Layout
+        header={<Header />}
+        withScroll={hasChallenges}
+        body={
+          <>
+            {!hasChallenges && <NoSubscriptions />}
 
-          {!!currentSubscriptions.length && (
-            <Box mt="10px">
-              <ExpansionPanel defaultExpanded={true}>
-                <ExpansionPanelSummary>Текущие</ExpansionPanelSummary>
-                <ExpansionPanelDetails>
-                  {currentSubscriptions.map((subscription) => (
-                    <Box mb="10px" key={subscription.id}>
-                      <ChallengeCard
-                        {...subscription}
-                        iconName="arrow"
-                        onButtonClick={() => onChooseChallenge(subscription.id)}
-                        daysPassed={differenceInCalendarDays(new Date(), new Date(subscription.startDate))}
-                      />
-                    </Box>
-                  ))}
-                </ExpansionPanelDetails>
-              </ExpansionPanel>
-            </Box>
-          )}
+            {!!currentSubscriptions.length && (
+              <Box mt="10px">
+                <ExpansionPanel defaultExpanded={true}>
+                  <ExpansionPanelSummary>Текущие</ExpansionPanelSummary>
+                  <ExpansionPanelDetails>
+                    {currentSubscriptions.map((subscription) => (
+                      <Box mb="10px" key={subscription.id}>
+                        <ChallengeCard
+                          {...subscription}
+                          iconName="arrow"
+                          onButtonClick={() => onChooseChallenge(subscription.id)}
+                          daysPassed={differenceInCalendarDays(new Date(), new Date(subscription.startDate))}
+                        />
+                      </Box>
+                    ))}
+                  </ExpansionPanelDetails>
+                </ExpansionPanel>
+              </Box>
+            )}
 
-          {!!finishedSubscriptions.length && (
-            <Box mt="10px">
-              <ExpansionPanel defaultExpanded={true}>
-                <ExpansionPanelSummary>Прошедшие</ExpansionPanelSummary>
-                <ExpansionPanelDetails>
-                  {finishedSubscriptions.map((subscription) => (
-                    <Box mb="10px" key={subscription.id}>
-                      <ChallengeCard
-                        {...subscription}
-                        iconName="arrow"
-                        done={true}
-                        onButtonClick={() => onChooseChallenge(subscription.id)}
-                      />
-                    </Box>
-                  ))}
-                </ExpansionPanelDetails>
-              </ExpansionPanel>
-            </Box>
-          )}
-        </>
-      }
-    />
+            {!!finishedSubscriptions.length && (
+              <Box mt="10px">
+                <ExpansionPanel defaultExpanded={true}>
+                  <ExpansionPanelSummary>Прошедшие</ExpansionPanelSummary>
+                  <ExpansionPanelDetails>
+                    {finishedSubscriptions.map((subscription) => (
+                      <Box mb="10px" key={subscription.id}>
+                        <ChallengeCard
+                          {...subscription}
+                          iconName="arrow"
+                          done={true}
+                          onButtonClick={() => onChooseChallenge(subscription.id)}
+                        />
+                      </Box>
+                    ))}
+                  </ExpansionPanelDetails>
+                </ExpansionPanel>
+              </Box>
+            )}
+          </>
+        }
+      />
+      {hasChallenges && <FloatButton iconName="plus" onClick={() => history.push(Routes.CREATE_CHALLENGE)} />}
+    </>
   );
 };
 

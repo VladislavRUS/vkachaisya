@@ -41,16 +41,7 @@ export interface FormValues {
   withReport?: boolean;
 }
 
-const Header = () => (
-  <AppBar.Small
-    left={<BackLink to={Routes.SUBSCRIPTIONS} />}
-    center={
-      <Typography variant="h1" noWrap={true}>
-        Создание челленджа
-      </Typography>
-    }
-  />
-);
+const Header = () => <AppBar.Small left={<BackLink to={Routes.SUBSCRIPTIONS} />} center="Создание челленджа" />;
 
 const hashtagStart = '#ВКачайся';
 

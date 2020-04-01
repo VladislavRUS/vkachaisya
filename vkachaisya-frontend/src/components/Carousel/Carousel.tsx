@@ -3,7 +3,8 @@ import styled from 'styled-components';
 import { useTheme } from '@material-ui/core/styles';
 import MobileStepper from '@material-ui/core/MobileStepper';
 import SwipeableViews from 'react-swipeable-views';
-import { Box, Typography } from '@material-ui/core';
+import { Box } from '@material-ui/core';
+import { Typography } from '../Typography';
 
 const Dots = styled(MobileStepper)`
   display: flex;
@@ -60,7 +61,7 @@ const Carousel: React.FC<CarouselProps> = ({ steps, step, setStep }) => {
             </Box>
             <Box display="flex" flexDirection="column" alignItems="center">
               {text.map((str, i) => (
-                <Typography key={i} variant="h2">
+                <Typography key={i} variant="h2" color={index === 0 && i === 1 ? '#346bec' : '#403E4B'}>
                   {str}
                 </Typography>
               ))}

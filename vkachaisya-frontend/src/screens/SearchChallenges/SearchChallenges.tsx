@@ -33,17 +33,7 @@ type DispatchProps = ReturnType<typeof mapDispatchToProps>;
 
 type Props = StateProps & DispatchProps;
 
-const Header = () => (
-  <AppBar.Small
-    left={<BackLink to={Routes.SUBSCRIPTIONS} />}
-    center={<Typography variant="h1">Выберите челлендж</Typography>}
-    // right={
-    //   <RouterLink to={Routes.CREATE_CHALLENGE}>
-    //     <SquareButton iconName="plus" />
-    //   </RouterLink>
-    // }
-  />
-);
+const Header = () => <AppBar.Small left={<BackLink to={Routes.SUBSCRIPTIONS} />} center="Выберите челлендж" />;
 
 const SearchChallenges: React.FC<Props> = ({ challenges, searchChallenges }) => {
   const [showModal, setShowModal] = useState(false);

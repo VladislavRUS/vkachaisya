@@ -21,6 +21,7 @@ import { Icon } from '../../components/Icon';
 import { SquareButton } from '../../components/SquareButton';
 import { Modal } from '../../components/Modal';
 import { differenceInCalendarDays } from 'date-fns';
+import { FloatButton } from '../../components/FloatButton';
 
 const mapStateToProps = (state: IApplicationState) => ({
   currentUser: selectCurrentUser(state),
@@ -44,17 +45,7 @@ type DispatchProps = ReturnType<typeof mapDispatchToProps>;
 
 type Props = StateProps & DispatchProps & RouteComponentProps;
 
-const Header = ({ title, button = null }: any) => (
-  <AppBar.Small
-    left={<BackLink to={Routes.SUBSCRIPTIONS} />}
-    center={
-      <Typography variant="h1" noWrap={true}>
-        {title}
-      </Typography>
-    }
-    right={button}
-  />
-);
+const Header = ({ title }: any) => <AppBar.Small left={<BackLink to={Routes.SUBSCRIPTIONS} />} center={title} />;
 
 const Subscription: React.FC<Props> = ({
   getReports,
@@ -124,12 +115,7 @@ const Subscription: React.FC<Props> = ({
   return (
     <>
       <Layout
-        header={
-          <Header
-            title={subscriptionResult.title}
-            button={currentUser && userId !== currentUser.id && <SquareButton iconName="plus" onClick={join} />}
-          />
-        }
+        header={<Header title={subscriptionResult.title} />}
         body={
           <>
             <Box m={2} mt={4} mb={1}>
@@ -200,6 +186,7 @@ const Subscription: React.FC<Props> = ({
           </>
         }
       />
+      {currentUser && userId !== currentUser.id && <FloatButton iconName="plus" onClick={join} />}
       <Modal.Join hashtag={subscriptionResult.hashtag} onBackButtonClick={() => setShowModal(false)} open={showModal} />
     </>
   );
