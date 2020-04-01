@@ -27,7 +27,7 @@ export class SubscriptionsService {
 
     const { identifiers } = await this.subscriptionRepository.insert(subscription);
 
-    return this.getById(identifiers[0].id);
+    return this.getSubscriptionResult(identifiers[0].id);
   }
 
   async getByChallengeId(challengeId: number, relations: string[] = []) {
@@ -70,7 +70,7 @@ export class SubscriptionsService {
     return this.subscriptionRepository.findOne({ where: { user: { id: userId }, challenge: { id: challengeId } } });
   }
 
-  async getSubscriptionResult(userId: number, subscriptionId: number) {
+  async getSubscriptionResult(subscriptionId: number) {
     const subscription = await this.getById(subscriptionId, ['challenge']);
 
     const subscriptionResultDto = new SubscriptionResultDto();

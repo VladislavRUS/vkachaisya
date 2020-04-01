@@ -30,12 +30,8 @@ export class SubscriptionsController {
   }
 
   @Get('/:subscriptionId/result')
-  async getSubscriptionResult(
-    @Headers() headers: any,
-    @Query('userId') userId: number,
-    @Param('subscriptionId') subscriptionId: number,
-  ) {
-    return this.subscriptionsService.getSubscriptionResult(userId, subscriptionId);
+  async getSubscriptionResult(@Param('subscriptionId') subscriptionId: number) {
+    return this.subscriptionsService.getSubscriptionResult(subscriptionId);
   }
 
   @Get('/:subscriptionId/reports')
