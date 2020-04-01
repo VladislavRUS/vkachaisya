@@ -4,7 +4,6 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { clearSearchChallenges, searchChallenges } from '../../store/challenges/actions';
 import {
   selectHasMoreChallenges,
-  selectIsChallengeCreating,
   selectIsChallengesSearching,
   selectUserSearchChallenges,
 } from '../../store/challenges/selectors';

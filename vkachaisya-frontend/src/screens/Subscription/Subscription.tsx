@@ -6,10 +6,14 @@ import { connect } from 'react-redux';
 import { IApplicationState } from '../../store';
 import { selectCurrentUser } from '../../store/user/selectors';
 import { withRouter, RouteComponentProps, generatePath, useHistory } from 'react-router-dom';
-import { selectIsFetchingSubscriptionResult, selectSubscriptionResult } from '../../store/subscriptions/selectors';
+import {
+  selectIsFetchingSubscriptionResult,
+  selectSubscriptionResult,
+  selectSubscriptions,
+} from '../../store/subscriptions/selectors';
 import { selectReports } from '../../store/reports/selectors';
 import { Routes } from '../../entry/Routes';
-import { clearSubscriptionResult, getSubscriptionResult } from '../../store/subscriptions/actions';
+import { clearSubscriptionResult, getSubscriptionResult, getSubscriptions } from '../../store/subscriptions/actions';
 import { AppBar } from '../../components/AppBar';
 import { BackLink } from '../../components/BackLink';
 import { Card } from '../../components/Card';
@@ -23,12 +27,15 @@ import { Modal } from '../../components/Modal';
 import { differenceInCalendarDays } from 'date-fns';
 import { FloatButton } from '../../components/FloatButton';
 import { PageLoader } from '../../components/PageLoader';
+import bridge from '@vkontakte/vk-bridge';
+import { getCurrentUser } from '../../store/user/actions';
 
 const mapStateToProps = (state: IApplicationState) => ({
   currentUser: selectCurrentUser(state),
   subscriptionResult: selectSubscriptionResult(state),
   reports: selectReports(state),
   isFetchingSubscriptionResult: selectIsFetchingSubscriptionResult(state),
+  subscriptions: selectSubscriptions(state),
 });
 
 type StateProps = ReturnType<typeof mapStateToProps>;
@@ -40,6 +47,8 @@ const mapDispatchToProps = (dispatch: Dispatch) =>
       clearReports,
       getSubscriptionResult,
       clearSubscriptionResult,
+      getSubscriptions,
+      getCurrentUser,
     },
     dispatch,
   );
@@ -59,6 +68,8 @@ const Subscription: React.FC<Props> = ({
   reports,
   isFetchingSubscriptionResult,
   clearSubscriptionResult,
+  getCurrentUser,
+  subscriptions,
 }) => {
   const history = useHistory();
 
@@ -71,15 +82,28 @@ const Subscription: React.FC<Props> = ({
       getReports(subscriptionId);
     }
 
+    if (!currentUser) {
+      getCurrentUser();
+    }
+
+    if (subscriptions.length === 0) {
+      getSubscriptions();
+    }
+
     return () => {
       clearReports();
       clearSubscriptionResult();
     };
-  }, [clearSubscriptionResult, currentUser, getReports, getSubscriptionResult, subscriptionId, userId]);
+    // eslint-disable-next-line
+  }, []);
 
   if (!subscriptionResult) {
     return <PageLoader />;
   }
+
+  const canJoin = !subscriptions.find((subscription) => subscription.id === subscriptionResult.id);
+
+  const canShare = currentUser && currentUser.id === parseInt(userId);
 
   const days = [];
 
@@ -124,7 +148,13 @@ const Subscription: React.FC<Props> = ({
     setShowModal(true);
   };
 
-  const onShare = () => {};
+  const onShare = () => {
+    if (currentUser) {
+      bridge.send('VKWebAppShare', {
+        link: `https://vk.com/app7380006#/subscriptions/${subscriptionId}/users/${currentUser.id}`,
+      });
+    }
+  };
 
   return (
     <>
@@ -171,10 +201,14 @@ const Subscription: React.FC<Props> = ({
                     </Grid>
                   </Box>
                   <Box display="flex" justifyContent="space-between" alignItems="center" pl="15px" pr="3px" pb="3px">
-                    <Badge text={subscriptionResult.hashtag} bgColor={'#f7f9fb'} color={'#9ea9b1'} />
-                    <IconButton onClick={onShare}>
-                      <Icon name="share" size={24} />
-                    </IconButton>
+                    <Box pb={'22px'}>
+                      <Badge text={subscriptionResult.hashtag} bgColor={'#f7f9fb'} color={'#9ea9b1'} />
+                    </Box>
+                    {canShare && (
+                      <IconButton onClick={onShare}>
+                        <Icon name="share" size={24} />
+                      </IconButton>
+                    )}
                   </Box>
                 </Box>
               </Card>
@@ -202,7 +236,7 @@ const Subscription: React.FC<Props> = ({
           </>
         }
       />
-      {currentUser && userId !== currentUser.id && <FloatButton iconName="plus" onClick={join} />}
+      {canJoin && <FloatButton iconName="plus" onClick={join} />}
       <Modal.Join hashtag={subscriptionResult.hashtag} onBackButtonClick={() => setShowModal(false)} open={showModal} />
       {/* <Modal.Complete
         hashtag={subscriptionResult.hashtag}

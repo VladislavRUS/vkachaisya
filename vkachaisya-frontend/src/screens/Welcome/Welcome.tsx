@@ -123,6 +123,7 @@ const Welcome: React.FC<Props> = ({ isCreating, createCurrentUser }) => {
           alignItems="stretch"
           height="100%"
           width="100%"
+          flexGrow={'1'}
         >
           <Box display="flex" flexDirection="column" flexGrow="1" justifyContent="center">
             <Carousel steps={steps} step={activeStep} setStep={setActiveStep} />
