@@ -188,6 +188,11 @@ const Subscription: React.FC<Props> = ({
       />
       {currentUser && userId !== currentUser.id && <FloatButton iconName="plus" onClick={join} />}
       <Modal.Join hashtag={subscriptionResult.hashtag} onBackButtonClick={() => setShowModal(false)} open={showModal} />
+      <Modal.Complete
+        hashtag={subscriptionResult.hashtag}
+        onBackButtonClick={() => setShowModal(false)}
+        open={showModal}
+      />
     </>
   );
 };

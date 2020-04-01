@@ -1,16 +1,23 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
-import { PanelHeaderSimple } from '@vkontakte/vkui';
-import { Box } from '@material-ui/core';
+import { Box, AppBar } from '@material-ui/core';
 
-const StyledPanelHeader = styled(({ isTransparent, ...props }) => <PanelHeaderSimple {...props} />)<{
+const StyledPanelHeader = styled(({ isTransparent, ...props }) => <AppBar {...props} />)<{
   isTransparent?: boolean;
 }>`
   position: relative;
   background-image: ${({ isTransparent }) =>
     isTransparent ? 'none' : 'linear-gradient(30.21deg, #3e5ee7 3.36%, #4f70f5 105%)'};
-  color: white;
   overflow: hidden;
+  box-shadow: none;
+
+  @supports (padding-top: constant(safe-area-inset-top)) {
+    padding-top: constant(safe-area-inset-top);
+  }
+
+  @supports (padding-top: env(safe-area-inset-top)) {
+    padding-top: env(safe-area-inset-top);
+  }
 
   ${(props) =>
     props.isTransparent &&
@@ -28,6 +35,7 @@ const TopWave = styled.img`
   top: 0;
   right: 0;
   width: 70%;
+  border: none;
 `;
 
 const Circle = styled.div`

@@ -5,6 +5,8 @@ import { Button } from '../Button';
 import { Typography } from '../Typography';
 
 import JoinImage from '../../assets/images/join.svg';
+import CreateImage from '../../assets/images/create.svg';
+import CongratulationsImage from '../../assets/images/congratulations.svg';
 
 const ImageBox = styled(({ src, ...props }) => <Box {...props} />)`
   background-image: url(${({ src }) => src});
@@ -26,6 +28,8 @@ interface JoinModalProps extends Omit<ModalProps, 'children'> {
 
 interface Modal extends React.FC<ModalProps> {
   Join: React.FC<JoinModalProps>;
+  Create: React.FC<JoinModalProps>;
+  Complete: React.FC<JoinModalProps>;
 }
 
 const Modal: Modal = ({ image, onShareButtonClick, onBackButtonClick, children, ...props }) => (
@@ -56,6 +60,30 @@ Modal.Join = ({ hashtag, ...props }) => (
       <Typography display="block">Вы присоединились</Typography>
       <Typography display="block">к новому челленджу</Typography>
       <Typography display="block" color="blues:0">
+        {hashtag}
+      </Typography>
+    </Typography>
+  </Modal>
+);
+
+Modal.Create = ({ hashtag, ...props }) => (
+  <Modal image={CreateImage} {...props}>
+    <Typography color="grays:1" fontSize="21px" fontWeight={500} align="center">
+      <Typography display="block">Ура! Поздравляем!</Typography>
+      <Typography display="block">Вы создали новый челлендж</Typography>
+      <Typography display="block" color="blues:0">
+        {hashtag}
+      </Typography>
+    </Typography>
+  </Modal>
+);
+
+Modal.Complete = ({ hashtag, ...props }) => (
+  <Modal image={CongratulationsImage} {...props}>
+    <Typography color="grays:1" fontSize="21px" fontWeight={500} align="center">
+      <Typography display="block">Ура! Челлендж</Typography>
+      <Typography display="block" color="blues:0">
+        <Typography display="block">успешно пройден</Typography>
         {hashtag}
       </Typography>
     </Typography>

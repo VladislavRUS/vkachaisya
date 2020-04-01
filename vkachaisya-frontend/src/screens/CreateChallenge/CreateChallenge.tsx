@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Box, Typography } from '@material-ui/core';
 import { Form, Field } from 'react-final-form';
 import { bindActionCreators, Dispatch } from 'redux';
@@ -14,6 +14,7 @@ import { BackLink } from '../../components/BackLink';
 import { TextField } from '../../components/TextField';
 import { Switch } from '../../components/Switch';
 import { Layout } from '../../components/Layout';
+import { Modal } from '../../components/Modal';
 
 const mapStateToProps = (state: IApplicationState) => ({
   isCreating: selectIsChallengeCreating(state),
@@ -49,13 +50,24 @@ const hashtag = (value: string) => (value ? value.replace(/[^(А-Яа-яA-Za-z0-
 const digits = (value: string) => (value ? value.replace(/[^\d]/, '') : '');
 
 const CreateChallenge: React.FC<Props> = ({ createChallenge, isCreating }) => {
+  const [showModal, setShowModal] = useState(false);
+
   const onSubmit = (values: FormValues) => {
-    createChallenge({
-      ...values,
-      withReport: Boolean(values.withReport),
-      hashtag: `${hashtagStart}${values.hashtag}`,
-    });
+    // TODO
+    // createChallenge({
+    //   ...values,
+    //   withReport: Boolean(values.withReport),
+    //   hashtag: `${hashtagStart}${values.hashtag}`,
+    // });
+    setShowModal(true);
   };
+
+  const onCloseModal = () => {
+    setShowModal(false);
+    //TODO
+    // redirect to challenges
+  };
+
   return (
     <Layout
       header={<Header />}
@@ -63,7 +75,7 @@ const CreateChallenge: React.FC<Props> = ({ createChallenge, isCreating }) => {
         <Box display="flex" flexDirection="column" flexGrow="1">
           <Form
             onSubmit={onSubmit}
-            render={({ handleSubmit, valid }) => (
+            render={({ values, handleSubmit, valid }) => (
               <StyledForm onSubmit={handleSubmit}>
                 <Box display="flex" flexDirection="column" justifyContent="space-between" flexGrow="1">
                   <Box flexGrow="1" m="27px">
@@ -181,6 +193,12 @@ const CreateChallenge: React.FC<Props> = ({ createChallenge, isCreating }) => {
                       Добавить челлендж
                     </Button>
                   </Box>
+
+                  <Modal.Create
+                    hashtag={`${hashtagStart}${values.hashtag}`}
+                    onBackButtonClick={onCloseModal}
+                    open={showModal}
+                  />
                 </Box>
               </StyledForm>
             )}
