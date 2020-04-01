@@ -35,7 +35,7 @@ const PrivateRoute: React.FC<Props> = ({ component, user, getCurrentUser, isFetc
       getCurrentUser();
       setRequestWasTriggered(true);
     }
-  }, []);
+  }, [getCurrentUser, user]);
 
   if (user) {
     const routeComponent = (props: any) => React.createElement(component, props);

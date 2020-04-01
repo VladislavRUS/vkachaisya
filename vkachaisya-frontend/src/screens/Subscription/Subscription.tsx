@@ -144,10 +144,16 @@ const Subscription: React.FC<Props> = ({
   const progress = reportDays < subscriptionResult.days ? Math.ceil((reportDays / subscriptionResult.days) * 100) : 100;
 
   const progressText = () => {
-    if (progress > 50) {
-      return 'Ого! Уже больше половины, осталось совсем чуть-чуть';
+    if (progress === 0) {
+      return 'Давай сделаем это!';
     }
-    return 'Надо бы придумать сюда тексты!';
+    if (progress === 100) {
+      return 'Это было круто! Ты молодец!';
+    }
+    if (progress <= 50) {
+      return 'Не останавливайся на достигнутом!';
+    }
+    return 'Ого! Уже больше половины, осталось совсем чуть-чуть';
   };
 
   const onChooseDay = (day: number) => {
