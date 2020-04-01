@@ -16,6 +16,7 @@ const initialState: IReportsState = {
   isFetching: false,
   isCreating: false,
   isUpdating: false,
+  isAttachingFile: false,
 };
 
 export const reportsReducer = createReducer<IReportsState, ReportsActionType>(initialState)
@@ -68,4 +69,22 @@ export const reportsReducer = createReducer<IReportsState, ReportsActionType>(in
       reports: state.reports.map((report) => (report.id === action.payload.id ? action.payload : report)),
     }),
   )
-  .handleType(ReportsActionTypes.UPDATE_REPORT_FAILURE, (state): IReportsState => ({ ...state, isUpdating: false }));
+  .handleType(ReportsActionTypes.UPDATE_REPORT_FAILURE, (state): IReportsState => ({ ...state, isUpdating: false }))
+
+  // Attach file
+  .handleType(ReportsActionTypes.ATTACH_FILE_REQUEST, (state): IReportsState => ({ ...state, isAttachingFile: true }))
+  .handleType(
+    ReportsActionTypes.ATTACH_FILE_SUCCESS,
+    (state, action): IReportsState => ({
+      ...state,
+      isAttachingFile: false,
+      editReport: { ...state.editReport, files: [...state.editReport.files, action.payload] },
+    }),
+  )
+  .handleType(
+    ReportsActionTypes.ATTACH_FILE_FAILURE,
+    (state): IReportsState => ({
+      ...state,
+      isAttachingFile: false,
+    }),
+  );
