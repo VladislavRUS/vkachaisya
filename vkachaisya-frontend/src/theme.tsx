@@ -48,7 +48,7 @@ const theme = createMuiTheme({
     fontFamily: "'Lato', sans-serif",
     h1: {
       fontWeight: 'bold',
-      fontSize: '18px',
+      fontSize: '16px',
       lineHeight: 1.3,
       letterSpacing: '-0.02em',
     },
