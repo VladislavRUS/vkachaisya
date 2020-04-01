@@ -70,7 +70,7 @@ const SearchChallenges: React.FC<Props> = ({
   const handleScroll = (e: any) => {
     const bottom = e.target.scrollHeight - e.target.scrollTop === e.target.clientHeight;
 
-    if (bottom && hasMore) {
+    if (bottom && hasMore && !isSearching) {
       searchChallenges();
     }
   };

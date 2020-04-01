@@ -8,7 +8,7 @@ const StyledAppBar = styled(({ isTransparent, ...props }) => <AppBar {...props} 
   background-image: ${({ isTransparent }) =>
     isTransparent ? 'none' : 'linear-gradient(30.21deg, #3e5ee7 3.36%, #4f70f5 105%)'};
   box-shadow: none;
-  height: 60px;
+  height: 58px;
   overflow: hidden;
 
   ${(props) =>

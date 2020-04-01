@@ -15,7 +15,6 @@ import {
 } from '../../store/subscriptions/selectors';
 import { selectCurrentUser } from '../../store/user/selectors';
 import { Icon } from '../../components/Icon';
-import { SquareButton } from '../../components/SquareButton';
 import { NoSubscriptions } from './NoSubscriptions';
 import { ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails } from '../../components/ExpansionPanel';
 import { ChallengeCard } from '../../components/ChallengeCard';

@@ -1,4 +1,4 @@
-import { put, all, takeLatest, fork, call, select, debounce } from 'redux-saga/effects';
+import { put, all, takeLatest, fork, call, select } from 'redux-saga/effects';
 import { ChallengesActionTypes } from './types';
 import { createChallenge, createChallengeAsync, searchChallengesAsync, getChallengesAsync } from './actions';
 import { ChallengesApi } from '../../api/challenges-api';
@@ -52,7 +52,7 @@ const watchers = [
     yield takeLatest(ChallengesActionTypes.GET_CHALLENGES, handleGetChallenges);
   }),
   fork(function* watchSearchChallenges() {
-    yield debounce(500, ChallengesActionTypes.SEARCH_CHALLENGES, handleSearchChallenges);
+    yield takeLatest(ChallengesActionTypes.SEARCH_CHALLENGES, handleSearchChallenges);
   }),
   fork(function* watchCreateChallenge() {
     yield takeLatest(ChallengesActionTypes.CREATE_CHALLENGE, handleCreateChallenge);
