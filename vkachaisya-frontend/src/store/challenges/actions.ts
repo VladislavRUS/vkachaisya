@@ -24,3 +24,5 @@ export const createChallengeAsync = createAsyncAction(
   ChallengesActionTypes.CREATE_CHALLENGE_SUCCESS,
   ChallengesActionTypes.CREATE_CHALLENGE_FAILURE,
 )<undefined, IChallenge, undefined>();
+
+export const clearSearchChallenges = () => action(ChallengesActionTypes.CLEAR_SEARCH_CHALLENGES);

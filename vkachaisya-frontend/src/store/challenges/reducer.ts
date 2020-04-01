@@ -1,12 +1,14 @@
 import { ChallengesActionTypes, IChallengesState } from './types';
 import * as challengesActions from './actions';
 import { ActionType, createReducer } from 'typesafe-actions';
+import { TAKE_CHALLENGES } from './sagas';
 
 type ChallengesActionType = ActionType<typeof challengesActions>;
 
 const initialState: IChallengesState = {
   challenges: [],
   searchChallenges: [],
+  hasMore: true,
   isFetching: false,
   isSearching: false,
   isCreating: false,
@@ -41,7 +43,8 @@ export const challengesReducer = createReducer<IChallengesState, ChallengesActio
     (state, action): IChallengesState => ({
       ...state,
       isSearching: false,
-      searchChallenges: [...action.payload],
+      hasMore: action.payload.length === TAKE_CHALLENGES,
+      searchChallenges: [...state.searchChallenges, ...action.payload],
     }),
   )
   .handleType(
@@ -65,4 +68,10 @@ export const challengesReducer = createReducer<IChallengesState, ChallengesActio
   .handleType(
     ChallengesActionTypes.CREATE_CHALLENGE_FAILURE,
     (state): IChallengesState => ({ ...state, isCreating: false }),
+  )
+
+  // Clear search challenges
+  .handleType(
+    ChallengesActionTypes.CLEAR_SEARCH_CHALLENGES,
+    (state): IChallengesState => ({ ...state, searchChallenges: [], hasMore: true }),
   );

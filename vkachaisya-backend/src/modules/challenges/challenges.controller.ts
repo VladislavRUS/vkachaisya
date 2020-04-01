@@ -14,9 +14,9 @@ export class ChallengesController {
   }
 
   @Get('/search')
-  async searchChallenges(@Headers() headers: any) {
+  async searchChallenges(@Headers() headers: any, @Query('skip') skip: number, @Query('take') take: number) {
     const userId = parseInt(headers['userId']);
-    return this.challengesService.search(userId);
+    return this.challengesService.search(userId, skip, take);
   }
 
   @Get('/:challengeId')

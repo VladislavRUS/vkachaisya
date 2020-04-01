@@ -1,7 +1,12 @@
 import React from 'react';
 import { Box } from '@material-ui/core';
 
-const Layout: React.FC<{ header?: any; body: any; withScroll?: boolean }> = ({ header, body, withScroll = true }) => (
+const Layout: React.FC<{ header?: any; body: any; withScroll?: boolean; onScroll?: (event: any) => void }> = ({
+  header,
+  body,
+  withScroll = true,
+  onScroll,
+}) => (
   <Box
     display="flex"
     flexDirection="column"
@@ -12,7 +17,14 @@ const Layout: React.FC<{ header?: any; body: any; withScroll?: boolean }> = ({ h
     bgcolor="grays:0"
   >
     <Box>{header}</Box>
-    <Box pb="8vh" display="flex" flexDirection="column" flexGrow={1} overflow={withScroll ? 'auto' : 'hidden'}>
+    <Box
+      pb="8vh"
+      display="flex"
+      flexDirection="column"
+      flexGrow={1}
+      overflow={withScroll ? 'auto' : 'hidden'}
+      onScroll={onScroll}
+    >
       {body}
     </Box>
   </Box>

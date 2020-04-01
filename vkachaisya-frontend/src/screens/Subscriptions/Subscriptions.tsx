@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Box, Typography, IconButton, Link } from '@material-ui/core';
+import { Box, Typography, IconButton, Link, CircularProgress } from '@material-ui/core';
 import { differenceInCalendarDays } from 'date-fns';
 import { bindActionCreators, Dispatch } from 'redux';
 import { getSubscriptions } from '../../store/subscriptions/actions';
@@ -8,7 +8,11 @@ import { IApplicationState } from '../../store';
 import { AppBar } from '../../components/AppBar';
 import { Link as RouterLink, generatePath, useHistory } from 'react-router-dom';
 import { Routes } from '../../entry/Routes';
-import { selectCurrentSubscriptions, selectFinishedSubscriptions } from '../../store/subscriptions/selectors';
+import {
+  selectCurrentSubscriptions,
+  selectFinishedSubscriptions,
+  selectisFetchingSubscriptions,
+} from '../../store/subscriptions/selectors';
 import { selectCurrentUser } from '../../store/user/selectors';
 import { Icon } from '../../components/Icon';
 import { SquareButton } from '../../components/SquareButton';
@@ -22,6 +26,7 @@ const mapStateToProps = (state: IApplicationState) => ({
   user: selectCurrentUser(state),
   currentSubscriptions: selectCurrentSubscriptions(state),
   finishedSubscriptions: selectFinishedSubscriptions(state),
+  isFetchingSubscriptions: selectisFetchingSubscriptions(state),
 });
 
 type StateProps = ReturnType<typeof mapStateToProps>;
@@ -51,7 +56,13 @@ const Header = () => (
   />
 );
 
-const Subscriptions: React.FC<Props> = ({ getSubscriptions, currentSubscriptions, finishedSubscriptions, user }) => {
+const Subscriptions: React.FC<Props> = ({
+  getSubscriptions,
+  currentSubscriptions,
+  finishedSubscriptions,
+  user,
+  isFetchingSubscriptions,
+}) => {
   const history = useHistory();
 
   useEffect(() => {
@@ -75,7 +86,20 @@ const Subscriptions: React.FC<Props> = ({ getSubscriptions, currentSubscriptions
         withScroll={hasChallenges}
         body={
           <>
-            {!hasChallenges && <NoSubscriptions />}
+            {!hasChallenges && !isFetchingSubscriptions && <NoSubscriptions />}
+
+            {!hasChallenges && isFetchingSubscriptions && (
+              <Box
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  height: '100%',
+                }}
+              >
+                <CircularProgress disableShrink={true} />
+              </Box>
+            )}
 
             {!!currentSubscriptions.length && (
               <Box mt="10px">

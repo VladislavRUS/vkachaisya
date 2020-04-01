@@ -4,6 +4,7 @@ import { ISearchChallenge } from '../../types/index';
 export interface IChallengesState {
   challenges: IChallenge[];
   searchChallenges: ISearchChallenge[];
+  hasMore: boolean;
   isFetching: boolean;
   isSearching: boolean;
   isCreating: boolean;
@@ -19,6 +20,8 @@ export enum ChallengesActionTypes {
   SEARCH_CHALLENGES_REQUEST = '@@challenges/SEARCH_CHALLENGES_REQUEST',
   SEARCH_CHALLENGES_SUCCESS = '@@challenges/SEARCH_CHALLENGES_SUCCESS',
   SEARCH_CHALLENGES_FAILURE = '@@challenges/SEARCH_CHALLENGES_FAILURE',
+
+  CLEAR_SEARCH_CHALLENGES = '@@challenges/CLEAR_SEARCH_CHALLENGES',
 
   CREATE_CHALLENGE = '@@challenges/CREATE_CHALLENGE',
   CREATE_CHALLENGE_REQUEST = '@@challenges/CREATE_CHALLENGE_REQUEST',

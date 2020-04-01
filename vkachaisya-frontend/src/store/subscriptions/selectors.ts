@@ -36,3 +36,4 @@ export const selectFinishedSubscriptions = createSelector(
 );
 
 export const selectSubscriptionResult = (state: IApplicationState) => state.subscriptions.subscriptionResult;
+export const selectisFetchingSubscriptions = (state: IApplicationState) => state.subscriptions.isFetchingSubscriptions;

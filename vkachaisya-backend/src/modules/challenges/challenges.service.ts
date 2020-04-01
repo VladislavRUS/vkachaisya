@@ -35,8 +35,8 @@ export class ChallengesService {
     return this.challengeRepository.findOne({ id });
   }
 
-  async search(userId: number) {
-    const challenges = await this.challengeRepository.find({ where: { authorId: Not(userId) } });
+  async search(userId: number, skip = 0, take = 50) {
+    const challenges = await this.challengeRepository.find({ where: { authorId: Not(userId) }, skip, take });
 
     const result: SearchChallengeDto[] = [];
 

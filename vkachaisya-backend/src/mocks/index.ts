@@ -26,7 +26,7 @@ export class Mock {
       users.push(user);
     }
 
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 30; i++) {
       const challenge = new Challenge();
       challenge.id = i;
       challenge.authorId = users[Math.floor(Math.random() * users.length)].id;
