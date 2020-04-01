@@ -27,7 +27,12 @@ export class SubscriptionsService {
 
     const { identifiers } = await this.subscriptionRepository.insert(subscription);
 
-    return this.getSubscriptionResult(identifiers[0].id);
+    const createdSubscription = await this.subscriptionRepository.findOne({
+      where: { id: identifiers[0].id },
+      relations: ['challenge'],
+    });
+
+    return this.getUserSubscription(createdSubscription);
   }
 
   async getByChallengeId(challengeId: number, relations: string[] = []) {
@@ -49,21 +54,27 @@ export class SubscriptionsService {
     for (let i = 0; i < subscriptions.length; i++) {
       const subscription = subscriptions[i];
 
-      const userSubscriptionDto = new UserSubscriptionDto();
-      userSubscriptionDto.id = subscription.id;
-      userSubscriptionDto.title = subscription.challenge.title;
-      userSubscriptionDto.days = subscription.challenge.days;
-      userSubscriptionDto.hashtag = subscription.challenge.hashtag;
-      userSubscriptionDto.startDate = subscription.startDate;
-      userSubscriptionDto.challengeId = subscription.challenge.id;
-      userSubscriptionDto.totalParticipants = await this.countUsersByChallengeId(subscription.challenge.id);
-      const subscriptionsSlice = await this.getSubscriptionsWithMaxUsers(subscription.challenge.id, 3);
-      userSubscriptionDto.avatars = subscriptionsSlice.map(subscription => subscription.user.avatar);
+      const userSubscriptionDto = await this.getUserSubscription(subscription);
 
       result.push(userSubscriptionDto);
     }
 
     return result;
+  }
+
+  async getUserSubscription(subscription: Subscription) {
+    const userSubscriptionDto = new UserSubscriptionDto();
+    userSubscriptionDto.id = subscription.id;
+    userSubscriptionDto.title = subscription.challenge.title;
+    userSubscriptionDto.days = subscription.challenge.days;
+    userSubscriptionDto.hashtag = subscription.challenge.hashtag;
+    userSubscriptionDto.startDate = subscription.startDate;
+    userSubscriptionDto.challengeId = subscription.challenge.id;
+    userSubscriptionDto.totalParticipants = await this.countUsersByChallengeId(subscription.challenge.id);
+    const subscriptionsSlice = await this.getSubscriptionsWithMaxUsers(subscription.challenge.id, 3);
+    userSubscriptionDto.avatars = subscriptionsSlice.map(subscription => subscription.user.avatar);
+
+    return userSubscriptionDto;
   }
 
   async getByUserIdAndChallengeId(userId: number, challengeId: number) {
