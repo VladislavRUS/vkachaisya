@@ -6,7 +6,7 @@ import { Typography } from '../Typography';
 
 import JoinImage from '../../assets/images/join.svg';
 import CreateImage from '../../assets/images/create.svg';
-import CongratulationsImage from '../../assets/images/congratulations.svg';
+import CompleteImage from '../../assets/images/complete.svg';
 
 const ImageBox = styled(({ src, ...props }) => <Box {...props} />)`
   background-image: url(${({ src }) => src});
@@ -79,7 +79,7 @@ Modal.Create = ({ hashtag, ...props }) => (
 );
 
 Modal.Complete = ({ hashtag, ...props }) => (
-  <Modal image={CongratulationsImage} {...props}>
+  <Modal image={CompleteImage} {...props}>
     <Typography color="grays:1" fontSize="21px" fontWeight={500} align="center">
       <Typography display="block">Ура! Челлендж</Typography>
       <Typography display="block" color="blues:0">
