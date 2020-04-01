@@ -11,6 +11,7 @@ import { ReactComponent as Image } from '../../assets/icons/image.svg';
 import { ReactComponent as Video } from '../../assets/icons/video.svg';
 import { ReactComponent as Pencil } from '../../assets/icons/pencil.svg';
 import { ReactComponent as Check } from '../../assets/icons/check.svg';
+import { ReactComponent as Share } from '../../assets/icons/share.svg';
 
 interface IconProps extends SpacingProps, PaletteProps, SizingProps {
   name: string;
@@ -30,6 +31,7 @@ const icons: { [key: string]: any } = {
   video: Video,
   check: Check,
   pencil: Pencil,
+  share: Share,
 };
 
 const rotate = (props: IconProps) =>

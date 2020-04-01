@@ -27,6 +27,7 @@
     "framer-motion": "^1.10.3",
     "plural-ru": "^2.0.2",
     "react": "^16.13.1",
+    "react-circular-progressbar": "^2.0.3",
     "react-dom": "^16.13.1",
     "react-final-form": "^6.3.5",
     "react-icons": "^3.9.0",

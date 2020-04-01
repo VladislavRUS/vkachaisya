@@ -1,42 +1,35 @@
 import React from 'react';
-import styled from 'styled-components';
-import {
-  Box,
-  CircularProgress as MuiCircularProgress,
-  CircularProgressProps as MuiCircularProgressProps,
-} from '@material-ui/core';
+import { CircularProgressbar } from 'react-circular-progressbar';
+import 'react-circular-progressbar/dist/styles.css';
+import { Box } from '@material-ui/core';
 
-enum MuiProgressColor {
-  inherit = 'inherit',
-  primary = 'primary',
-  secondary = 'secondary',
-}
-
-export const isProgressColor = (color: any): color is MuiProgressColor => color in MuiProgressColor;
-
-const StyledCircularProgress = styled(({ color, ...props }) => (
-  <MuiCircularProgress color={isProgressColor(color) ? MuiProgressColor[color] : 'inherit'} {...props} />
-))`
-  color: ${({ theme, color }) => (theme.palette[color] ? theme.palette[color] : color)};
-`;
-
-interface CircularProgressProps extends Omit<MuiCircularProgressProps, 'color'> {
-  color?: string;
-}
-
-type MuiCircularProgress = React.ComponentType<CircularProgressProps>;
-
-type CircularProgress = MuiCircularProgress & {
-  Main: MuiCircularProgress;
-};
-
-const CircularProgress: CircularProgress = (props) => <StyledCircularProgress color="secondary" {...props} />;
-const ProgressMain: MuiCircularProgress = (props) => (
-  <Box display="flex" alignItems="center" justifyContent="center" height="100%">
-    <CircularProgress color="secondary" size={100} thickness={3} {...props} />
+const CircularProgress: React.FC<{ value: number }> = ({ value }) => (
+  <Box width="80px" height="80px">
+    <CircularProgressbar
+      value={value}
+      text={`${value} %`}
+      styles={{
+        trail: {
+          stroke: '#f3f3f3',
+        },
+        path: {
+          stroke: 'url(#linear-gradient)',
+        },
+        text: {
+          fontFamily: '"Lato", sans-serif',
+          fill: '#403E4B',
+          fontSize: '22px',
+          fontWeight: 700,
+        },
+      }}
+    />
+    <svg style={{ width: 0, height: 0, position: 'absolute' }} aria-hidden="true" focusable="false">
+      <linearGradient id="linear-gradient" x2="1" y2="1">
+        <stop offset="0" stop-color="white" />
+        <stop offset="100%" stop-color="#ffcd79" />
+      </linearGradient>
+    </svg>
   </Box>
 );
-
-CircularProgress.Main = ProgressMain;
 
 export { CircularProgress };
