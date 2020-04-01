@@ -4,14 +4,14 @@ import { StyledPanelHeader, TopWave, Circle, Content } from './AppBar.styles';
 import WaveImage from '../../assets/images/top-wave.svg';
 import { Typography } from '../Typography';
 
-// interface AppBarProps extends MuiAppBarProps {
-//   isTransparent?: boolean;
-//   left?: any;
-//   right?: any;
-//   center?: string;
-// }
+interface AppBarProps extends MuiAppBarProps {
+  isTransparent?: boolean;
+  left?: any;
+  right?: any;
+  center?: string;
+}
 
-const AppBar = ({ ...props }) => (
+const AppBar: React.FC<AppBarProps> = ({ ...props }) => (
   <StyledPanelHeader>
     {!props.isTransparent && (
       <>
