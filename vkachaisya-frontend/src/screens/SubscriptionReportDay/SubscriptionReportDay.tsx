@@ -12,15 +12,23 @@ import { EditReport } from './EditReport';
 import { RoundButton } from '../../components/RoundButton';
 import { Icon } from '../../components/Icon';
 import { clearReports, createReport, getReports, setEditReport, updateReport } from '../../store/reports/actions';
-import { getSubscriptions } from '../../store/subscriptions/actions';
+import { getSubscriptionResult, getSubscriptions } from '../../store/subscriptions/actions';
 import { ViewReport } from './ViewReport';
-import { selectSubscriptions } from '../../store/subscriptions/selectors';
+import {
+  selectIsFetchingSubscriptions,
+  selectSubscriptionResult,
+  selectSubscriptions,
+} from '../../store/subscriptions/selectors';
+import { selectCurrentUser } from '../../store/user/selectors';
 
 const mapStateToProps = (state: IApplicationState, routeProps: RouteComponentProps) => ({
   reports: selectReports(state),
   report: selectReportByDay(state, +(routeProps.match.params as any).reportDay),
   isFetchingReports: selectIsFetchingReports(state),
   subscriptions: selectSubscriptions(state),
+  user: selectCurrentUser(state),
+  isFetchingSubscriptions: selectIsFetchingSubscriptions(state),
+  subscriptionResult: selectSubscriptionResult(state),
 });
 
 type StateProps = ReturnType<typeof mapStateToProps>;
@@ -34,6 +42,7 @@ const mapDispatchToProps = (dispatch: Dispatch) =>
       clearReports,
       updateReport,
       getSubscriptions,
+      getSubscriptionResult,
     },
     dispatch,
   );
@@ -41,14 +50,16 @@ type DispatchProps = ReturnType<typeof mapDispatchToProps>;
 
 type Props = StateProps & DispatchProps & RouteComponentProps;
 
-const ViewHeader = ({ to, title, onEdit }: any) => (
+const ViewHeader = ({ to, title, onEdit, canEdit }: any) => (
   <AppBar
     left={<BackLink to={to} />}
     center={title}
     right={
-      <RoundButton onClick={onEdit} buttonColor={'transparent'}>
-        <Icon name={'pencil'} size={50} color={'#818c99'} />
-      </RoundButton>
+      canEdit && (
+        <RoundButton onClick={onEdit} buttonColor={'transparent'}>
+          <Icon name={'pencil'} size={50} color={'#818c99'} />
+        </RoundButton>
+      )
     }
   />
 );
@@ -83,6 +94,10 @@ const SubscriptionReportDay: React.FC<Props> = ({
   updateReport,
   subscriptions,
   getSubscriptions,
+  isFetchingSubscriptions,
+  subscriptionResult,
+  getSubscriptionResult,
+  user,
 }) => {
   const { subscriptionId, reportDay, userId } = match.params as any;
 
@@ -95,6 +110,10 @@ const SubscriptionReportDay: React.FC<Props> = ({
 
     if (subscriptions.length === 0) {
       getSubscriptions();
+    }
+
+    if (!subscriptionResult) {
+      getSubscriptionResult(userId, subscriptionId);
     }
 
     return () => {
@@ -153,12 +172,25 @@ const SubscriptionReportDay: React.FC<Props> = ({
     return null;
   }
 
+  const canEdit =
+    isFetchingSubscriptions || !subscriptionResult || !user
+      ? false
+      : !!subscriptions.find(
+          (subscription) =>
+            subscription.challengeId === subscriptionResult.challenge.id &&
+            subscription.id === parseInt(subscriptionId),
+        ) && user.id === parseInt(userId);
+
+  if (editMode && !canEdit && subscriptionResult) {
+    history.goBack();
+  }
+
   return (
     <Box display={'flex'} flexDirection={'column'} width={'100%'} height={'100%'} overflow={'hidden'}>
       {editMode ? (
         <EditHeader onCancel={onCancel} title={getTitle()} onSave={onSave} />
       ) : (
-        <ViewHeader to={subscriptionsLink} title={getTitle()} onEdit={onEdit} />
+        <ViewHeader to={subscriptionsLink} title={getTitle()} onEdit={onEdit} canEdit={canEdit} />
       )}
 
       {editMode && <EditReport day={reportDay} onSubmit={onSave} />}
@@ -167,6 +199,7 @@ const SubscriptionReportDay: React.FC<Props> = ({
           start={subscription ? new Date(subscription.startDate).toString() : null}
           report={report}
           onEdit={onEdit}
+          canEdit={canEdit}
         />
       )}
     </Box>

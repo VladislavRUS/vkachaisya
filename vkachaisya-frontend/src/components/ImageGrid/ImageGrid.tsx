@@ -25,7 +25,7 @@ const ImageGrid: React.FC<any> = ({ files, size, editMode = false, onDelete }) =
                     position="absolute"
                     top={0}
                     right={0}
-                    style={{ transform: 'translate(25%,-25%)' }}
+                    style={{ transform: 'translate(-25%,-25%)' }}
                     onClick={() => onDelete(file)}
                   >
                     <RoundButton>

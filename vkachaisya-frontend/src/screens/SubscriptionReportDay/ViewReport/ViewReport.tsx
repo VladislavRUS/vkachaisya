@@ -12,9 +12,10 @@ type Props = {
   report: IReport;
   start: string | null;
   onEdit?: () => void;
+  canEdit: boolean;
 };
 
-const ViewReport: React.FC<Props> = ({ report, start, onEdit }) => {
+const ViewReport: React.FC<Props> = ({ report, start, onEdit, canEdit }) => {
   return (
     <Wrapper>
       <Box my="30px" mx={2}>
@@ -30,7 +31,7 @@ const ViewReport: React.FC<Props> = ({ report, start, onEdit }) => {
         <Box mt="24px">
           <ImageGrid files={report.files} size={110} />
         </Box>
-        <FloatButton iconName="pencil" onClick={onEdit} />
+        {canEdit && <FloatButton iconName="pencil" onClick={onEdit} />}
       </Box>
     </Wrapper>
   );

@@ -2,8 +2,8 @@ import { put, all, takeLatest, fork, call, select } from 'redux-saga/effects';
 import { ChallengesActionTypes } from './types';
 import { createChallenge, createChallengeAsync, searchChallengesAsync, getChallengesAsync } from './actions';
 import { ChallengesApi } from '../../api/challenges-api';
-import { goBack } from 'connected-react-router';
 import { selectSearchChallenges } from './selectors';
+import { setJoinedChallenge } from '../subscriptions/actions';
 
 export const TAKE_CHALLENGES = 10;
 
@@ -40,7 +40,7 @@ function* handleCreateChallenge(action: ReturnType<typeof createChallenge>) {
   try {
     const { data } = yield call(ChallengesApi.createChallenge, challenge);
     yield put(createChallengeAsync.success(data));
-    yield put(goBack());
+    yield put(setJoinedChallenge({ ...data }));
   } catch (e) {
     yield put(createChallengeAsync.failure());
   }

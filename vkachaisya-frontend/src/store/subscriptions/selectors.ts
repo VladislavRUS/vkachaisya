@@ -2,11 +2,16 @@ import { IApplicationState } from '../index';
 import { createSelector } from 'reselect';
 import { selectCurrentUser } from '../user/selectors';
 import { differenceInCalendarDays } from 'date-fns';
+import { ISubscription } from '../../types/index';
 
 export const selectSubscriptions = (state: IApplicationState) => state.subscriptions.subscriptions;
 export const selectIsSubscriptionCreating = (state: IApplicationState) => state.subscriptions.isCreating;
 export const selectIsFetchingSubscriptionResult = (state: IApplicationState) =>
   state.subscriptions.isFetchingSubscriptionResult;
+
+const sortSubscriptionsByDate = (first: ISubscription, second: ISubscription) => {
+  return new Date(second.startDate).getTime() - new Date(first.startDate).getTime();
+};
 
 export const selectCurrentSubscriptions = createSelector(
   [selectSubscriptions, selectCurrentUser],
@@ -17,9 +22,11 @@ export const selectCurrentSubscriptions = createSelector(
 
     const now = new Date();
 
-    return subscriptions.filter((subscription) => {
-      return differenceInCalendarDays(now, new Date(subscription.startDate)) <= subscription.days;
-    });
+    return subscriptions
+      .filter((subscription) => {
+        return differenceInCalendarDays(now, new Date(subscription.startDate)) <= subscription.days;
+      })
+      .sort(sortSubscriptionsByDate);
   },
 );
 
@@ -32,9 +39,11 @@ export const selectFinishedSubscriptions = createSelector(
 
     const now = new Date();
 
-    return subscriptions.filter((subscription) => {
-      return differenceInCalendarDays(now, new Date(subscription.startDate)) > subscription.days;
-    });
+    return subscriptions
+      .filter((subscription) => {
+        return differenceInCalendarDays(now, new Date(subscription.startDate)) > subscription.days;
+      })
+      .sort(sortSubscriptionsByDate);
   },
 );
 

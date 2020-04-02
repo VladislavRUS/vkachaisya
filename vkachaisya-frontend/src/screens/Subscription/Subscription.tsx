@@ -112,10 +112,6 @@ const Subscription: React.FC<Props> = ({
       getSubscriptions();
     }
 
-    return () => {
-      clearReports();
-      clearSubscriptionResult();
-    };
     // eslint-disable-next-line
   }, []);
 
