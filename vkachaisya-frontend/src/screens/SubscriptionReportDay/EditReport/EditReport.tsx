@@ -56,20 +56,6 @@ const EditReport: React.FC<Props> = ({ editReport, setEditReport, attachFile, on
     }
   };
 
-  const videoInputRef = React.createRef<HTMLInputElement>();
-
-  const onVideoSelect = () => {
-    if (videoInputRef.current) {
-      videoInputRef.current.click();
-    }
-  };
-
-  const onVideoChange = (event: React.FormEvent<HTMLInputElement>) => {
-    if (event.currentTarget.files && event.currentTarget.files.length) {
-      attachFile(event.currentTarget.files[0], 'video');
-    }
-  };
-
   const onFileDelete = (fileToDelete: IFile) => {
     const updatedEditReport = { ...editReport, files: editReport.files.filter((file) => file.id !== fileToDelete.id) };
     setEditReport(updatedEditReport);
@@ -89,11 +75,6 @@ const EditReport: React.FC<Props> = ({ editReport, setEditReport, attachFile, on
           <Icon name={'image'} size={20} color="#7a8e9c" />
         </IconButton>
 
-        <FileInput ref={videoInputRef} accept={'image'} onChange={onVideoChange} />
-
-        <IconButton onClick={onVideoSelect}>
-          <Icon name={'video'} size={22} color="#7a8e9c" />
-        </IconButton>
         <Box flexGrow={1} />
         <RoundButton
           size={34}
