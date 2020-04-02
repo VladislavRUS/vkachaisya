@@ -2,8 +2,15 @@ import React from 'react';
 import { Box, Grid } from '@material-ui/core';
 import { RoundButton } from '../RoundButton';
 import { Icon } from '../Icon';
+import bridge from '@vkontakte/vk-bridge';
 
 const ImageGrid: React.FC<any> = ({ files, size, editMode = false, onDelete }) => {
+  const onViewImage = (path: string) => {
+    bridge.send('VKWebAppShowImages', {
+      images: [path],
+    });
+  };
+
   return (
     <Grid container spacing={1}>
       {(files as any[]).map(
@@ -12,6 +19,7 @@ const ImageGrid: React.FC<any> = ({ files, size, editMode = false, onDelete }) =
             <Grid item key={i} xs={3}>
               <Box position="relative">
                 <Box
+                  onClick={() => onViewImage(file.path)}
                   style={{
                     width: `${size}px`,
                     height: `${size}px`,
