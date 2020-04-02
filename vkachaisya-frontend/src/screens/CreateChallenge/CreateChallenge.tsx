@@ -72,6 +72,10 @@ const CreateChallenge: React.FC<Props> = ({
   const history = useHistory();
 
   const onSubmit = (values: FormValues) => {
+    if (values.days <= 0) {
+      return;
+    }
+
     createChallenge({
       ...values,
       withReport: Boolean(values.withReport),

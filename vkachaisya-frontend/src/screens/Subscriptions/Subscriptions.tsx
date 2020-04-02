@@ -101,7 +101,7 @@ const Subscriptions: React.FC<Props> = ({
                           {...subscription}
                           iconName="arrow"
                           onButtonClick={() => onChooseChallenge(subscription.id)}
-                          daysPassed={differenceInCalendarDays(new Date(), new Date(subscription.startDate))}
+                          daysPassed={differenceInCalendarDays(new Date(), new Date(subscription.startDate)) + 1}
                         />
                       </Box>
                     ))}
