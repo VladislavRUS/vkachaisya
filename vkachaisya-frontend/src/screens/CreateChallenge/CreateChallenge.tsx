@@ -92,7 +92,7 @@ const CreateChallenge: React.FC<Props> = ({
     if (joinedChallenge && joinedSubscription && user) {
       bridge.send('VKWebAppShowWallPostBox', {
         attachments: `https://vk.com/app7380006#/subscriptions/${joinedSubscription.id}/users/${user.id}`,
-        message: `Я присоединился к челленджу "${joinedChallenge.title}"! \nОтслеживай мои результаты в приложении \n\n${joinedChallenge.hashtag}`,
+        message: `Я создал челлендж "${joinedChallenge.title}"! \nОтслеживай мои результаты в приложении \n\n${joinedChallenge.hashtag}`,
       });
     }
   };
