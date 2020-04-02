@@ -282,11 +282,6 @@ const Subscription: React.FC<Props> = ({
           onShareButtonClick={onShareButtonClick}
         />
       )}
-      {/* <Modal.Complete
-        hashtag={subscriptionResult.hashtag}
-        onBackButtonClick={() => setShowModal(false)}
-        open={showModal}
-      /> */}
     </>
   );
 };

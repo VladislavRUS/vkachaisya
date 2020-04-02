@@ -7,11 +7,23 @@ import { AppBar } from '../../components/AppBar';
 import { Box, Typography } from '@material-ui/core';
 import { BackLink } from '../../components/BackLink';
 import { Routes } from '../../entry/Routes';
-import { selectIsFetchingReports, selectReportByDay, selectReports } from '../../store/reports/selectors';
+import {
+  selectHasCompleted,
+  selectIsFetchingReports,
+  selectReportByDay,
+  selectReports,
+} from '../../store/reports/selectors';
 import { EditReport } from './EditReport';
 import { RoundButton } from '../../components/RoundButton';
 import { Icon } from '../../components/Icon';
-import { clearReports, createReport, getReports, setEditReport, updateReport } from '../../store/reports/actions';
+import {
+  clearReports,
+  createReport,
+  getReports,
+  setEditReport,
+  setHasCompleted,
+  updateReport,
+} from '../../store/reports/actions';
 import { getSubscriptionResult, getSubscriptions } from '../../store/subscriptions/actions';
 import { ViewReport } from './ViewReport';
 import {
@@ -20,6 +32,8 @@ import {
   selectSubscriptions,
 } from '../../store/subscriptions/selectors';
 import { selectCurrentUser } from '../../store/user/selectors';
+import { Modal } from '../../components/Modal';
+import bridge from '@vkontakte/vk-bridge';
 
 const mapStateToProps = (state: IApplicationState, routeProps: RouteComponentProps) => ({
   reports: selectReports(state),
@@ -29,6 +43,7 @@ const mapStateToProps = (state: IApplicationState, routeProps: RouteComponentPro
   user: selectCurrentUser(state),
   isFetchingSubscriptions: selectIsFetchingSubscriptions(state),
   subscriptionResult: selectSubscriptionResult(state),
+  hasCompleted: selectHasCompleted(state),
 });
 
 type StateProps = ReturnType<typeof mapStateToProps>;
@@ -43,6 +58,7 @@ const mapDispatchToProps = (dispatch: Dispatch) =>
       updateReport,
       getSubscriptions,
       getSubscriptionResult,
+      setHasCompleted,
     },
     dispatch,
   );
@@ -97,6 +113,8 @@ const SubscriptionReportDay: React.FC<Props> = ({
   isFetchingSubscriptions,
   subscriptionResult,
   getSubscriptionResult,
+  setHasCompleted,
+  hasCompleted,
   user,
 }) => {
   const { subscriptionId, reportDay, userId } = match.params as any;
@@ -185,24 +203,43 @@ const SubscriptionReportDay: React.FC<Props> = ({
     history.goBack();
   }
 
-  return (
-    <Box display={'flex'} flexDirection={'column'} width={'100%'} height={'100%'} overflow={'hidden'}>
-      {editMode ? (
-        <EditHeader onCancel={onCancel} title={getTitle()} onSave={onSave} />
-      ) : (
-        <ViewHeader to={subscriptionsLink} title={getTitle()} onEdit={onEdit} canEdit={canEdit} />
-      )}
+  const onShareCompleteButtonClick = () => {
+    if (user && subscriptionResult) {
+      bridge.send('VKWebAppShowWallPostBox', {
+        attachments: `https://vk.com/app7380006#/subscriptions/${subscriptionId}/users/${user.id}`,
+        message: `Я завершил челлендж "${subscriptionResult.challenge.title}"! \nПосмотри мои отчеты в приложении \n\n${subscriptionResult.challenge.hashtag}`,
+      });
+    }
+  };
 
-      {editMode && <EditReport day={reportDay} onSubmit={onSave} />}
-      {!editMode && report && (
-        <ViewReport
-          start={subscription ? new Date(subscription.startDate).toString() : null}
-          report={report}
-          onEdit={onEdit}
-          canEdit={canEdit}
+  return (
+    <>
+      <Box display={'flex'} flexDirection={'column'} width={'100%'} height={'100%'} overflow={'hidden'}>
+        {editMode ? (
+          <EditHeader onCancel={onCancel} title={getTitle()} onSave={onSave} />
+        ) : (
+          <ViewHeader to={subscriptionsLink} title={getTitle()} onEdit={onEdit} canEdit={canEdit} />
+        )}
+
+        {editMode && <EditReport day={reportDay} onSubmit={onSave} />}
+        {!editMode && report && (
+          <ViewReport
+            start={subscription ? new Date(subscription.startDate).toString() : null}
+            report={report}
+            onEdit={onEdit}
+            canEdit={canEdit}
+          />
+        )}
+      </Box>
+      {subscriptionResult && (
+        <Modal.Complete
+          hashtag={subscriptionResult.hashtag}
+          onBackButtonClick={() => setHasCompleted(false)}
+          open={hasCompleted}
+          onShareButtonClick={onShareCompleteButtonClick}
         />
       )}
-    </Box>
+    </>
   );
 };
 

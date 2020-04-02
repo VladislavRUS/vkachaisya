@@ -17,6 +17,7 @@ const initialState: IReportsState = {
   isCreating: false,
   isUpdating: false,
   isAttachingFile: false,
+  hasCompleted: false,
 };
 
 export const reportsReducer = createReducer<IReportsState, ReportsActionType>(initialState)
@@ -86,5 +87,12 @@ export const reportsReducer = createReducer<IReportsState, ReportsActionType>(in
     (state): IReportsState => ({
       ...state,
       isAttachingFile: false,
+    }),
+  )
+  .handleType(
+    ReportsActionTypes.SET_HAS_COMPLETED,
+    (state, action): IReportsState => ({
+      ...state,
+      hasCompleted: action.payload.hasCompleted,
     }),
   );

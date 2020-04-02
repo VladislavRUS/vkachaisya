@@ -13,6 +13,8 @@ export const getReportsAsync = createAsyncAction(
 export const clearReports = () => action(ReportsActionTypes.CLEAR_REPORTS);
 
 export const setEditReport = (editReport: EditReport) => action(ReportsActionTypes.SET_EDIT_REPORT, { editReport });
+export const setHasCompleted = (hasCompleted: boolean) =>
+  action(ReportsActionTypes.SET_HAS_COMPLETED, { hasCompleted });
 
 export const createReport = (day: number, subscriptionId: number) =>
   action(ReportsActionTypes.CREATE_REPORT, { day, subscriptionId });

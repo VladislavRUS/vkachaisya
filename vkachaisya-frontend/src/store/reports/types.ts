@@ -8,6 +8,7 @@ export interface IReportsState {
   isCreating: boolean;
   isUpdating: boolean;
   isAttachingFile: boolean;
+  hasCompleted: boolean;
 }
 
 export enum ReportsActionTypes {
@@ -32,6 +33,7 @@ export enum ReportsActionTypes {
   ATTACH_FILE_FAILURE = '@@reports/ATTACH_FILE_FAILURE',
 
   CLEAR_REPORTS = '@@reports/CLEAR_REPORTS',
+  SET_HAS_COMPLETED = '@@reports/SET_HAS_COMPLETED',
 
   SET_EDIT_REPORT = '@@reports/SET_EDIT_REPORT',
 }

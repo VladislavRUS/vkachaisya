@@ -7,12 +7,14 @@ import {
   createReportAsync,
   getReports,
   getReportsAsync,
+  setHasCompleted,
   updateReport,
   updateReportAsync,
 } from './actions';
 import { ReportsApi } from '../../api/reports-api';
-import { selectEditReport } from './selectors';
+import { selectEditReport, selectReports } from './selectors';
 import { FilesApi } from '../../api/files-api';
+import { selectSubscriptionResult } from '../subscriptions/selectors';
 
 // HANDLERS
 function* handleGetReports(action: ReturnType<typeof getReports>) {
@@ -43,6 +45,13 @@ function* handleCreateReport(action: ReturnType<typeof createReport>) {
   try {
     const { data } = yield call(ReportsApi.createReport, body);
     yield put(createReportAsync.success(data));
+
+    const reports: ReturnType<typeof selectReports> = yield select(selectReports);
+    const subscriptionResult: ReturnType<typeof selectSubscriptionResult> = yield select(selectSubscriptionResult);
+
+    if (subscriptionResult && reports.length === subscriptionResult.challenge.days) {
+      yield put(setHasCompleted(true));
+    }
   } catch (e) {
     yield put(createReportAsync.failure());
   }
